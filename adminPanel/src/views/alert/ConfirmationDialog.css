@@ -1,0 +1,58 @@
+.p-dialog.p-component.p-dialog .p-dialog-header {
+    border-bottom: 0 none;
+    background: #ef6767;
+    color: #eff1f3;
+    padding: 8px;
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+}
+.p-dialog .p-dialog-header .p-dialog-title {
+    font-size: 1rem;
+}
+.p-dialog.p-component.p-dialog .p-dialog-header .p-dialog-header-icon {
+    width: 2rem;
+    height: 2rem;
+    color: #fafcfe;
+}
+
+.p-dialog.p-component.p-dialog .p-dialog-content {
+    background: #ffffff;
+    color: #495057;
+    padding: 1.5rem 2rem 1.5rem;
+}
+
+.p-dialog.p-component.p-dialog .p-dialog-content {
+    background: #ffffff;
+    color: #495057;
+    padding: 1rem 1rem 1rem;
+}
+
+.p-button.p-confirm-dialog-accept,.p-button.p-confirm-dialog-reject{
+    background: #ef6767;
+    text-transform: capitalize;
+    color: #fff !important;
+    font-size: 12px;
+    padding: 3px 20px;
+    font-weight: 100;
+    border: none;
+    border-radius: 3px;
+    outline: none;
+    display: inline-block;
+    text-align: center;
+    margin-bottom: 0px !important;
+}
+.p-button.p-confirm-dialog-accept:hover{
+    background: #ef6767;
+}
+.p-button.p-confirm-dialog-reject{
+    background: #b9b8b8;
+}
+.p-button.p-confirm-dialog-reject:hover{
+    background: rgb(136, 136, 136) !important;
+}
+.p-button:focus{
+    box-shadow: none;
+}
+.p-dialog.p-confirm-dialog .p-confirm-dialog-icon {
+    font-size: 1.5rem;
+}

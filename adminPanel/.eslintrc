@@ -1,0 +1,10 @@
+{
+    "extends": [
+      "react-app"
+    ],
+    "rules": {
+      "no-unused-vars": "off",
+      "eqeqeq": "off",
+      "no-extend-native": "off"
+    }
+  }

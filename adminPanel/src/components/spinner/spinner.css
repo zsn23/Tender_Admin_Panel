@@ -1,0 +1,38 @@
+.loader {
+    border: 16px solid #180303;
+    border-radius: 50%;
+    border-top: 10px solid #ef6767;
+    border-right: 10px solid #a14848;
+    border-bottom: 10px solid #ff52005e;
+    border-left: 10px solid #f7a7b5;
+    width: 100px;
+    height: 100px;
+    animation: spin 0.5s linear infinite;
+    margin: 0 auto;
+    margin-top: 36vh;
+}
+
+.spinner-img {
+    height: 40px;
+    margin-top: 13px;
+}
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="/favicon.ico"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="theme-color" content="#000000" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- <link
+      rel="stylesheet"
+      href="vendor/fontawesome-pro-5.12.0-web/css/fontawesome.min.css"
+    /> -->
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://pro.fontawesome.com/releases/v6.0.0-beta2/css/all.css"
+    />
+    <!-- <link
+      href="vendor/fontawesome-pro-5.12.0-web/css/all.min.css"
+      rel="stylesheet"
+      type="text/css"
+    /> -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet"
+    />
+    <link href="css/sb-admin-2.min.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+   
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/primeicons/primeicons.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/primereact/resources/themes/lara-light-indigo/theme.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/primereact/resources/primereact.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/primeflex@2.0.0/primeflex.min.css"
+    />
+
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $(function () {
+          var $tabButtonItem = $("#tab-button li"),
+            $tabSelect = $("#tab-select"),
+            $tabContents = $(".tab-contents"),
+            activeClass = "is-active";
+
+          $tabButtonItem.first().addClass(activeClass);
+          $tabContents.not(":first").hide();
+
+          $tabButtonItem.find("a").on("click", function (e) {
+            var target = $(this).attr("href");
+
+            $tabButtonItem.removeClass(activeClass);
+            $(this).parent().addClass(activeClass);
+            $tabSelect.val(target);
+            $tabContents.hide();
+            $(target).show();
+            e.preventDefault();
+          });
+
+          $tabSelect.on("change", function () {
+            var target = $(this).val(),
+              targetSelectNum = $(this).prop("selectedIndex");
+
+            $tabButtonItem.removeClass(activeClass);
+            $tabButtonItem.eq(targetSelectNum).addClass(activeClass);
+            $tabContents.hide();
+            $(target).show();
+          });
+        });
+      });
+    </script>
+
+    <script>
+      $(document).ready(function () {
+        $("#myCollapsible")?.collapse({
+          toggle: true,
+        });
+      });
+    </script>
+
+    <!-- Custom styles for this template-->
+    <title>Tender786</title>
+  <script defer src="/static/js/bundle.js"></script></head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

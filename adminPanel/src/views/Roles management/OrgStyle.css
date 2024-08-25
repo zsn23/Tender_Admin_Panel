@@ -1,0 +1,21 @@
+.p-input-icon-right > .p-inputtext {
+    padding-right: 2.5rem;
+    width: 100%;
+    height: 38px;
+}
+.p-password {
+    position: relative;
+    display: block;
+    width: 100%;
+}
+
+.p-datatable.p-component.p-datatable-responsive-scroll.p-datatable .p-datatable-tbody > tr > td {
+    text-align: left;
+    padding: 0.5rem 0.5rem;
+}
+.p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+    background: #ef6767;
+  }
+  .p-inputswitch.p-inputswitch-checked:not(.p-disabled):hover .p-inputswitch-slider {
+    background: #0e6667;
+  }

@@ -1,0 +1,17 @@
+[04-Jun-2024 07:54:13 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'tender786_live'@'server100.powerfulgamingservers.com' (using password: YES) in /home/tender786/mytender.online/db_connection.php:9
+Stack trace:
+#0 /home/tender786/mytender.online/db_connection.php(9): mysqli->__construct('server100.power...', 'tender786_live', 'c_ucUu-nFV%Q', 'tender786_live')
+#1 /home/tender786/mytender.online/get_banks.php(3): include_once('/home/tender786...')
+#2 {main}
+  thrown in /home/tender786/mytender.online/db_connection.php on line 9
+[04-Jun-2024 07:54:15 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'tender786_live'@'server100.powerfulgamingservers.com' (using password: YES) in /home/tender786/mytender.online/db_connection.php:9
+Stack trace:
+#0 /home/tender786/mytender.online/db_connection.php(9): mysqli->__construct('server100.power...', 'tender786_live', 'c_ucUu-nFV%Q', 'tender786_live')
+#1 /home/tender786/mytender.online/get_banks.php(3): include_once('/home/tender786...')
+#2 {main}
+  thrown in /home/tender786/mytender.online/db_connection.php on line 9
+[12-Jun-2024 20:53:07 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'u742906798_tender786'@'localhost' (using password: YES) in /home/tender786/mytender.online/db_connection.php:10
+Stack trace:
+#0 /home/tender786/mytender.online/db_connection.php(10): mysqli->__construct('127.0.0.1:3306', 'u742906798_tend...', 'Tender@111', 'u742906798_tend...')
+#1 {main}
+  thrown in /home/tender786/mytender.online/db_connection.php on line 10

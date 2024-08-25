@@ -1,0 +1,71 @@
+.p-input-icon-right > .p-inputtext {
+    padding-right: 2.5rem;
+    width: 100%;
+    height: 38px;
+}
+.p-password {
+    position: relative;
+    display: block;
+    width: 100%;
+}
+
+.disable-btn{
+    background-color:#e3e3e3;
+    cursor: not-allowed !important;
+}
+
+.disable-btn:hover{
+    background-color:#e3e3e3;
+}
+.button-section{
+    margin-top: 11%;
+    float: right;
+}
+.p-multiselect .p-multiselect-label {
+    padding: 0rem 0.5rem;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+.add-btn{
+    margin-right: 3px;
+}
+.billing-date{
+    width: 100% !important;
+    height: 38px !important
+}
+
+.modal-lg .p-multiselect {
+    display: flex;
+    position: relative;
+    width: 100% !important;
+    -webkit-user-select: none;
+    user-select: none;
+    height: 38px !important;
+}
+.modal-lg .p-multiselect.p-component.p-inputwrapper.w-full.md\:w-20rem {
+    width: 100%;
+    height: 38px;
+}
+
+.modal-lg .p-multiselect {  
+    display: flex !important;
+    width: 100%; 
+}
+.modal-lg .p-dropdown {
+    display: flex;
+    cursor: pointer;
+    width: 100%;
+    -webkit-user-select: none;
+    user-select: none;
+    height: 38px !important;
+}
+
+.p-datatable.p-component.p-datatable-responsive-scroll.p-datatable .p-datatable-tbody > tr > td {
+    text-align: left;
+    padding: 0.5rem 0.5rem;
+}
+.p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+    background: #ef6767;
+  }
+  .p-inputswitch.p-inputswitch-checked:not(.p-disabled):hover .p-inputswitch-slider {
+    background: #0e6667;
+  }
