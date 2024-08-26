@@ -33,7 +33,9 @@ td,th{
 main{
   padding-left: 0px !important;
 }
-
+a{
+  text-decoration: none !important;
+}
 
 .add-minus-btn {  
   cursor: pointer;
@@ -72,7 +74,6 @@ main{
   height: calc(100vh - 0px) !important;
   overflow-y: auto !important;
   background: radial-gradient(circle, #0B2B11, #2a6a43);
-  top :3%;
 }
 
 .dropdown-menu.dropdown-menu-right.show {
@@ -204,15 +205,14 @@ button.blue-btn{
 
 .app-sidebar .logo,
 .off-canvas-sidebar .logo {
-  padding:0 !important;
-  margin: 20px 7px 0px 7px !important;
+  padding: 8px !important;
 }
 
 i.pi.pi-pencil {
   color: #ffffffe3;
   cursor: pointer;
   font-size: 20px;
-  padding: 10px ;
+  
 }
 i.pi.pi-trash{
   color: #ffffffe3;
@@ -389,7 +389,13 @@ ul#main-menu-navigation li>a.active {
 }
 
 .app-sidebar .sidebar-content ul li>a.active>i {
-  color: #000000 !important;
+  color: black !important;
+  
+}
+
+.app-sidebar .sidebar-content ul li>a.active {
+  color: black !important;
+  font-weight: bolder !important;
 }
 
 
@@ -475,19 +481,21 @@ span#customizer-toggle-icon .fa:before {
   font-size: 1.4rem;
 }
 
-.wrapper .collapsed.app-sidebar .logo.clearfix a img {
-  width: 40px;
-}
+
 
 .logo.clearfix a img {
-  width: 70%;
+  width: 100% !important;
+  height: auto !important;
+}
+.logo{
+  background: radial-gradient(circle, #0B2B11, #2a6a43);
 }
 
 .app-sidebar .logo .logo-text,
 .off-canvas-sidebar .logo .logo-text {
-  padding: 0px !important;
+ 
   position: relative;
-  left: -6px;
+  left: -5px;
 }
 
 .side-bar-heading {
@@ -508,9 +516,7 @@ span#customizer-toggle-icon .fa:before {
   line-height: 0.5px;
 }
 
-.logo.clearfix a img {
-  width: 70%;
-}
+
 
 
 .loader {
