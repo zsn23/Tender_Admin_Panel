@@ -192,42 +192,38 @@ export const routes = [
   }
  
 ]
-
-
-
 class SideMenuContent extends Component {
-  _userData = localStorageService.getPersistedData("USER_DETAILS")
+  _userData = localStorageService.getPersistedData("USER_DETAILS");
+
   constructor(props) {
     super(props);
 
     this.state = {
-      userData: null
+      userData: null,
     };
 
-    _EventEmitter.on("onLoginSuccess", this.onLogin)
+    _EventEmitter.on("onLoginSuccess", this.onLogin);
   }
 
   componentDidMount() {
     this.setState({
-      userData: this._userData
-    })
+      userData: this._userData,
+    });
   }
 
-
   onLogin = () => {
-    var res = localStorageService.getPersistedData("USER_DETAILS")
+    var res = localStorageService.getPersistedData("USER_DETAILS");
     this.setState({
-      userData: res
-    })
+      userData: res,
+    });
   };
 
   getUserPermittedRoutes = () => {
-    let routesList = routes
-     if (routesList.length > 0) {
-      return routesList
-    }
-    else {
-      return []
+    let routesList = routes;
+    if (routesList.length > 0) {
+      return routesList;
+    } else {
+      return [];
     }
   };
 
@@ -236,32 +232,26 @@ class SideMenuContent extends Component {
       return;
     }
 
-
-    if (this.state.userData!=null) {
+    if (this.state.userData != null) {
       let permittedMenus = this.getUserPermittedRoutes();
       return permittedMenus.map((route) => {
-
         return (
           <SideMenu.MenuSingleItem key={route.path}>
             <NavLink
               title={route.title}
               to={route.path}
+              onClick={this.props.onMenuItemClick}  // Collapse sidebar on click
             >
-              {route.icon ? (
-                <i className="">{route.icon}</i>
-              ) : (
-                ""
-              )}
+              {route.icon ? <i className="">{route.icon}</i> : ""}
               <span className="menu-item-text">{route.title}</span>
             </NavLink>
           </SideMenu.MenuSingleItem>
-        )
-      })
+        );
+      });
     }
-  }
+  };
 
   render() {
-
     return (
       <SideMenu
         className="sidebar-content"
@@ -272,4 +262,5 @@ class SideMenuContent extends Component {
     );
   }
 }
+
 export default SideMenuContent;

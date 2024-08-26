@@ -210,8 +210,8 @@ class ThemeNavbar extends Component {
                           id="customizer-toggle-icon"
                           onClick={() => this.isThemeOpen()}
                         >
-                          <Settings size={16} className="spinner mr-1" /> Theme
-                          Customizer
+                          <Settings size={16} className="spinner mr-1" />Dark Theme
+                          
                         </span>
                       </DropdownItem>
 

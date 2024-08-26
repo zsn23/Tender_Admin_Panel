@@ -48,30 +48,64 @@ const CustomDataTable = (props) => {
     setIsModalOpen(!isModalOpen);
   };
 
+  // const deleteTender = (data) => {
+  //   setDataForEdit(data);
+  //   setOpenConfirmation(true);
+  // };
   const deleteTender = (data) => {
+    console.log('Delete button clicked', data);
     setDataForEdit(data);
     setOpenConfirmation(true);
   };
-
+  
+  // const acceptConfirmation = () => {
+  //   if (dataForEdit != null) {
+  //     deleteRecords();
+  //   }
+  // };
   const acceptConfirmation = () => {
+    console.log('Accept confirmation clicked', dataForEdit);
     if (dataForEdit != null) {
       deleteRecords();
     }
   };
+  
+  // const deleteRecords = () => {
+  //   setOpenConfirmation(false);
 
+  //   const body = {
+  //     id: dataForEdit?.id,
+  //   };
+
+  //   billingApiServices.deleteTender(body).then((response) => {
+  //     if (response == null || response == undefined) {
+  //       handleToast("error", "Operation failed, check your internet connection");
+  //       return;
+  //     }
+
+  //     if (response?.data?.status) {
+  //       handleToast("success", response?.data?.message);
+  //       setDataForEdit(null);
+  //       props.reloadData();
+  //     } else {
+  //       handleToast("error", response?.data?.message);
+  //     }
+  //   });
+  // };
   const deleteRecords = () => {
     setOpenConfirmation(false);
-
+  
     const body = {
       id: dataForEdit?.id,
     };
-
+  
     billingApiServices.deleteTender(body).then((response) => {
+      console.log('Delete response', response);
       if (response == null || response == undefined) {
         handleToast("error", "Operation failed, check your internet connection");
         return;
       }
-
+  
       if (response?.data?.status) {
         handleToast("success", response?.data?.message);
         setDataForEdit(null);
@@ -79,8 +113,12 @@ const CustomDataTable = (props) => {
       } else {
         handleToast("error", response?.data?.message);
       }
+    }).catch((error) => {
+      console.error('Error during deletion:', error);
+      handleToast("error", "An error occurred while deleting the record.");
     });
   };
+  
 
   const handleDownload = (currentRow) => {
     const imgURL = currentRow.tenderImage;
@@ -192,7 +230,7 @@ const CustomDataTable = (props) => {
           selection={selectedRows}
           onSelectionChange={(e) => setSelectedRows(e.value)}
         >
-          <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+          <Column selectionMode="multiple" headerStyle={{ width: '10%' }}></Column>
           <Column field="IPLNumber" header="IPL Number" sortable filter filterPlaceholder="Search" style={{ width: "10%" }} filterClear={filterClearTemplate} filterApply={filterApplyTemplate} body={IPLNumberTemplate}></Column>
           <Column field="name" header="Title" sortable filter filterPlaceholder="Search" style={{ width: "10%" }} filterApply={filterApplyTemplate} body={NameTemplate}></Column>
           <Column field="organizationName" header="Organization" sortable filter filterPlaceholder="Search" style={{ width: "10%" }} filterApply={filterApplyTemplate} body={OrganizationBodyTemplate}></Column>

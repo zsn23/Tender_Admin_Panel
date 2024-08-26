@@ -16,11 +16,11 @@ class SidebarHeader extends Component {
         {(context) => (
           <div className="sidebar-header">
             <div className="logo clearfix">
-              <NavLink to="/dashboard" className="logo-text float-left">
-                <img src={imgSrc} alt="" />
+              <NavLink to="/dashboard" className="logo-text ">
+                <img src={imgSrc} alt="logo" />
               </NavLink>
 
-              <span className="nav-toggle d-none d-sm-none d-md-none">
+              <span className="nav-toggle d-none d-sm-none d-md-none m-0 p-0">
                 {context.foldedContent ? (
                   <ToggleLeft
                     onClick={context.makeNormalContent}
@@ -35,13 +35,7 @@ class SidebarHeader extends Component {
                   />
                 )}
               </span>
-              <span
-                href=""
-                className="nav-close d-block d-md-block d-lg-none d-xl-none"
-                id="sidebarClose"
-              >
-                <X onClick={this.handleClick} size={20} />
-              </span>
+
             </div>
           </div>
         )}
