@@ -1,3 +1,4 @@
+// App.js file
 import React, { Component } from "react";
 import history from "./history";
 import "react-perfect-scrollbar/dist/css/styles.css";
