@@ -33,20 +33,20 @@
 }
 
 .sidebar-lg {
-   &.main-layout {
-      margin-left: 280px;
-   }
-}
-.sidebar-md {
-   &.main-layout {
-      margin-left: 250px;
-   }
-}
-.sidebar-sm {
-   &.main-layout {
-      margin-left: 220px;
-   }
-}
+//    &.main-layout {
+//       margin-left: 280px;
+//    }
+// }
+// .sidebar-md {
+//    &.main-layout {
+//       margin-left: 250px;
+//    }
+// }
+// .sidebar-sm {
+//    &.main-layout {
+//       margin-left: 220px;
+//    }
+// }
 
 .menu-collapsed {
    margin-left: 60px;
@@ -108,4 +108,5 @@
       -webkit-transform: rotate(-12deg);
       transform: rotate(-12deg);
    }
+}
 }
