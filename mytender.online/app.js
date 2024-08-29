@@ -174,6 +174,10 @@ app.post('/send-email/', (req, res) => {
     }
 });
 
+
+
+
+// ***************City Api's**************************
 // Define a route for the heading
 app.post('/city/', (req, res) => {
   const { name, effectedBy } = req.body;
@@ -282,10 +286,11 @@ app.post('/city/updateCity', (req, res) => {
     return res.status(200).json({ status: false, data: [], message: MESSAGES.FAILED_MESSAGE });
   }
 });
+// ***************City Api's**************************
 
 
 
-
+// ***************categories Api's**************************
 app.get('/categories/', (req, res) => {
   try {
     pool.query('SELECT categories.*, users.name AS userName FROM categories INNER JOIN users ON categories.effectedBy = users.id', (err, results) => {
@@ -452,7 +457,9 @@ app.post('/categories/updateCategory', (req, res) => {
     return res.status(200).json({ status: false, data: [], message: MESSAGES.FAILED_MESSAGE });
   }
 });
+// ***************categories Api's**************************
 
+// ***************User Api's**************************
 const checkUserExists = (data) => {
   return new Promise((resolve, reject) => {
 
@@ -544,7 +551,9 @@ app.post('/user/updateUser', (req, res) => {
     res.status(200).json({ status: false, data: [], message: MESSAGES.ERROR_MESSAGE + err });
   }
 });
+// ***************User Api's**************************
 
+// ***************Organizations Api's**************************
 app.post('/organizations/saveMultipleOrganizations', (req, res) => {
    const { values,effectedBy } = req.body
   try {   
@@ -711,9 +720,11 @@ app.post('/organizations/updateOrganization', (req, res) => {
     return res.status(200).json({ status: false, data: [], message: MESSAGES.FAILED_MESSAGE });
   }
 });
+// ***************User Api's**************************
 
 
 
+// ***************newspapers Api's**************************
 const checkExists = (data) => {
   return new Promise((resolve, reject) => {
 
@@ -816,8 +827,10 @@ app.post('/newsPaper/updateNewsPaper', (req, res) => {
     return res.status(200).json({ status: false, data: [], message: MESSAGES.FAILED_MESSAGE });
   }
 });
+// ***************newspapers Api's**************************
 
 
+// ***************tender Api's**************************
 // for tender/id
 app.get('/tender', (req, res) => {
   const page = parseInt(req.query.page) || 1;
@@ -953,6 +966,7 @@ app.post('/tender/', (req, res) => {
 });
 
 
+
 app.post('/tender/deleteTender', (req, res) => {
   try {
     const { id } = req.body;
@@ -973,6 +987,7 @@ app.post('/tender/deleteTender', (req, res) => {
     res.status(200).json({ status: false, data: [], message: MESSAGES.FAILED_MESSAGE });
   }
 });
+
 
 app.post('/tender/updateTender', (req, res) => {
   try {
@@ -1033,6 +1048,11 @@ app.post('/tender/upload', upload.single('file'), (req, res) => {
     return res.status(500).json({ success: false, message: 'Internal server error' });
   }
 });
+// ***************tender Api's**************************
+
+
+
+// ***************Settings Api's**************************
 app.get('/Settings/', (req, res) => {
   try {
     pool.query('SELECT settings.*, users.name AS userName FROM settings INNER JOIN users ON settings.effectedBy = users.id', (err, results) => {
@@ -1085,10 +1105,11 @@ app.post('/Settings/updateSetting', (req, res) => {
     return res.status(200).json({ status: false, data: [], message: MESSAGES.FAILED_MESSAGE });
   }
 });
+// ***************Settings Api's**************************
 
 
 
-
+// ***************FAQs Api's**************************
 const checkExistsFAQs = (data) => {
   return new Promise((resolve, reject) => {
 
@@ -1197,11 +1218,12 @@ app.post('/FAQs/updateFAQ', (req, res) => {
     return res.status(200).json({ status: false, data: [], message: MESSAGES.FAILED_MESSAGE });
   }
 });
+// ***************FAQs Api's**************************
 
 
 
 
-
+// ***************Subscriptions Api's**************************
 const checkExistsSubscriptions = (data) => {
   return new Promise((resolve, reject) => {
 
@@ -1334,6 +1356,7 @@ app.post('/Subscriptions/deleteSubscription', (req, res) => {
     res.status(200).json({ status: false, data: [], message: MESSAGES.FAILED_MESSAGE });
   }
 });
+// ***************Subscriptions Api's**************************
 
 
 
