@@ -428,23 +428,9 @@ class BillingApiService {
     }
   };
 
-  updateTender = async (body) => {
-    try {
-      let res = await axios.post(this.baseUrl + "tender/updateTender/", body);
-      return res;
-    } catch (e) {
-      return null;
-    }
-  };
 
-  deleteTender = async (body) => {
-    try {
-      let res = await axios.post(this.baseUrl + "tender/deleteTender/", body);
-      return res;
-    } catch (e) {
-      return null;
-    }
-  };
+
+ 
 
   getSubscriptions = async () => {
     try {
@@ -476,18 +462,11 @@ class BillingApiService {
     }
   };
 
-  updateTender = async (body) => {
-    try {
-      let res = await axios.post(this.baseUrl + "tender/updateTender/", body);
-      return res;
-    } catch (e) {
-      return null;
-    }
-  };
+c
 
   deleteSubscription = async (body) => {
     try {
-      let res = await axios.post(
+      let res = await axios.post( 
         this.baseUrl + "Subscriptions/deleteSubscription/",
         body
       );
