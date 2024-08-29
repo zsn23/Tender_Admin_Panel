@@ -3233,8 +3233,8 @@ h5.card-title {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 18px;
+  height: 15px;
 }
 .p-datatable-selectable .p-selectable-row, .p-datatable-selectable-cell .p-selectable-cell{
 
@@ -3259,7 +3259,7 @@ h5.card-title {
 }
 
 .table-responsive:-webkit-scrollbar {
-  width: 5px;
+  width: 15px;
 }
 
 .main-msg {
