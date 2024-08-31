@@ -10,8 +10,8 @@ body {
   color: rgba(0, 0, 0, 0.87);
   min-height: 100% !important;
   background-color: #fff !important;
-  font-size: 24px !important /* Default font size */
- 
+  font-size: 24px !important ;/* Default font size */
+  background: whitesmoke !important;
 }
 
 h1,h2,h3,h4,h5,h6{
@@ -324,7 +324,7 @@ button.cross-btn {
 
 .wrapper .collapsed.app-sidebar {
   width: 45px !important;
-  box-shadow: 2px 3px 5px #ccc;
+  
 }
 
 .app-sidebar .navigation li>a {
@@ -1514,11 +1514,25 @@ thead.p-datatable-thead {
 .p-datatable-wrapper {
   overflow: auto;
   position: relative;
-  height: calc(100vh - 205px) !important;
+  border-radius: 20px !important;
+  border: 5px solid transparent;
+  background-clip: padding-box;
+  background: radial-gradient(circle, #0B2B11, #2a6a43) !important; 
+  box-shadow: 
+    0 12px 24px rgba(0, 0, 0, 0.5), 
+    0 24px 48px rgba(0, 0, 0, 0.4);  
+  padding: 20px 0 20px 0; /* Padding for spacing */
+ 
 }
 
+
+.p-datatable .p-datatable-thead > tr > th{
+  border: 1px solid #e9ecef !important;
+  border-width: 0 0 1px 0 !important;
+}
 .card {
   box-shadow: none !important;
+  background: whitesmoke !important;
 }
 
 .p-paginator .p-paginator-pages .p-paginator-page,
@@ -1548,7 +1562,7 @@ thead.p-datatable-thead {
 }
 
 .table-scroll .p-datatable-wrapper {
-  height: calc(100vh - 135px) !important;
+  /* height: calc(100vh - 135px) !important; */
   overflow: auto;
   position: relative;
 }
@@ -1609,8 +1623,7 @@ div#invoice-tbl .p-fluid .p-inputtext {
 
 .p-paginator {
   padding: 20px 1rem !important;
-  margin-bottom: 30px;
-  margin-top: 20px;
+ 
 }
 
 .p-checkbox .p-checkbox-box {

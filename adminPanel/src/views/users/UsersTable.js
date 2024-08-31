@@ -29,7 +29,7 @@ const UsersTable = (props) => {
   const [responseMsg, setResponseMsg] = useState("")
   const [userStatus, setUserStatus] = useState('Disable');
   const options = ['Disable', 'Enable'];
-
+  
 
 
 
@@ -282,7 +282,7 @@ const UsersTable = (props) => {
 
     }
     return (
-      <div className="card">
+      <div className="card" >
         <SelectButton value={userStatus} options={options} onChange={(e) => setUserStatus(e.value)} />
       </div>
     );
@@ -390,15 +390,15 @@ const UsersTable = (props) => {
 
   return (
     <div>
-      <div className="card table-scroll">
+      <div className="container-fluid table-scroll">
         <DataTable
           value={users}
           paginator
           responsiveLayout="scroll"
-          paginatorTemplate=" FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink  CurrentPageReport RowsPerPageDropdown"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-          rows={20}
-          rowsPerPageOptions={[20, 40, 60]}
+          paginatorTemplate=" PrevPageLink PageLinks NextPageLink  CurrentPageReport RowsPerPageDropdown"
+          currentPageReportTemplate="Showing Records : {first} to {last} "
+          rows={25}
+          
           dataKey="id"
           filters={filterArray}
           filterDisplay="row"

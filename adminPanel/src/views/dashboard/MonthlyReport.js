@@ -111,7 +111,7 @@ export default function VerticalBarDemo() {
     }, []);
 
     return (
-        <div className="card">
+        <div className="container-fluid" >
             <Chart type="bar" data={chartData} options={chartOptions} />
         </div>
     )

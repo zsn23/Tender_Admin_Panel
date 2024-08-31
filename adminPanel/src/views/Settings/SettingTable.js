@@ -179,15 +179,15 @@ const CustomDataTable = (props) => {
 
   return (
     <div>
-      <div className="card">
+      <div className="container" >
         <DataTable
           value={loader ? Array.from({ length: 5 }) : gridData}
           paginator
           responsiveLayout="scroll"
-          paginatorTemplate=" FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-          rows={20}
-          rowsPerPageOptions={[20, 40, 60]}
+          paginatorTemplate=" PrevPageLink PageLinks NextPageLink  CurrentPageReport RowsPerPageDropdown"
+          currentPageReportTemplate="Showing Records : {first} to {last} "
+          rows={25}
+         
           dataKey="id"
           filters={filterArray}
           filterDisplay="row"
