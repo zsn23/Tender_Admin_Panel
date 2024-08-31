@@ -355,7 +355,7 @@ const SaveNewsPaperModal = (props) => {
               </div>
             </div>
 
-            <div class="row">
+            <div class="row ">
               <div class="col-sm">
                 <FormGroup>
                   <Label for="charges">
@@ -388,13 +388,14 @@ const SaveNewsPaperModal = (props) => {
                   <Label for="charges">
                     Status
                   </Label>
-                  <div className="card flex justify-content-center">
+                  <div className=" flex justify-content-center">
                     <InputSwitch checked={status} onChange={(e) => setStatus(e.value)} />
                   </div>
                 </FormGroup>
               </div>}
 
-              <div class="col-sm">
+              <div class="col-5">
+               
                 <div className="button-section form-actions">
                   <Button
                     color="warning"
@@ -402,17 +403,21 @@ const SaveNewsPaperModal = (props) => {
                     className="add-btn"
 
                   >
-                    <X size={16} color="#FFF" /> Cancel
+                  
+                    Cancel
+                    <X size={15} color="#FFF" /> 
                   </Button>
+
                   <Button
                     color="primary"
                     onClick={() => SubmitForm('top')}
                     icon="pi pi-arrow-down" label="Top"
-                    className="p-button-warning ml-2"
+                    className="p-button-warning"
                   >
-                    <CheckSquare size={16} color="#FFF" />{props.dataForEdit != null ? "Update" : "Save"}
+                    <CheckSquare size={15} color="#FFF" />{props.dataForEdit != null ? "Update" : "Save"}
                   </Button>
-                </div>
+                  </div>
+               
               </div>
             </div>
           </div>

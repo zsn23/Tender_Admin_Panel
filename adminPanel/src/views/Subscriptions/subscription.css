@@ -14,7 +14,7 @@
     cursor: not-allowed !important;
 }
 .section {
-    padding: 50px;
+    padding: 10px;
     background-color: #f0f0f0;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -28,10 +28,15 @@
 .disable-btn:hover{
     background-color:#e3e3e3;
 }
-.button-section{
-    margin-top: 20%;
-    float: right;
+.button-section {
+    
+    margin-top: 17%;
+    display: flex; /* Use flexbox to arrange items in a row */
+    justify-content: end; /* Center the buttons horizontally */
+    gap: 10px; /* Optional: Adds space between buttons */
+    text-align: left;
 }
+
 .p-multiselect .p-multiselect-label {
     padding: 0rem 0.5rem;
     transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
@@ -75,8 +80,8 @@
     padding: 0.5rem 0.5rem;
 }
 .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
-    background: #ef6767;
+    background: radial-gradient(circle, #0B2B11, #2a6a43);
   }
   .p-inputswitch.p-inputswitch-checked:not(.p-disabled):hover .p-inputswitch-slider {
-    background: #0e6667;
+    background: radial-gradient(circle, #0B2B11, #2a6a43);
   }
