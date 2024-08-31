@@ -179,7 +179,7 @@ const CustomDataTable = (props) => {
 
   return (
     <div>
-      <div className="container" >
+      <div className="container-fluid" >
         <DataTable
           value={loader ? Array.from({ length: 5 }) : gridData}
           paginator
