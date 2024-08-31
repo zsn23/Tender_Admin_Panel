@@ -2995,7 +2995,7 @@ h5.card-title {
 
 .form-actions .btn-primary,
 .form-actions .btn-warning {
-  background-color: #ef6767;
+  background: radial-gradient(circle, #0B2B11, #2a6a43);
   text-transform: capitalize;
   color: #fff !important;
   font-size: 16px;
@@ -3008,19 +3008,15 @@ h5.card-title {
   font-family: nimbus-san-regular;
   text-align: center;
   margin-bottom: 0px !important;
+  border-radius: 100px !important;
 }
 
-.form-actions .btn-primary:hover {
-  background: #ef6767 !important;
 
-}
 
-.form-actions .btn-warning {
-  background-color: #b9b8b8;
-}
+
 
 .form-actions .btn-warning:hover {
-  background-color: rgb(136, 136, 136) !important;
+  background: radial-gradient(circle, #0B2B11, #2a6a43) !important;
 }
 
 .form-actions {

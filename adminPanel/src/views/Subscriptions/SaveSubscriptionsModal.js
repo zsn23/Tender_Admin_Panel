@@ -232,7 +232,7 @@ const SaveNewsPaperModal = (props) => {
   }
 
   return (
-    <div>
+    <div className="container-fluid my-3 d-flex align-items-center justify-content-center">
 
       <Toast open={openSnackBar}
         severity={severity}
@@ -246,10 +246,10 @@ const SaveNewsPaperModal = (props) => {
         className={props.className}
         backdrop="static"
       > */}
-      <div className="modal-lg" role="document">
+      <div className="modal-lg section" role="document">
         <div className="modal-content">
           <div className="modal-header">
-            <CardTitle>{props.dataForEdit == null ? "Insert Subscription" : "Update Subscription"}</CardTitle>
+            <CardTitle >{props.dataForEdit == null ? "INSERT SUBSCRIPTION" : "Update Subscription"}</CardTitle>
             <button
               className="cross-btn"
               onClick={() => toggle()}
@@ -302,7 +302,7 @@ const SaveNewsPaperModal = (props) => {
               </div>
             </div>
 
-            <div class="row">
+            <div class="row ">
               <div class="col-sm">
                 <FormGroup>
                   <Label for="company">
@@ -317,7 +317,7 @@ const SaveNewsPaperModal = (props) => {
                     filterBy="name"
                     filterPlaceholder="Search"
                     optionLabel="name"
-                     className="w-full md:w-20rem" />
+                     className="" />
                   {selectedCategories == null && <span className="validation-error">* Required</span>}
                 </FormGroup>
 
@@ -395,7 +395,7 @@ const SaveNewsPaperModal = (props) => {
               </div>}
 
               <div class="col-sm">
-                <div className="button-section">
+                <div className="button-section form-actions">
                   <Button
                     color="warning"
                     onClick={() => toggle()}
@@ -408,7 +408,7 @@ const SaveNewsPaperModal = (props) => {
                     color="primary"
                     onClick={() => SubmitForm('top')}
                     icon="pi pi-arrow-down" label="Top"
-                    className="p-button-warning mr-2"
+                    className="p-button-warning ml-2"
                   >
                     <CheckSquare size={16} color="#FFF" />{props.dataForEdit != null ? "Update" : "Save"}
                   </Button>

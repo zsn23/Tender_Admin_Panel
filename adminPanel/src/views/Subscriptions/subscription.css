@@ -13,12 +13,23 @@
     background-color:#e3e3e3;
     cursor: not-allowed !important;
 }
-
+.section {
+    padding: 50px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 200%;
+    height: auto;
+}
+.p-multiselect-panel{
+    width: 43% !important;
+    height: auto !important;
+}
 .disable-btn:hover{
     background-color:#e3e3e3;
 }
 .button-section{
-    margin-top: 11%;
+    margin-top: 20%;
     float: right;
 }
 .p-multiselect .p-multiselect-label {
