@@ -18,6 +18,7 @@ const CustomDataTable = (props) => {
   const [severity, setSeverity] = useState("")
   const [openSnackBar, setOpenSnackBar] = useState(false)
   const [responseMsg, setResponseMsg] = useState("")
+  const [selectedRows, setSelectedRows] = useState([])
 
   let [filterArray, setfilterArray] = useState({
     email: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -247,21 +248,24 @@ const CustomDataTable = (props) => {
 
   return (
     <div>
-      <div className="card">
+      <div className="container-fluid" >
         <DataTable
           value={loader ? Array.from({ length: 5 }) : gridData}
           paginator
           responsiveLayout="scroll"
-          paginatorTemplate=" FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-          rows={20}
-          rowsPerPageOptions={[20, 40, 60]}
+          paginatorTemplate=" PrevPageLink PageLinks NextPageLink  CurrentPageReport RowsPerPageDropdown"
+          currentPageReportTemplate="Showing Records : {first} to {last} "
+          rows={25}
+         
           dataKey="id"
           filters={filterArray}
           filterDisplay="row"
           removableSort
+          selectionMode={'checkbox'}
+          selection={selectedRows}
+          onSelectionChange={(e) => setSelectedRows(e.value)} 
         >
-
+           <Column selectionMode="multiple" headerStyle={{ width: '5%' }}></Column>
           <Column
             field="userName"
             header="Name"
@@ -321,7 +325,7 @@ const CustomDataTable = (props) => {
             field="billingPeriod"
             header="billing Period"
             sortable
-            style={{ width: "20%" }}
+            style={{ width: "10%" }}
             body={BillingPeriodBodyTemplate}
           ></Column>
 

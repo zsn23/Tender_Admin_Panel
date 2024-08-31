@@ -603,7 +603,7 @@ const SaveTenderModal = (props) => {
   };
 
   return (
-    <div>
+    <div className="container-fluid d-flex justify-content-center">
       <Toast
         open={openSnackBar}
         severity={severity}
@@ -856,10 +856,11 @@ const SaveTenderModal = (props) => {
                 <h2 sx={{ fontSize: '22px', fontWeight: 500, color: 'red', display: 'flex', justifyContent: 'center' }}>{`© ${selectedNewsPaper?.name} ${selectedCity?.name} ${moment(new Date()).format("YYYY-MM-DD")}`}</h2>
               </div>
             </div> */}
-            <div className="section col8">
+            <div className=" section col8">
+              IMAGE FILE.
               {selectedFile == null ? (
                 <div
-                  className="content-four single-box text-center append"
+                  className=" content-four single-box text-center append"
                   ref={gridRef}
                 >
                   {selectedImg != "" && selectedImg != null && (

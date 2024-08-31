@@ -71,10 +71,10 @@ i.pi.pi-pencil{
     border: 1px solid #fff !important;  
 }
 .p-datatable .p-datatable-thead > tr > th{
-    border: none  !important;  
+    /* border: none  !important;   */
 }
 .p-datatable span.p-dropdown-label.p-inputtext,.custom-dropdown .p-inputwrapper .p-dropdown-label{
-    border: none !important;
+    /* border: none !important; */
     background-color: #000 !important;
 }
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item{
