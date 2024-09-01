@@ -308,7 +308,8 @@ class BillingApiService {
       return null;
     }
   };
-
+  
+// ***************tender Api's**************************
   uploadFile = async (selectedFile, name) => {
     try {
       const formData = new FormData();
@@ -387,6 +388,7 @@ class BillingApiService {
       return null;
     }
   };
+  // ***************tender Api's**************************
 
   getAllRoles = async () => {
     try {
