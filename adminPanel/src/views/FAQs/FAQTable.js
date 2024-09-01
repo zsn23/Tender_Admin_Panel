@@ -250,7 +250,8 @@ const CustomDataTable = (props) => {
             body={CreatedByTemplate}
           ></Column>
 
-          <Column header="Action" style={{ width: "20%" }} body={bodyTemplate} />
+          <Column header="Action"   body={bodyTemplate}
+            style={{ width: "10%" }} />
         </DataTable>
       </div>
 

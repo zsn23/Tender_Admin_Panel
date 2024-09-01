@@ -8,6 +8,7 @@ import { Skeleton } from "primereact/skeleton";
 import ConfirmationDialog from "../alert/ConfirmationDialog";
 import { billingApiServices } from '../../services/BillingApiService';
 import Toast from "../alert/Toast"
+import { Dropdown } from "primereact/dropdown";
 
 const CustomDataTable = (props) => {
   const [isModalOpen, setisModalOpen] = useState(false);
@@ -24,6 +25,11 @@ const CustomDataTable = (props) => {
     email: { value: null, matchMode: FilterMatchMode.CONTAINS },
     phoneNumber: { value: null, matchMode: FilterMatchMode.CONTAINS },
     userName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    company: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    status: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    billingPeriod: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    categories: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    billingDate: { value: null, matchMode: FilterMatchMode.CONTAINS }
   });
 
   useEffect(() => {
@@ -178,17 +184,40 @@ const CustomDataTable = (props) => {
   };
 
   const StatusBodyTemplate = (rowData) => {
-    if (loader == true) {
+    if (loader) {
       return <Skeleton></Skeleton>;
     }
 
-    if (rowData.status == 1) {
-      return <div>Active</div>;
-    }
-    else {
-      return <div>InActive</div>;
-    }
+    return rowData.status === 1 ? "Active" : "InActive";
   };
+
+  const handleFilterChange = (value) => {
+    setfilterArray((prevFilters) => ({
+      ...prevFilters,
+      status: { value, matchMode: FilterMatchMode.EQUALS }, // Use FilterMatchMode.EQUALS for exact match
+    }));
+  };
+
+  const statusFilterTemplate = (options) => {
+    const statusOptions = [
+      { label: 'Active', value: 1 },
+      { label: 'InActive', value: 0 },
+    ];
+
+    return (
+      <Dropdown
+        value={options.value}
+        options={statusOptions}
+        onChange={(e) => {
+
+          handleFilterChange(e.value); // Update filter array
+        }} // Update filterArray on change
+        placeholder="Select"
+        className="text-dark"
+      />
+    );
+  };
+
 
 
   const CategoriesBodyTemplate = (rowData) => {
@@ -198,12 +227,6 @@ const CustomDataTable = (props) => {
     else {
       var names = []
       let category = rowData?.categories?.split(",")
-      // category?.forEach(element => {
-      //   let filtered = props.CategoryDetails?.find(x => x.id ==parseInt(element))
-      //   names.push(filtered?.name)
-      // });
-
-      // names = names.join(",")
       return <div>{category}</div>;
     }
   };
@@ -221,7 +244,8 @@ const CustomDataTable = (props) => {
       return <Skeleton></Skeleton>;
     } else {
       var effectedDate = convertDateBestFormate(rowData.billingDate)
-      return <div>{effectedDate}</div>
+      const dateOnly = effectedDate.slice(6);
+      return <div>{dateOnly}</div>
     }
   };
 
@@ -239,7 +263,7 @@ const CustomDataTable = (props) => {
     const hours = date.getUTCHours().toString().padStart(2, '0');
     const minutes = date.getUTCMinutes().toString().padStart(2, '0');
     const day = date.getUTCDate().toString().padStart(2, '0');
-    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0'); // Adding 1 to the month since it's zero-based
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
     const year = date.getUTCFullYear();
 
     const formattedDateTime = `${hours}:${minutes} ${day}-${month}-${year}`;
@@ -256,16 +280,16 @@ const CustomDataTable = (props) => {
           paginatorTemplate=" PrevPageLink PageLinks NextPageLink  CurrentPageReport RowsPerPageDropdown"
           currentPageReportTemplate="Showing Records : {first} to {last} "
           rows={25}
-         
+
           dataKey="id"
           filters={filterArray}
           filterDisplay="row"
           removableSort
           selectionMode={'checkbox'}
           selection={selectedRows}
-          onSelectionChange={(e) => setSelectedRows(e.value)} 
+          onSelectionChange={(e) => setSelectedRows(e.value)}
         >
-           <Column selectionMode="multiple" headerStyle={{ width: '5%' }}></Column>
+          <Column selectionMode="multiple" headerStyle={{ width: '5%' }}></Column>
           <Column
             field="userName"
             header="Name"
@@ -281,7 +305,7 @@ const CustomDataTable = (props) => {
 
           <Column
             field="phoneNumber"
-            header="Phone Number"
+            header="Phone"
             sortable
             filter
             filterPlaceholder="Search"
@@ -309,24 +333,39 @@ const CustomDataTable = (props) => {
             field="company"
             header="Company"
             sortable
-            style={{ width: "8%" }}
             body={CompanyBodyTemplate}
+            style={{ width: "8%" }}
+
+            filter
+            filterPlaceholder="Search"
+            filterClear={filterClearTemplate}
+            filterApply={filterApplyTemplate}
+            filterFooter={filterFooterTemplate}
           ></Column>
 
           <Column
             field="status"
             header="Status"
             sortable
-            style={{ width: "8%" }}
+            filter
+            filterElement={statusFilterTemplate}
+            style={{ width: "5%" }}
             body={StatusBodyTemplate}
+
           ></Column>
 
           <Column
             field="billingPeriod"
             header="billing Period"
             sortable
-            style={{ width: "10%" }}
+            style={{ width: "15%" }}
             body={BillingPeriodBodyTemplate}
+
+            filter
+            filterPlaceholder="Search"
+            filterClear={filterClearTemplate}
+            filterApply={filterApplyTemplate}
+            filterFooter={filterFooterTemplate}
           ></Column>
 
           <Column
@@ -335,6 +374,12 @@ const CustomDataTable = (props) => {
             sortable
             style={{ width: "20%" }}
             body={CategoriesBodyTemplate}
+
+            filter
+            filterPlaceholder="Search"
+            filterClear={filterClearTemplate}
+            filterApply={filterApplyTemplate}
+            filterFooter={filterFooterTemplate}
           ></Column>
 
 
@@ -343,38 +388,18 @@ const CustomDataTable = (props) => {
             header="Billing Date"
             sortable
             style={{ width: "20%" }}
+            filter
+            filterPlaceholder="Search"
+            filterClear={filterClearTemplate}
+            filterApply={filterApplyTemplate}
+            filterFooter={filterFooterTemplate}
 
             body={billingDateBodyTemplate}
           ></Column>
-
-          {/* <Column
-            field="effectedDate"
-            header="Created Date"
-            sortable           
-            body={SubmissionDateTemplate}
-          ></Column> */}
-
-          {/* <Column
-            field="userName"
-            header="Created By"
-            sortable          
-            style={{ width: "16%" }}          
-            body={CreatedByTemplate}
-          ></Column> */}
-
           <Column header="Action" body={bodyTemplate} />
+
         </DataTable>
       </div>
-
-      {/* {isModalOpen && (<SaveSubscriptionsModal
-        dataForEdit={dataForEdit}
-        modalopen={isModalOpen}
-        onClose={() => setisModalOpen(false)}
-        isEditMode={true}
-        reloadData={() => reloadData()}
-
-        
-      />)} */}
 
       <Toast open={openSnackBar}
         severity={severity}

@@ -23,7 +23,7 @@ const CustomDataTable = (props) => {
   let [filterArray, setfilterArray] = useState({
     name: { value: null, matchMode: FilterMatchMode.CONTAINS },
     effectedDate: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    userName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+
   });
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const CustomDataTable = (props) => {
 
     billingApiServices.deleteCity(body).then((response) => {
       if (response == null || response == undefined) {
-        handleToast("error", "Operation failed, check your internet connection")
+        handleToast("error", "associated with some tenders,please remove the tender at first.")
         return
       }
 
@@ -149,13 +149,7 @@ const CustomDataTable = (props) => {
     }
   };
 
-  const CreatedByTemplate = (rowData) => {
-    if (loader == true) {
-      return <Skeleton></Skeleton>;
-    } else {
-      return <div>{rowData?.userName}</div>
-    }
-  };
+
 
   const convertDateBestFormate = (inputDateTime) => {
 
@@ -216,19 +210,7 @@ const CustomDataTable = (props) => {
             body={SubmissionDateTemplate}
           ></Column>
 
-          <Column
-            field="userName"
-            header="Created By"
-            sortable
-            filter
-            filterPlaceholder="Search"
-            style={{ width: "16%" }}
-            filterClear={filterClearTemplate}
-            filterApply={filterApplyTemplate}
-            filterFooter={filterFooterTemplate}
-            // body={CreatedByTemplate}
-            body="admin"
-          ></Column>
+          
 
           <Column header="Action" body={bodyTemplate} 
             style={{ width: "19%" }}

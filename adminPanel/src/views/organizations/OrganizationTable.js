@@ -163,6 +163,7 @@ const CustomDataTable = (props) => {
     if (loader == true) {
       return <Skeleton></Skeleton>;
     } else {
+      
       return <div>{rowData?.userName}</div>
     }
   };

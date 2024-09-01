@@ -26,7 +26,7 @@ const CustomDataTable = (props) => {
     name: { value: null, matchMode: FilterMatchMode.CONTAINS },
     IPLNumber: { value: null, matchMode: FilterMatchMode.CONTAINS },
     openDate: { value: null, matchMode: FilterMatchMode.EQUALS },
-    publishDate: { value: null, matchMode: FilterMatchMode.EQUALS },
+    publishDate: { value: null, matchMode: FilterMatchMode.CONTAINS },
     effectedDate: { value: null, matchMode: FilterMatchMode.CONTAINS },
     userName: { value: null, matchMode: FilterMatchMode.CONTAINS },
     organizationName: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -212,7 +212,7 @@ const CustomDataTable = (props) => {
           <Column field="effectedDate" header="Submit Date" sortable filter filterPlaceholder="Search" style={{ width: "10%" }} filterApply={filterApplyTemplate} body={SubmissionDateTemplate}></Column>
           <Column field="newPaperName" header="Newspaper" sortable filter filterPlaceholder="Search" style={{ width: "10%" }} filterApply={filterApplyTemplate} body={NewsPaperBodyTemplate}></Column>
           <Column field="userName" header="Created By" sortable filter filterPlaceholder="Search" style={{ width: "10%" }} filterApply={filterApplyTemplate} body={CreatedByTemplate}></Column>
-          <Column field="tenderImage" header="Download" sortable filter filterPlaceholder="Search" style={{ width: "10%" }} body={TenderImageTemplate}></Column>
+          <Column field="tenderImage" header="Download" sortable  style={{ width: "10%" }} body={TenderImageTemplate}></Column>
           <Column field="id" header="Action"  body={bodyTemplate}></Column>
         </DataTable>
       </div>
