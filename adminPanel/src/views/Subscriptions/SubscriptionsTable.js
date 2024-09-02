@@ -133,11 +133,6 @@ const CustomDataTable = (props) => {
     );
   };
 
-  const filterFooterTemplate = () => {
-    return (
-      <div className="px-3 pt-0 pb-3 text-center font-bold">Add rules</div>
-    );
-  };
 
   const NameBodyTemplate = (rowData) => {
     if (loader == true) {
@@ -299,7 +294,7 @@ const CustomDataTable = (props) => {
             style={{ width: "15%" }}
             filterClear={filterClearTemplate}
             filterApply={filterApplyTemplate}
-            filterFooter={filterFooterTemplate}
+            
             body={NameBodyTemplate}
           ></Column>
 
@@ -312,7 +307,7 @@ const CustomDataTable = (props) => {
             style={{ width: "10%" }}
             filterClear={filterClearTemplate}
             filterApply={filterApplyTemplate}
-            filterFooter={filterFooterTemplate}
+            
             body={phoneNumberTemplate}
           ></Column>
 
@@ -325,7 +320,7 @@ const CustomDataTable = (props) => {
             style={{ width: "10%" }}
             filterClear={filterClearTemplate}
             filterApply={filterApplyTemplate}
-            filterFooter={filterFooterTemplate}
+            
             body={EmailBodyTemplate}
           ></Column>
 
@@ -340,7 +335,7 @@ const CustomDataTable = (props) => {
             filterPlaceholder="Search"
             filterClear={filterClearTemplate}
             filterApply={filterApplyTemplate}
-            filterFooter={filterFooterTemplate}
+            
           ></Column>
 
           <Column
@@ -365,7 +360,7 @@ const CustomDataTable = (props) => {
             filterPlaceholder="Search"
             filterClear={filterClearTemplate}
             filterApply={filterApplyTemplate}
-            filterFooter={filterFooterTemplate}
+            
           ></Column>
 
           <Column
@@ -379,7 +374,7 @@ const CustomDataTable = (props) => {
             filterPlaceholder="Search"
             filterClear={filterClearTemplate}
             filterApply={filterApplyTemplate}
-            filterFooter={filterFooterTemplate}
+            
           ></Column>
 
 
@@ -392,7 +387,7 @@ const CustomDataTable = (props) => {
             filterPlaceholder="Search"
             filterClear={filterClearTemplate}
             filterApply={filterApplyTemplate}
-            filterFooter={filterFooterTemplate}
+            
 
             body={billingDateBodyTemplate}
           ></Column>

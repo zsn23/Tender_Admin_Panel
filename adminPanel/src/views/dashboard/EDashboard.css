@@ -4,12 +4,7 @@
     width: 100%;
     margin-top: 50px;
 }
-.container-fluid_bg{
-    /* background-color: #0B2B11; */
-    /* background: linear-gradient(to bottom, #0B2B11, #2a6a43); */
-    /* background: linear-gradient(to bottom, #0B2B11, #118B44); */
 
-}
 
 .dashboard-chat-box {
     border-radius: 6px;
@@ -107,11 +102,13 @@
 }
 
 .img-box i {
-    position: absolute;
-    top: 27%;
-    left: 25%;
-
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 17px;
 }
+
 
 i.fa-light.fa-message-bot {
     left: 22%;

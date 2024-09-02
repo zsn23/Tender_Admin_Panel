@@ -128,11 +128,7 @@ const CustomDataTable = (props) => {
     );
   };
 
-  const filterFooterTemplate = () => {
-    return (
-      <div className="px-3 pt-0 pb-3 text-center font-bold">Add rules</div>
-    );
-  };
+ 
 
   const NameBodyTemplate = (rowData) => {
     if (loader == true) {
@@ -231,7 +227,7 @@ const CustomDataTable = (props) => {
             style={{ width: "50%" }}
             filterClear={filterClearTemplate}
             filterApply={filterApplyTemplate}
-            filterFooter={filterFooterTemplate}
+            
             body={NameBodyTemplate}
           ></Column>
           <Column
@@ -243,7 +239,7 @@ const CustomDataTable = (props) => {
             style={{ width: "16%" }}
             filterClear={filterClearTemplate}
             filterApply={filterApplyTemplate}
-            filterFooter={filterFooterTemplate}
+            
             body={SubmissionDateTemplate}
           ></Column>
 
@@ -256,7 +252,7 @@ const CustomDataTable = (props) => {
             style={{ width: "16%" }}
             filterClear={filterClearTemplate}
             filterApply={filterApplyTemplate}
-            filterFooter={filterFooterTemplate}
+            
             body={CreatedByTemplate}
           ></Column>
 

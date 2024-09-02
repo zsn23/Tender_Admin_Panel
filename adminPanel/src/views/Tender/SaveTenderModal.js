@@ -694,6 +694,7 @@ const SaveTenderModal = (props) => {
                       onClick={() => addCategory()}
                     >
                       <i className="fa fa-plus-circle"></i>
+                      <span className="validation-error">* Required</span>
                     </span>
                   </span>
                   <CategorySelection
@@ -857,14 +858,14 @@ const SaveTenderModal = (props) => {
               </div>
             </div> */}
             <div className=" section col8">
-              IMAGE FILE.
+               <span className="imgFile__">IMAGE FILE.</span>
               {selectedFile == null ? (
                 <div
                   className=" content-four single-box text-center append"
                   ref={gridRef}
                 >
                   {selectedImg != "" && selectedImg != null && (
-                    <a className="link" href="javascript:;">
+                    <a className="link" href="javascript;">
                       <img
                         src={selectedImg}
                         onClick={handleZoomIn}
@@ -880,7 +881,7 @@ const SaveTenderModal = (props) => {
                         width="100%"
                         height="100%"
                         className="profile-img zooooom"
-                        alt="Tender Image"
+                        alt="TenderImage"
                         data-magnify-src=""
                       />
                     </a>
@@ -919,7 +920,7 @@ const SaveTenderModal = (props) => {
                         width="100%"
                         height="100%"
                         className="profile-img zooooom"
-                        alt="Tender Image"
+                        alt="TenderImage"
                         data-magnify-src=""
                       />
                       // </Watermark>
