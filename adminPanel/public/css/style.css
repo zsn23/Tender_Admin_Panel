@@ -1,11 +1,11 @@
 @import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css");
-/*   background: radial-gradient(circle, #0B2B11, #2a6a43);
+/*   url(style.css)
  */
 /* @charset "utf-8"; */
 /* CSS Document */
 body {
-  font-family: "Rubik", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-weight: 300;
+  /* font-family: "Rubik", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; */
+  font-weight: 700 !important;
   line-height: 1.5em;
   color: rgba(0, 0, 0, 0.87);
   min-height: 100% !important;
@@ -24,6 +24,9 @@ input.p-inputtext.p-component.p-column-filter {
 
 label,span,p{
   font-size: 16px !important;
+}
+.p-datatable .p-paginator .p-paginator-current,.p-paginator .p-paginator-first, .p-paginator .p-paginator-prev, .p-paginator .p-paginator-next, .p-paginator .p-paginator-last{
+  padding: 1%;
 }
 
 td,th{
@@ -1839,7 +1842,10 @@ button.p-paginator-prev.p-paginator-element.p-link{
 .fas {
   font-size: 28px;
   color: rgba(17, 13, 13, 0.6);
-  padding: 0px;
+  padding: 5px;
+}
+.p-column-filter-clear-button:hover{
+  background: none !important;
 }
 
 .fa,

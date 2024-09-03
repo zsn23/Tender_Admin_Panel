@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import "./login.css";
+
+import "./login__.css"
 import { Input, Form, Label } from "reactstrap";
 import { billingApiServices } from "../../services/BillingApiService";
 import { localStorageService } from "../../services/LocalStorageService";
@@ -11,17 +12,21 @@ import { Checkbox } from "primereact/checkbox";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { RadioButton } from "primereact/radiobutton";
 import imgSrc from "../../assets/img/logos/my_logo.png";
+import aboutImg from "../../assets/img/logos/about-img.png";
+
 import { InputText } from "primereact/inputtext";
 
 import axios from "axios";
 
 const cookies = new Cookies();
 
-class Login extends Component {
+class Login extends Component  {
   constructor(props) {
     super(props);
     const { user } = this.props;
   }
+
+ 
 
   state = {
     isChecked: false,
@@ -382,121 +387,134 @@ class Login extends Component {
   handleEmail = (value) => {
     this.setState({ email: value });
   };
+  togglePasswordVisibility = () => {
+    this.setState(prevState => ({
+        showPassword: !prevState.showPassword
+    }));
+}
 
   render() {
+    
     return (
-      <div className="login-bg">
-        <div className="login-box">
-          <div className="login-logo">
-            <img src={imgSrc} alt="" />
-          </div>
-          {this.state.authenticationComponent == false ? (
-            <>
-              <div className="login-head">
-                <h1>Login</h1>
-              </div>
-              {/* <InputText type="file" onChange={(e) => this.handleFileChange(e)} className="ipl-input" /> */}
+      
+      <div className="background__ login-bg hover-area">
+        <div className="container d-flex align-items-center justify-content-center min-vh-100">
 
-              <div className="form-group">
-                <img
-                  className="login-input-image"
-                  title="Email"
-                  src={"/css/email.svg"}
-                  alt=""
-                />
-
-                <Input
-                  onChange={(value) => {
-                    this.handleEmail(value.target.value);
-                  }}
-                  type="text"
-                  className="login-input"
-                  name="inputEmail"
-                  id="inputEmail"
-                  value={this.state.email}
-                  placeholder="Username / Email"
-                  autoComplete="new"
-                  onKeyDown={this.onKey}
-                  required
-                />
+          <div className="card login-box shadow">
+            <div className="card-body">
+              <div className="login-logo text-center mb-4">
+                <img src={imgSrc} alt="logoimg" className="tenderLogo" />
               </div>
-              <div className="form-group">
-                <img
-                  className="login-input-image"
-                  title="Email"
-                  src={"/css/locker.svg"}
-                  alt=""
-                />
-                <Password
-                  value={this.state.password}
-                  onChange={(value) => {
-                    this.setState({ password: value.target.value });
-                  }}
-                  onKeyDown={this.onKey}
-                  placeholder="Password"
-                  toggleMask
-                  feedback={false}
-                />
-              </div>
-              <div className="form-group" style={{ marginTop: "0px" }}>
-                <div className="custom-checkbox ">
-                  <Checkbox
-                    className="rememberme-checkbox"
-                    checked={this.state.isChecked}
-                    onChange={(e) => this.handleChecked(e)}
-                    id="cookies"
-                  />
-
-                  <Label className="remember-label " for="rememberme">
-                    Remember Me
-                  </Label>
-                </div>
-              </div>
-              <div
-                className="form-group"
-                style={{ margin: "0px", textAlign: "center" }}
-              >
-                <button
-                  type="submit"
-                  color="danger"
-                  block
-                  className="signin-btn"
-                  onClick={() => this.handleLoginClick()}
-                >
-                  {this.state.loading ? (
-                    <ProgressSpinner
-                      style={{ padding: "0px", width: "50px", height: "20px" }}
+              {this.state.authenticationComponent == false ? (
+                <>
+                  <div className="login-head text-center mb-0">
+                    <h1>TENDER LOGIN</h1>
+                  </div>
+                  <div className="form-group position-relative mb-3">
+                    <label htmlFor="inputEmail" className="sr-only">Username / Email</label>
+                    <img
+                      className="login-input-image"
+                      title="Email"
+                      src={"/css/email.svg"}
+                      alt=""
                     />
-                  ) : (
-                    "Sign in"
-                  )}
-                </button>
-              </div>
-            </>
-          ) : this.state.authenticationCode === true ? (
-            <>{this.AuthenticationCode()}</>
-          ) : (
-            <>{this.TwoFactorAuthentication()}</>
-          )}
+                    <Input
+                      onChange={(value) => {
+                        this.handleEmail(value.target.value);
+                      }}
+                      type="text"
+                      className="form-control login-input"
+                      name="inputEmail"
+                      id="inputEmail"
+                      value={this.state.email}
+                      placeholder="Username / Email"
+                      autoComplete="new"
+                      onKeyDown={this.onKey}
+                      required
+                    />
+                  </div>
 
-          {/* <div className="forget-password">
-            <NavLink to="/forgot-password" className="text-white">
-              Forgot Password?
-            </NavLink>
-          </div> */}
+
+                  <div className="form-group position-relative mb-3 d-flex align-items-center justify-content-center">
+                    <label htmlFor="inputPassword" className="sr-only">Password</label>
+                    <img
+                      className="login-input-image"
+                      title="Password"
+                      src={"/css/locker.svg"}
+                      alt="Password Icon"
+                    />
+                    <Input
+                      value={this.state.password}
+                      onChange={(value) => {
+                        this.setState({ password: value.target.value });
+                      }}
+                      onKeyDown={this.onKey}
+                      placeholder="Password"
+                      type={this.state.showPassword ? "text" : "password"}
+                      className="form-control login-input"
+                      id="inputPassword"
+                    />
+                    <i
+                      className={`toggle-password ${this.state.showPassword ? 'pi pi-eye' : 'pi pi-eye-slash'}`}
+                      onClick={() => this.togglePasswordVisibility()}
+                      title={this.state.showPassword ? "Hide Password" : "Show Password"}
+                    ></i>
+                  </div>
+
+
+                  <div className="form-group mb-0" style={{ marginLeft: "10px" }}>
+                    <div className="custom-checkbox ">
+                      <Checkbox
+                        className="rememberme-checkbox"
+                        checked={this.state.isChecked}
+                        onChange={(e) => this.handleChecked(e)}
+                        id="cookies"
+                      />
+
+                      <Label className="remember-label " for="cookies">
+                        Remember Me
+                      </Label>
+                    </div>
+                  </div>
+
+
+                  <div className="form-group text-center mb-0">
+                    <button
+                      type="submit"
+
+                      className="btn btn-primary w-100 signin-btn"
+                      onClick={() => this.handleLoginClick()}
+                    >
+                      {this.state.loading ? (
+                        <ProgressSpinner
+                          style={{ padding: "0px", width: "50px", height: "20px" }}
+                        />
+                      ) : (
+                        "Sign in"
+                      )}
+                    </button>
+                  </div>
+                </>
+              ) : this.state.authenticationCode === true ? (
+                <>{this.AuthenticationCode()}</>
+              ) : (
+                <>{this.TwoFactorAuthentication()}</>
+              )}
+              <span onClick={() => this.handleAuthorization()} className="copy-right m-0">
+                © {new Date().getFullYear()} Tender786. All rights reserved.
+              </span>
+              <Toast
+                open={this.state.openSnackBar}
+                summary={this.state.summary}
+                severity={this.state.severity}
+                handleClose={() => this.setState({ openSnackBar: false })}
+                message={this.state.responseMsg}
+              />
+            </div>
+          </div>
         </div>
-        <span onClick={() => this.handleAuthorization()} className="copy-right">
-          © {new Date().getFullYear()} Tender786. All rights reserved.
-        </span>
-
-        <Toast
-          open={this.state.openSnackBar}
-          summary={this.state.summary}
-          severity={this.state.severity}
-          handleClose={() => this.setState({ openSnackBar: false })}
-          message={this.state.responseMsg}
-        />
       </div>
+
     );
   }
 }
