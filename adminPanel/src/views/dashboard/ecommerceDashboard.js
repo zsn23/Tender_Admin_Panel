@@ -43,14 +43,18 @@ class EcommerceDashboard extends Component {
          });
    }
 
+ 
    getTenderDetails() {
       billingApiServices
          .getAllTenders()
          .then((response) => {
-            this.setState({ Tenders: response?.data?.data });
+            this.setState({
+               Tenders: response?.data?.total, // this is still the paginated data
+               // totalTenders: response?.data?.total 
+            });
          });
    }
-
+   
    getOrganizationsDetails() {
       billingApiServices
          .getOrganizationsDetails()
@@ -112,8 +116,7 @@ class EcommerceDashboard extends Component {
                               <div className="img-box " style={{border: '2px solid #000' }}>
                                  <i className="fa-light fa-boxes-stacked" style={{ color: '#000' }}></i>
                               </div>
-
-                              <h1>435</h1>
+                              <h1>{this.state.Subscriptions?.length}</h1>
                               <p>View all Subscribers</p>
                            </Link>
                         </div>
@@ -125,7 +128,8 @@ class EcommerceDashboard extends Component {
                               <div className="img-box" style={{ border: '2px solid #000' }}>
                                  <i className="fa-light fa-message-bot" style={{ color: '#000' }}></i>
                               </div>
-                              <h1>{this.state.Tenders?.length}</h1>
+                              
+                              <h1>{this.state.Tenders}</h1>
                               <p>View All Tenders detail</p>
                            </Link>
                         </div>

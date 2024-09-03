@@ -262,8 +262,8 @@ const SaveNewsPaperModal = (props) => {
             <div class="row">
               <div class="col-sm">
                 <FormGroup>
-                  <Label for="name">
-                    user Name
+                  <Label className="subscriptionEditLables"  for="name">
+                    User Name
                   </Label>
                   <Input
                     type="text"
@@ -276,7 +276,7 @@ const SaveNewsPaperModal = (props) => {
               </div>
               <div class="col-sm">
                 <FormGroup>
-                  <Label for="email">
+                  <Label className="subscriptionEditLables"   for="email">
                     Email
                   </Label>
                   <Input
@@ -289,7 +289,7 @@ const SaveNewsPaperModal = (props) => {
               </div>
               <div class="col-sm">
                 <FormGroup>
-                  <Label for="phone">
+                  <Label className="subscriptionEditLables"  for="phone">
                     Phone Number
                   </Label>
                   <Input
@@ -305,7 +305,7 @@ const SaveNewsPaperModal = (props) => {
             <div class="row ">
               <div class="col-sm">
                 <FormGroup>
-                  <Label for="company">
+                  <Label className="subscriptionEditLables"  for="company">
                     Category
                   </Label>
                   <MultiSelect
@@ -324,7 +324,7 @@ const SaveNewsPaperModal = (props) => {
               </div>
               <div class="col-sm">
                 <FormGroup>
-                  <Label for="company">
+                  <Label className="subscriptionEditLables"  for="company">
                     Company
                   </Label>
                   <Input
@@ -339,7 +339,7 @@ const SaveNewsPaperModal = (props) => {
               </div>
               <div class="col-sm">
                 <FormGroup>
-                  <Label for="bPeriod">
+                  <Label className="subscriptionEditLables"  for="bPeriod">
                     Billing Period
                   </Label>
                   <Dropdown
@@ -358,7 +358,7 @@ const SaveNewsPaperModal = (props) => {
             <div class="row ">
               <div class="col-sm">
                 <FormGroup>
-                  <Label for="charges">
+                  <Label className="subscriptionEditLables"  for="charges">
                     Amount
                   </Label>
                   <Input
@@ -374,7 +374,7 @@ const SaveNewsPaperModal = (props) => {
               </div>
               <div class="col-sm">
                 <FormGroup>
-                  <Label for="charges">
+                  <Label className="subscriptionEditLables"  for="charges">
                     billing Date
                   </Label>
                   <Calendar className="billing-date" format="DD/MM/YYYY" value={billingDate} onChange={(e) => setBillingDate(e.value)} />
@@ -385,7 +385,7 @@ const SaveNewsPaperModal = (props) => {
 
               {props.dataForEdit != null && <div class="col-sm">
                 <FormGroup>
-                  <Label for="charges">
+                  <Label className="subscriptionEditLables"  for="charges">
                     Status
                   </Label>
                   <div className=" flex justify-content-center">

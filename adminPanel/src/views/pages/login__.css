@@ -1,0 +1,185 @@
+/* Background Styling */
+.background__ {
+    background-image: url('../../assets/img//logos/about-img.png') !important;
+    background-repeat: no-repeat !important;
+    background-size: 100% 100% !important;
+    background-position: center !important;
+    height: 100vh !important; 
+    width: 100% !important;  
+    position: relative;
+}
+.background__::before {
+    content: '' !important ; /* Empty content */
+    position: absolute !important; /* Position it absolutely */
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0, 0, 0, 0.3) !important; /* Semi-transparent white */
+    backdrop-filter: blur(8px) !important; /* Apply blur effect */
+    z-index: 1 !important; /* Ensure it sits behind the content */
+   
+}
+
+
+/* Card Styling */
+.card.login-box {
+    border-radius: 15px; /* Rounded corners for card */
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.card-body {
+    padding: 30px !important; /* Padding inside the card */
+    background: radial-gradient(circle, #0B2B11, #2a6a43);
+    padding-bottom: 20px !important;
+}
+
+.login-logo .tenderLogo {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+    backdrop-filter: blur(50px) !important;
+    padding-right: 2px;
+    border-radius: 10px !important; /* Rounded corners */
+}
+
+.login-head h1{
+    color: rgb(255, 255, 255);
+    font-weight: 600 !important;
+    font-size: larger !important;
+}
+
+.login-input-image {
+    position: absolute;
+    top: 50%;
+    left: 15px; /* Adjust as needed */
+    transform: translateY(-50%);
+    width: 20px; /* Adjust size as needed */
+    height: 20px; /* Adjust size as needed */
+    pointer-events: none; /* Ensures the image does not interfere with input interaction */
+    z-index: 2; /* Ensures the image is above the input field */
+}
+
+.form-control.login-input {
+    padding-left: 45px; /* Adjust to make space for the input image */
+    padding-right: 40px; /* Adjust to make space for the toggle icon */
+    border-radius: 15px; /* Rounded corners */
+    border: 1px solid #ced4da; /* Light border color */
+    background-color: #f8f9fa; /* Light background color */
+    font-size: 10px; /* Larger font size */
+    color: #495057; /* Darker text color */
+    height: 45px; /* Adjust height */
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+.signin-btn {
+    font-size: 14px;
+    padding: 6px 20px;
+    font-weight: 500;
+    border-radius: 20px;
+    color: #fff;
+    background-color: rgb(17, 139, 68);
+    border: none !important;
+}
+
+.signin-btn:hover {
+    background: black !important;
+    color: #ced4da !important;
+}
+
+.copy-right {
+    color: #ffffff;
+    display: block;
+    text-align: center;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+
+
+.form-control.login-input:focus {
+    border-color: #17a2b8; /* Bootstrap primary color */
+    box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25); /* Bootstrap focus shadow */
+    outline: none;
+}
+
+/* Placeholder text styling */
+.form-control.login-input::placeholder {
+    color: #6c757d; /* Light grey color */
+    opacity: 1; /* Ensure placeholder is fully opaque */
+}
+
+/* Improve appearance on hover/focus */
+.form-control.login-input:hover,
+.form-control.login-input:focus {
+    border-color: #17a2b8; /* Bootstrap primary color */
+}
+
+/* Remove box shadow on focus for specific input components */
+.p-inputtext:enabled:focus {
+    box-shadow: none;
+}
+.p-inputtext{
+    border: none !important;
+
+}
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 15px; /* Adjust as needed */
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 20px; /* Adjust size as needed */
+    color: #6c757d; /* Light grey color */
+    z-index: 3; /* Ensure it is above the input field */
+}
+
+
+
+/* Ensure proper alignment and spacing */
+.form-group.mb-3.d-flex.align-items-center {
+    display: flex;
+    align-items: center;
+}
+
+.custom-control.custom-checkbox {
+    display: flex;
+    align-items: center;
+}
+
+/* Optional: Space between checkbox and label */
+.custom-control.custom-checkbox .custom-control-label {
+    margin-left: 8px; /* Adjust spacing between checkbox and label */
+}
+/* Tender Logo Styling */
+.tenderLogo {
+    width: 150px; /* Set a fixed width for the logo */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 10px; /* Rounded corners */
+    background-color: rgba(255, 255, 255, 0.8); /* Light background to enhance visibility */
+    padding: 10px; /* Space between the logo and its border */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow to create depth */
+    margin: 0 auto; /* Center horizontally */
+    display: block; /* Ensure it centers properly */
+    transition: transform 0.3s ease; /* Smooth scaling effect on hover */
+    padding-right: 10px !important;
+}
+
+/* Optional hover effect */
+.tenderLogo:hover {
+    transform: scale(1.05); /* Slightly enlarge the logo on hover */
+}
+.custom-checkbox {
+    display: flex;
+    align-items: center;
+}
+
+/* Styling for the checkbox itself */
+.rememberme-checkbox {
+    margin-top: -4px; /* Space between checkbox and label */
+}
+
+/* Styling for the label text */
+.remember-label {
+    color: #ffffff; /* White color for the label text */
+    font-weight: lighter; /* Make the label text bold */
+    font-size: 15px !important; /* Adjust font size as needed */
+}

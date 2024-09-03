@@ -1,9 +1,9 @@
  .wrapper,.app-sidebar .sidebar-content, .off-canvas-sidebar .sidebar-content,.sidebar-header,.app-sidebar .logo, .off-canvas-sidebar .logo{
     background-color: #2c2a2a !important;
 }
-h1,h2,h3,h4,h5,h6,p,span{
+/* h1,h2,h3,h4,h5,h6,p,span{
     color: #fff !important;
-}
+} */
 .dashboard-chat-box p,.dashboard-chat-box h1,.app-sidebar .navigation i{
     color: #fff !important;
 }
@@ -16,6 +16,12 @@ h1,h2,h3,h4,h5,h6,p,span{
 .table th, .table td,.w-75.pull-right.adjust-font,.form-group.adjust-font label,.adjust-font strong,.search-div input.p-inputtext.p-component::placeholder,.p-input-icon-left > i:first-of-type, .p-input-icon-left > svg:first-of-type, .p-input-icon-left > .p-input-prefix{
     color: #fff !important;
 }
+.section .p-grid .p-col-12 span{
+    color: #fff;
+}
+.section .p-grid .p-col-12 .validation-error{
+    color: red;
+} 
 .navbar{
     background-color: #595959 !important;
 }
@@ -41,9 +47,7 @@ h1,h2,h3,h4,h5,h6,p,span{
 .p-datatable .p-datatable-tbody > tr,.card{
     background: #2c2a2a !important;
 }
-.p-datatable .p-datatable-tbody > tr:hover,.p-datatable .p-datatable-thead>tr>th{
-    background: #000 !important;
-}
+
 .p-datatable .p-datatable-tbody>tr>td,.p-datatable .p-datatable-thead > tr > th{
     color: #fff !important;
 }
@@ -53,7 +57,8 @@ h1,h2,h3,h4,h5,h6,p,span{
 }
 .p-datatable .p-paginator .p-paginator-current,.p-paginator .p-paginator-first, .p-paginator .p-paginator-prev, .p-paginator .p-paginator-next, .p-paginator .p-paginator-last
 {
-    color: #fff !important;
+    color: #000 !important;
+    padding: 1%;
 }
 .p-inputtext{
     background: #2c2a2a !important;
@@ -64,14 +69,23 @@ h1,h2,h3,h4,h5,h6,p,span{
     color: #fff !important;
 }
 i.pi.pi-pencil{
-    color: #ef6767 !important;
+    color: #ffffff !important;
 }
 .p-dropdown{
     background: #000 !important;
     border: 1px solid #fff !important;  
 }
-.p-datatable .p-datatable-thead > tr > th{
-    /* border: none  !important;   */
+/* .p-datatable .p-datatable-thead > tr > th{
+    border: none  !important;  
+} */
+
+.section{
+    background-color: #000 !important;
+    border: none !important;
+    padding: 0% !important;
+}
+.add-minus-btn .fa{
+    color: rgba(12, 255, 118, 0.6);
 }
 .p-datatable span.p-dropdown-label.p-inputtext,.custom-dropdown .p-inputwrapper .p-dropdown-label{
     /* border: none !important; */
@@ -91,9 +105,11 @@ i.pi.pi-pencil{
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item:not(.p-highlight):not(.p-disabled):hover{
     background: #2c2a2a !important;
 }
-.modal-content{
-    background: #2c2a2a !important; 
+
+.subscriptionEditLables{
+    color: whitesmoke;
 }
+
 .modal form label{
     color: #fff !important;
 }
@@ -111,8 +127,50 @@ button.cross-btn {
 h5.card-title,.p-input-icon-right > i:last-of-type, .p-input-icon-right > svg:last-of-type, .p-input-icon-right > .p-input-suffix{
     color: #fff !important;
 }
-.p-datatable-responsive-scroll>.p-datatable-wrapper>table, .p-datatable-auto-layout>.p-datatable-wrapper>table{
-    /* border: 1px solid #fff !important; */
+/* .p-datatable-responsive-scroll>.p-datatable-wrapper>table, .p-datatable-auto-layout>.p-datatable-wrapper>table{
+    border: 1px solid #fff !important;
+} */
+.p-datatable-wrapper{
+    border-color: black !important ;
+    background: linear-gradient( #000000 80%, #29422d 20%) !important;
+
+}
+.p-datepicker:not(.p-datepicker-inline){
+    background: #000;
+  border: 1px solid whitesmoke;
+}
+.p-datepicker table td.p-datepicker-today > span.p-highlight{
+    background:#19841B;
+}
+.p-datepicker:not(.p-disabled) table td span:not(.p-highlight):not(.p-disabled):hover{
+    background:#19841B;   
+}
+.css-6od3lo-MuiChip-label{
+    color: #000 !important;
+}
+.p-datepicker-calendar th span{
+    color: #fff;
+}
+.p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-month{
+    color: #fff;
+}
+.p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-year{
+    color: #fff;
+}
+.p-datepicker:not(.p-disabled) table td span:not(.p-highlight):not(.p-disabled){
+    background:green;   
+}
+.p-datepicker:not(.p-datepicker-inline) .p-datepicker-header {
+    background: #000;
+}
+.p-datepicker .p-datepicker-header{
+    color: #fff !important;
+}
+.section .imgFile__ {
+    color: #fff !important;
+}
+.p-datepicker {
+    left: 490px !important;
 }
 .p-column-filter-overlay{
     background-color: #000 !important;
@@ -133,7 +191,7 @@ h5.card-title,.p-input-icon-right > i:last-of-type, .p-input-icon-right > svg:la
 .p-column-filter-menu-button:hover {
     color: #fff !important;
     border-color: transparent;
-    background:  #2c2a2a !important;
+    background: transparent !important;
 }
 .p-column-filter-menu-button.p-column-filter-menu-button-open, .p-column-filter-menu-button.p-column-filter-menu-button-open:hover{
     color: #fff !important;
@@ -208,6 +266,7 @@ h5.card-title,.p-input-icon-right > i:last-of-type, .p-input-icon-right > svg:la
 }
 .p-skeleton,ul.pagination,.p-dropdown-panel .p-dropdown-header{
     background-color: #000 !important;
+
 }
 ul.pagination .p-dropdown .p-dropdown-label,.custom-dropdown .p-inputwrapper .p-dropdown-label{
     border: none !important;
@@ -216,4 +275,33 @@ ul.pagination .p-dropdown .p-dropdown-label,.custom-dropdown .p-inputwrapper .p-
 .react-datepicker,.p-dropdown-panel .p-dropdown-items .p-dropdown-empty-message{
     background-color: #000 !important;
     color: #fff !important; 
+}
+.p-dropdown-panel{
+    border:1px solid #19841B;
+}
+.p-datatable .p-datatable-tbody > tr:hover,.p-datatable .p-datatable-thead>tr>th{
+    background: #000 !important;
+}
+.modal-content {
+    border-radius: 0.375rem;
+    padding-top: 1%;
+    border: 1px solid whitesmoke;
+    background: black;
+    color: aliceblue;
+    margin-bottom:  3px;
+  }
+  .p-paginator-next .pi{
+    color: #fff  !important;
+}
+.p-paginator .p-paginator-next:not(.p-disabled):not(.p-highlight):hover{
+    background-color: #000 !important;
+}
+.p-paginator-prev .pi{
+    color: #fff  !important;
+}
+.p-paginator .p-paginator-prev:not(.p-disabled):not(.p-highlight):hover{
+    background-color: #000 !important;
+}
+.p-multiselect-label-container .p-multiselect-label{
+    color: #000 !important;
 }
