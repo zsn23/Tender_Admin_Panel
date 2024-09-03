@@ -7,6 +7,7 @@ import { Skeleton } from "primereact/skeleton";
 import { billingApiServices } from '../../services/BillingApiService';
 import Toast from "../alert/Toast";
 import ConfirmationDialog from "../alert/ConfirmationDialog";
+import { ConfirmDialog } from "primereact/confirmdialog";
 import XLSX from "xlsx";
 import FileSaver from 'file-saver';
 import { colors } from "@mui/material";
@@ -21,6 +22,10 @@ const CustomDataTable = (props) => {
   const [openSnackBar, setOpenSnackBar] = useState(false);
   const [responseMsg, setResponseMsg] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
+const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
+  
+  const [currentPage, setCurrentPage] = useState(1); // Pagination state
+  const [totalRecord, setTotalRecords] = useState(0); // Total records state
 
   const [filterArray, setFilterArray] = useState({
     name: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -34,6 +39,24 @@ const CustomDataTable = (props) => {
     cityName: { value: null, matchMode: FilterMatchMode.CONTAINS },
     newPaperName: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoader(true);
+      try {
+        const response = await billingApiServices.getAllTenders(currentPage, 25); // Use currentPage for API call
+        if (response && response.status) {
+          setGridData(response.data.data); // Adjust according to your API response structure
+          setTotalRecords(response.data.total); // Set total records based on API response
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+      setLoader(false);
+    };
+  
+    fetchData();
+  }, [currentPage]); // Fetch data whenever currentPage changes
 
   useEffect(() => {
     setLoader(props.loading);
@@ -62,9 +85,14 @@ const CustomDataTable = (props) => {
       deleteRecords();
     }
   };
+const confirmDelete = (data) => {
+  setDataForEdit(data);
+  setDeleteDialogVisible(true);
+};
   
 
   const deleteRecords = () => {
+  setDeleteDialogVisible(false);
     setOpenConfirmation(false);
   
     const body = {
@@ -152,9 +180,23 @@ const CustomDataTable = (props) => {
   ) : (
     <span>
       <span style={{ margin: "5px" }}>
-        <i onClick={() => editTender(rowData)} className="pi pi-pencil"></i>
+        {/* <i onClick={() => editTender(rowData)} className="pi pi-pencil"></i> */}
+
+ <Button
+icon="pi pi-pencil"
+onClick={() => editTender(rowData)}
+className="p-button-rounded p-button-success my-2"
+/> 
+
+
       </span>
-      <i onClick={() => deleteTender(rowData)} className="pi pi-trash"></i>
+      {/* <i onClick={() => deleteTender(rowData)} className="pi pi-trash"></i> */}
+
+<Button
+               icon="pi pi-trash"
+               onClick={() => confirmDelete(rowData)}
+               className="p-button-rounded p-button-danger"
+             /> 
     </span>
   );
 
@@ -180,7 +222,6 @@ const CustomDataTable = (props) => {
       <i className="fa-duotone fa-download"></i>
     </div>
   );
-
   return (
     <div>
       <button style={{ position: 'relative', bottom: 42 }} className="btn-style" onClick={exportToExcel}>Export</button>
@@ -190,10 +231,13 @@ const CustomDataTable = (props) => {
           value={loader ? Array.from({ length: 5 }) : gridData}
           paginator
           responsiveLayout="scroll"
-          paginatorTemplate=" PrevPageLink PageLinks NextPageLink  CurrentPageReport RowsPerPageDropdown"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport "
           currentPageReportTemplate="Showing Records : {first} to {last} "
           rows={25}
-         
+          totalRecords={totalRecord}
+          first={(currentPage - 1) * 25}
+          onPage={(event) => setCurrentPage(event.page + 1)}
+          lazy
           dataKey="id"
           filters={filterArray}
           filterDisplay="row"
@@ -226,6 +270,15 @@ const CustomDataTable = (props) => {
             openConfirmModal={openConfirmation} 
             acceptConfirmation={() => acceptConfirmation()} 
             rejectConfirmation={() => rejectConfirmation()} />
+            <ConfirmDialog
+        visible={deleteDialogVisible}
+        onHide={() => setDeleteDialogVisible(false)}
+        message="Are you sure you want to delete this record?"
+        header="Confirmation"
+        icon="pi pi-exclamation-triangle"
+        accept={deleteRecords}
+        reject={() => setDeleteDialogVisible(false)}
+      />
 
     </div>
   );

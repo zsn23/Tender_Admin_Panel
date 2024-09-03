@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-
-import "./login__.css"
+// import "./login__.css"
+import "./login.css"
 import { Input, Form, Label } from "reactstrap";
 import { billingApiServices } from "../../services/BillingApiService";
 import { localStorageService } from "../../services/LocalStorageService";
@@ -11,7 +11,9 @@ import Cookies from "universal-cookie";
 import { Checkbox } from "primereact/checkbox";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { RadioButton } from "primereact/radiobutton";
-import imgSrc from "../../assets/img/logos/my_logo.png";
+import imgSrc from "../../assets/img/logos/favicon_red_background.png";
+// import imgSrc from "../../assets/img/logos/my_logo.png";
+
 import aboutImg from "../../assets/img/logos/about-img.png";
 
 import { InputText } from "primereact/inputtext";
