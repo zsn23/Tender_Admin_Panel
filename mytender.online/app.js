@@ -882,6 +882,69 @@ app.get('/tender', (req, res) => {
   );
 });
 
+
+// app.get('/tender', (req, res) => {
+//   const page = parseInt(req.query.page) || 1;
+//   const limit = parseInt(req.query.limit) || 25;
+//   const offset = (page - 1) * limit;
+
+//   let query = 'SELECT tenders.*, users.name AS userName, cities.name AS cityName, organizations.name AS organizationName, newspapers.name AS newPaperName FROM tenders INNER JOIN users ON tenders.effectedBy = users.id INNER JOIN cities ON tenders.city = cities.id INNER JOIN organizations ON tenders.organization = organizations.id INNER JOIN newspapers ON tenders.newspaper = newspapers.id';
+//   let queryParams = [limit, offset];
+  
+//   if (req.query.filters) {
+//     const filters = JSON.parse(req.query.filters);
+//     const filterClauses = Object.entries(filters).map(([key, { value, matchMode }]) => {
+//       if (matchMode === 'contains') {
+//         return `tenders.${key} LIKE ?`;
+//       }
+//       // Add other match modes if needed
+//       return '';
+//     }).filter(clause => clause).join(' AND ');
+
+//     if (filterClauses) {
+//       query += ` WHERE ${filterClauses}`;
+//       queryParams = queryParams.concat(Object.values(filters).map(filter => `%${filter.value}%`));
+//     }
+//   }
+
+//   query += ' LIMIT ? OFFSET ?';
+//   pool.query(query, queryParams, (err, results) => {
+//     if (err) {
+//       return res.status(500).json({ status: false, message: 'An error occurred in fetching tender.' });
+//     }
+
+//     pool.query('SELECT COUNT(*) AS total FROM tenders', (err, countResults) => {
+//       if (err) {
+//         return res.status(500).json({ status: false, message: 'An error occurred while fetching the total count of tenders.' });
+//       }
+
+//       const totalItems = countResults[0].total;
+//       const totalPages = Math.ceil(totalItems / limit);
+
+//       return res.status(200).json({
+//         status: true,
+//         message: 'All Tender',
+//         data: {
+//           current_page: page,
+//           data: results,
+//           first_page_url: `http://localhost:${PORT}/tender?page=1&limit=${limit}`,
+//           from: offset + 1,
+//           last_page: totalPages,
+//           last_page_url: `http://localhost:${PORT}/tender?page=${totalPages}&limit=${limit}`,
+//           next_page_url: page < totalPages ? `http://localhost:${PORT}/tender?page=${page + 1}&limit=${limit}` : null,
+//           path: `http://localhost:${PORT}/tender`,
+//           per_page: limit,
+//           prev_page_url: page > 1 ? `http://localhost:${PORT}/tender?page=${page - 1}&limit=${limit}` : null,
+//           to: offset + results.length,
+//           total: totalItems
+//         },
+//         statusCode: 200
+//       });
+//     });
+//   });
+// });
+
+
 app.get('/tender/:id', (req, res) => {
   const tenderId = req.params.id;
   pool.query(

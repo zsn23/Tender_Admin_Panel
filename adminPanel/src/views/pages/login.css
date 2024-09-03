@@ -1,473 +1,204 @@
-.custom-control-label::after,
-.custom-control-label::before {
-    top: 0.15rem !important;
-}
-
-.gradient-indigo-purple.text-center.card {
-    width: 400px;
-    margin: 40px 0px !important;
-}
-
-  
-
-.horizontal-bar {
-    width: 100%;
-    height: 30px;
-    background-color: #f0f0f0;
-    border-radius: 4px;
-    margin-bottom: 10px;
-  }
-  
-  .bar {
-    height: 100%;
-    border-radius: 4px;
-    transition: width 0.5s;
-  }
-  
-  .bar-red {
-    background-color: rgb(17, 139, 68); 
-  }
-  
-  .bar-yellow {
-    background-color: #ffff00; 
-  }
-  
-  .bar-green {
-    background-color: #00ff00; 
-  }
-  
-
-a.signin-btn {
-    color: white;
-    text-decoration: none;
-}
-
-/* body {
-    float: left;
-    width: 100%;
-    display: block;
-    min-height: auto;
-} */
-.tenderLogo{
-    background-color: rgba(0, 0, 0, 0.1) !important;
-    backdrop-filter: blur(50px) !important;
-    padding-right: 2px;
-    border-radius: 10px !important; /* Rounded corners */
-}
-.login-box {
-
-    background-color: rgba(255, 255, 255, 0.1) !important;
-    backdrop-filter: blur(10px) !important;
-    border-radius: 10px !important; /* Rounded corners */
-    padding: 0px !important; /* Spacing inside the container */
-   
-    width: 100% !important;
-    height: 100vh !important; 
-    display: flex !important; 
-    align-items: center !important; 
-    justify-content: center !important; 
-    flex-direction: column !important;
-    /* width: 410px;
-    padding: 60px 50px 70px 50px;
-    margin-left: 37%;
-    border-radius: 20px;
-    float: left;
-    margin-top: 4%; */
-    /* width: 30%; */
-}
-
-.resend-email {
-    color: #4584cc !important;
-}
-
-.login-input input.p-inputtext.p-component.p-password-input {
-    border: none;
-    background: unset;
-    font-size: 14px;
-    padding: unset;
-}
-
-.resend-email-disable {
-    pointer-events: none;
-    cursor: default;
-}
-
-/* .login-bg {
-    background: linear-gradient(0deg, rgba(48, 46, 47, 0.5), rgba(126, 120, 123, 0.4)), url(../../assets/img//logos/about-img.png)no-repeat;
-    background-size: cover;
-    height: 100%;
-    background-position: center;
-} */
+/* Background Styling */
 .background__ {
-   
-
     background-image: url('../../assets/img//logos/about-img.png') !important;
     background-repeat: no-repeat !important;
     background-size: 100% 100% !important;
-   
-
     background-position: center !important;
-   
     height: 100vh !important; 
     width: 100% !important;  
- 
+    position: relative;
+}
+.background__::before {
+    content: '' !important ; /* Empty content */
+    position: absolute !important; /* Position it absolutely */
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0, 0, 0, 0.27) !important; /* Semi-transparent white */
+    backdrop-filter: blur(4px) !important; /* Apply blur effect */
+    z-index: 1 !important; /* Ensure it sits behind the content */
+   
 }
 
-span.copy-right {
-    color: #000000;
+
+/* Card Styling */
+.card.login-box {
+    border-radius: 15px; /* Rounded corners for card */
+    overflow: hidden;
+    z-index: 1;
+    position: relative; 
+    background-color: transparent !important;
+    box-sizing: border-box;
+}
+/* .card.login-box::before {
+    content: ''; 
     position: absolute;
-    bottom: 0px;
-    display: block;
-    text-align: center;
-    width: 100%;
-    font-size: 16px;
-    font-weight: 600;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgb(255, 255, 255); 
+    backdrop-filter: blur(10px);
+    z-index: -1; 
+    pointer-events:visibleFill; 
+} */
+
+.card-body {
+    padding: 30px !important; /* Padding inside the card */
+    /* background: radial-gradient(circle, #0B2B11, #2a6a43); */
+    padding-bottom: 20px !important;
+    z-index: 1;
 }
 
+/* .login-logo .tenderLogo {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(50px) !important;
+    padding-right: 2px;
+    border-radius: 10px !important;
+} */
 
-
-div#root,
-.error-layout,
-main.main {
-    height: 100%;
-}
-
-.login-logo img,
-.login-logo-mobile img {
-    width: 150px;
-}
-
-.login-logo,
-.forget-password,
-.login-logo-mobile {
-    text-align: center;
-    float: left;
-    width: 100%;
-}
-
-.login-head h1,
-.login-head p {
-    font-size: 24px;
-    margin: 0px;
-    text-align: center;
-    color: #000000;
-    line-height: 1.3;
-    font-weight: bolder;
-}
 .login-head h1{
-    color: rgb(17, 139, 68);
-}
-
-.form-check-input:focus {
-    border-color: none;
-    box-shadow: none;
-}
-
-.login-head h3 {
-    font-size: 26px;
-    margin-bottom: 5px;
-}
-
-.login-head p {
-    font-size: 12px;
-}
-
-.error-message {
-    font-size: 12px;
-    color: #ff0000b0;
-    width: 100%;
-    padding-left: 10px;
-    float: left;
-    text-align: justify;
-}
-
-.success-message {
-    font-size: 14px;
-    color: #4caf50;
-    width: 100%;
-    display: inline-block;
-    text-align: center;
-}
-
-.remember-label {
-    font-size: 14px;
-    color: #000000db !important;
-    letter-spacing: 0px;
-    text-transform: none;
-    font-weight: 450;
-    padding-left: 5px;
-}
-
-.login-head {
-    padding: 30px 0px;
-    float: left;
-    width: 100%;
+    color: rgb(255, 255, 255);
+    font-weight: 800 !important;
+    font-size: larger !important;
+    letter-spacing: 2px;
 }
 
 .login-input-image {
     position: absolute;
-    padding: 5px 10px;
-    height: auto;
-    width: 51px;
-    z-index: 1;
+    top: 50%;
+    left: 15px; /* Adjust as needed */
+    transform: translateY(-50%);
+    width: 20px; /* Adjust size as needed */
+    height: 20px; /* Adjust size as needed */
+    pointer-events: none; /* Ensures the image does not interfere with input interaction */
+    z-index: 2; /* Ensures the image is above the input field */
 }
 
-.login-box .login-input,
-.login-box input.p-inputtext.p-component.p-password-input {
-    border-radius: 20px;
-    border: none;
-    background-color: rgb(232, 240, 254) !important;
-    transition: unset;
-    color: #575757 !important;
-    padding: 10px 55px;
-    height: 40px !important;
-    font-size: 14px;
-    outline: none;
-    line-height: unset;
-    font-weight: 400;
-    width: 100%;
+.form-control.login-input {
+    padding-left: 45px; /* Adjust to make space for the input image */
+    padding-right: 40px; /* Adjust to make space for the toggle icon */
+    border-radius: 15px; /* Rounded corners */
+    border: 1px solid #ced4da; /* Light border color */
+    background-color: #f8f9fa; /* Light background color */
+    font-size: 10px; /* Larger font size */
+    color: #495057; /* Darker text color */
+    height: 45px; /* Adjust height */
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
-
-.login-box .p-checkbox .p-checkbox-box .p-checkbox-icon {
-    font-size: 11px !important;
-}
-
-.login-box .p-checkbox .p-checkbox-box {
-    width: 16px !important;
-    height: 16px !important;
-    border-radius: 3px !important;
-    top: 0px;
-    position: relative;
-}
-
-.login-box .p-checkbox {
-    width: 16px !important;
-    height: 16px !important;
-    display: inline-block;
-    cursor: pointer;
-    user-select: none;
-    vertical-align: middle !important;
-    position: relative;
-    top: 0px;
-}
-
-
-
-
-/* .login-box .rememberme-checkbox {
-    padding-left: 3px;
-} */
-
-.login-box input.p-inputtext.p-component.p-password-input::placeholder,
-.login-box .login-input::placeholder {
-    color: #b1c1d9;
-    font-weight: 400;
-}
-
-.panelClassName {
-    display: none !important;
-}
-
-i.pi.pi-eye {
-    cursor: pointer;
-}
-
-
-
-.login-box .p-password.p-component.p-inputwrapper.p-input-icon-right {
-    width: 100%;
-}
-
-.login-box i.pi.pi-eye,
-.login-box i.pi.pi-eye-slash {
-    right: 20px;
-}
-
-.p-inputtext:enabled:focus {
-    box-shadow: none;
-    outline: none;
-}
-
-/* @-moz-document url-prefix() {
-    .login-box .login-input {
-        font-family: "Montserrat", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    }
-} */
-
-.login-box .login-input:focus {
-    border: none !important;
-    box-shadow: none;
-}
-
-.login-box .form-group {
-    margin: 15px 0px;
-    /* float: left; */
-    width: 28%;
-   
-}
-
-button.signin-btn {
+.signin-btn {
     font-size: 14px;
     padding: 6px 20px;
     font-weight: 500;
-    border: none;
     border-radius: 20px;
-    outline: none;
-    display: block;
-    width: 100%;
     color: #fff;
-    cursor: pointer;
-    background-color: rgb(17, 139, 68);
+    background-color: rgb(139, 17, 17);
+    border: none !important;
+    transition: background 0.4s ease-in-out;
 }
 
-button.signin-btn:hover {
-    background: black;
+.signin-btn:hover {
+    background: rgb(255, 255, 255) !important;
+    color: #000000 !important;
+
 }
 
-.forget-password {
-    padding: 20px 0px;
-}
-
-.check-inbox .forget-password {
-    padding: 0px;
-}
-
-.forget-password {
-    padding: 15px 0px;
-}
-
-.forget-password a {
-    color: #ef6767 !important;
-    font-size: 14px;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.check-inbox,
-.forget-pw {
-    float: left;
-    width: 100%;
-    height: 290px;
-}
-
-.forget-pw {
-    height: 330px;
-}
-
-@media (min-width: 575px) {
-    .login-logo-mobile {
-        display: none;
-    }
-}
-
-@media (max-width: 575px) {
-    .login-logo {
-        display: none;
-    }
-
-    .login-logo-mobile img {
-        width: 200px;
-    }
-
-    .gradient-indigo-purple.text-center.card {
-        width: 100%;
-        margin: 0px !important;
-    }
-
-    .d-flex.align-items-center.justify-content-center.col-12 {
-        padding: 0px;
-    }
-
-    .login-box {
-        width: 100%;
-        display: table;
-        margin: auto;
-        float: unset;
-        height: 100%;
-    }
-
-
-    .login-box {
-        padding: 40px 40px 0px 40px;
-        background-color: transparent;
-    }
-
-    .login-head h1,
-    .login-head h2,
-    .login-head h3,
-    .login-head p,
-    .remember-label,
-    .forget-password a {
-        color: #fff !important;
-    }
-
-    span.copy-right {
-        font-size: 12px;
-    }
-}
-
-/* Two-Factor Authentication CSS */
-
-.login-head h2 {
-    margin-bottom: 20px !important;
-}
-
-.login-head h2 {
-    color: black;
-    font-size: 18px;
-    line-height: 1.3;
-    margin: 0;
-    text-align: center;
-    font-weight: 600;
-}
-
-.login-head h6 {
-    color: #07060659;
-    font-size: 14px;
-    margin-bottom: 10px !important;
-    line-height: 1.3;
-    margin: 0;
-    text-align: center;
-}
-
-.h6 {
-    font-family: nimbus-san-bold;
-}
-
-.login-head.radio-class {
+.copy-right {
+    color: #ffffff;
     display: block;
-    margin-top: 0em;
+    text-align: center;
+    font-size: 10px;
+    font-weight: bold;
 }
 
-.type-selection-radio-button {
-    line-height: 0px !important;
-    margin-top: 8px !important;
+
+
+.form-control.login-input:focus {
+    border-color: #17a2b8; /* Bootstrap primary color */
+    box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25); /* Bootstrap focus shadow */
+    outline: none;
 }
 
-.p-radiobutton {
-    display: inline-flex;
+/* Placeholder text styling */
+.form-control.login-input::placeholder {
+    color: #6c757d; /* Light grey color */
+    opacity: 1; /* Ensure placeholder is fully opaque */
+}
+
+/* Improve appearance on hover/focus */
+.form-control.login-input:hover,
+.form-control.login-input:focus {
+    border-color: #17a2b8; /* Bootstrap primary color */
+}
+
+/* Remove box shadow on focus for specific input components */
+.p-inputtext:enabled:focus {
+    box-shadow: none;
+}
+.p-inputtext{
+    border: none !important;
+
+}
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 15px; /* Adjust as needed */
+    transform: translateY(-50%);
     cursor: pointer;
-    user-select: none;
-    vertical-align: bottom;
-    /* font-size: 21px; */
+    font-size: 20px; /* Adjust size as needed */
+    color: #6c757d; /* Light grey color */
+    z-index: 3; /* Ensure it is above the input field */
 }
 
-.p-component,
-.p-component * {
-    box-sizing: border-box;
+
+
+/* Ensure proper alignment and spacing */
+.form-group.mb-3.d-flex.align-items-center {
+    display: flex;
+    align-items: center;
 }
 
-.p-radiobutton {
-    width: 25px;
-    height: 22px;
+.custom-control.custom-checkbox {
+    display: flex;
+    align-items: center;
 }
 
-.p-radiobutton .p-radiobutton-box {
-    border: 2px solid #ced4da;
-    background: #ffffff;
-    width: 20px;
-    height: 20px;
-    color: #495057;
-    border-radius: 50%;
-    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+/* Optional: Space between checkbox and label */
+.custom-control.custom-checkbox .custom-control-label {
+    margin-left: 8px; /* Adjust spacing between checkbox and label */
+}
+/* Tender Logo Styling */
+.tenderLogo {
+    width: 50px;
+    height: auto;
+    border-radius: 10px;
+    /* background-color: rgba(255, 255, 255, 0.8);  */
+    padding: 10px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    margin: 0 auto; 
+    display: block; 
+    transition: transform 0.3s ease; 
+    padding-right: 10px !important;
+}
+
+/* Optional hover effect */
+.tenderLogo:hover {
+    transform: scale(1.05); 
+}
+.custom-checkbox {
+    display: flex;
+    align-items: center;
+}
+
+/* Styling for the checkbox itself */
+.rememberme-checkbox {
+    margin-top: -4px; 
+}
+
+/* Styling for the label text */
+.remember-label {
+    color: #ffffff; /* White color for the label text */
+    font-weight: lighter; /* Make the label text bold */
+    font-size: 15px !important; /* Adjust font size as needed */
 }
