@@ -6,6 +6,7 @@ import { Button } from "primereact/button";
 import { FilterMatchMode } from "primereact/api";
 import { Skeleton } from "primereact/skeleton";
 import ConfirmationDialog from "../alert/ConfirmationDialog";
+import { ConfirmDialog } from "primereact/confirmdialog";
 import { billingApiServices } from '../../services/BillingApiService';
 import Toast from "../alert/Toast"
 import { Dropdown } from "primereact/dropdown";
@@ -20,6 +21,8 @@ const CustomDataTable = (props) => {
   const [openSnackBar, setOpenSnackBar] = useState(false)
   const [responseMsg, setResponseMsg] = useState("")
   const [selectedRows, setSelectedRows] = useState([])
+
+  const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
 
   let [filterArray, setfilterArray] = useState({
     email: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -54,8 +57,13 @@ const CustomDataTable = (props) => {
       deleteRecords()
     }
   }
+  const confirmDelete = (data) => {
+    setDataForEdit(data);
+    setDeleteDialogVisible(true);
+  };
 
   const deleteRecords = () => {
+    setDeleteDialogVisible(false);
     setOpenConfirmation(false)
 
     const body = {
@@ -99,17 +107,24 @@ const CustomDataTable = (props) => {
     setOpenConfirmation(false)
   }
 
-  const bodyTemplate = (rowData) => {
-    if (loader == true) {
-      return <Skeleton shape="circle" size="2rem" className="mr-2"></Skeleton>;
-    }
-    return (
-      <span>
-        <span style={{ margin: "5px" }}><i onClick={() => editCategory(rowData)} className="pi pi-pencil "></i></span>
-        <i onClick={() => deleteCategory(rowData)} className="pi pi-trash"></i>
-      </span>
-    );
-  };
+  const bodyTemplate = (rowData) => loader ? (
+    <Skeleton shape="circle" size="1rem" className="mr-2" />
+  ) : (
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <Button
+        icon="pi pi-pencil"
+        onClick={() => editCategory(rowData)}
+        className="p-button-rounded p-button-warning my-2"
+        style={{ margin: '0.5rem' }} // Optional: adds spacing between buttons
+      />
+      <Button
+        icon="pi pi-trash"
+        onClick={() => confirmDelete(rowData)}
+        className="p-button-rounded p-button-warning"
+        style={{ margin: '0.5rem' }}
+      />
+    </div>
+  );
 
   const filterClearTemplate = (options) => {
     return (
@@ -264,11 +279,19 @@ const CustomDataTable = (props) => {
     const formattedDateTime = `${hours}:${minutes} ${day}-${month}-${year}`;
     return formattedDateTime
   }
+  const customHeaderTemplate = () => (
+  
+    <div >
+    <span>Action</span>
+    <i className="pi pi-wrench" style={{ fontSize: '13px' ,marginLeft : "3px" }} ></i>
+    </div>
+  );
 
   return (
-    <div>
+  
       <div className="container-fluid" >
         <DataTable
+        header="SUBSCRIPTION RECORDS"
           value={loader ? Array.from({ length: 5 }) : gridData}
           paginator
           responsiveLayout="scroll"
@@ -284,7 +307,7 @@ const CustomDataTable = (props) => {
           selection={selectedRows}
           onSelectionChange={(e) => setSelectedRows(e.value)}
         >
-          <Column selectionMode="multiple" headerStyle={{ width: '5%' }}></Column>
+          {/* <Column selectionMode="multiple" ></Column> */}
           <Column
             field="userName"
             header="Name"
@@ -304,7 +327,7 @@ const CustomDataTable = (props) => {
             sortable
             filter
             filterPlaceholder="Search"
-            style={{ width: "10%" }}
+           
             filterClear={filterClearTemplate}
             filterApply={filterApplyTemplate}
             
@@ -317,7 +340,7 @@ const CustomDataTable = (props) => {
             sortable
             filter
             filterPlaceholder="Search"
-            style={{ width: "10%" }}
+            
             filterClear={filterClearTemplate}
             filterApply={filterApplyTemplate}
             
@@ -329,7 +352,7 @@ const CustomDataTable = (props) => {
             header="Company"
             sortable
             body={CompanyBodyTemplate}
-            style={{ width: "8%" }}
+           
 
             filter
             filterPlaceholder="Search"
@@ -344,7 +367,7 @@ const CustomDataTable = (props) => {
             sortable
             filter
             filterElement={statusFilterTemplate}
-            style={{ width: "5%" }}
+           
             body={StatusBodyTemplate}
 
           ></Column>
@@ -353,7 +376,7 @@ const CustomDataTable = (props) => {
             field="billingPeriod"
             header="billing Period"
             sortable
-            style={{ width: "15%" }}
+           
             body={BillingPeriodBodyTemplate}
 
             filter
@@ -367,7 +390,7 @@ const CustomDataTable = (props) => {
             field="categories"
             header="Categories"
             sortable
-            style={{ width: "20%" }}
+           
             body={CategoriesBodyTemplate}
 
             filter
@@ -382,7 +405,7 @@ const CustomDataTable = (props) => {
             field="billingDate"
             header="Billing Date"
             sortable
-            style={{ width: "20%" }}
+           
             filter
             filterPlaceholder="Search"
             filterClear={filterClearTemplate}
@@ -391,18 +414,29 @@ const CustomDataTable = (props) => {
 
             body={billingDateBodyTemplate}
           ></Column>
-          <Column header="Action" body={bodyTemplate} />
+          <Column field="id" header={customHeaderTemplate}  body={bodyTemplate} />
 
         </DataTable>
-      </div>
+      
 
       <Toast open={openSnackBar}
         severity={severity}
         handleClose={() => setOpenSnackBar(false)}
         message={responseMsg} />
 
-      <ConfirmationDialog openConfirmModal={openConfirmation} acceptConfirmation={() => acceptConfirmation()} rejectConfirmation={() => rejectConfirmation()} />
-    </div>
+     
+      
+      <ConfirmDialog
+        visible={deleteDialogVisible}
+        onHide={() => setDeleteDialogVisible(false)}
+        message="Are you sure you want to delete this record?"
+        header="Confirmation"
+        icon="pi pi-exclamation-triangle"
+        accept={deleteRecords}
+        reject={() => setDeleteDialogVisible(false)}
+      />
+
+      </div>
   );
 };
 export default CustomDataTable;

@@ -13,6 +13,8 @@ import "primeicons/primeicons.css";
 import { InputSwitch } from 'primereact/inputswitch';
 import { billingApiServices } from '../../services/BillingApiService';
 import _EventEmitter from "./../../constants/emitter";
+// import { ConfirmDialog } from "primereact/confirmdialog";
+
 
 const UsersTable = (props) => {
   const [isModalOpen, setisModalOpen] = useState(false);
@@ -29,6 +31,8 @@ const UsersTable = (props) => {
   const [responseMsg, setResponseMsg] = useState("")
   const [userStatus, setUserStatus] = useState('Disable');
   const options = ['Disable', 'Enable'];
+
+
   
 
 
@@ -78,7 +82,7 @@ const UsersTable = (props) => {
     setisModalOpen(!isModalOpen);
     setRefreshState(new Date())
   };
-
+ 
   const closeModal = () => {
     // alert("close model")
   }
@@ -192,18 +196,26 @@ const UsersTable = (props) => {
     }
   };
 
-  const bodyTemplate = (rowData) => {
-    if (rowData == undefined || loader == true) {
-      return <Skeleton shape="circle" size="2rem" className="mr-2"></Skeleton>;
+  const bodyTemplate = (rowData) => loader ? (
+    <Skeleton shape="circle" size="1rem" className="mr-2" />
+  ) : (
+    <div style={{ display: 'flex', alignItems: 'center' , justifyContent:"center " }}>
+      <Button
+        icon="pi pi-pencil"
+        onClick={() => edituser(rowData)}
+        className="p-button-rounded p-button-warning my-2"
+        style={{ margin: '0.5rem' }} // Optional: adds spacing between buttons
+      />
+    </div>
+  );
 
-    }
-    return (
-      <div>
-        <i className="pi pi-pencil " onClick={() => edituser(rowData)}></i>
-
-      </div>
-    );
-  };
+  const customHeaderTemplate = () => (
+  
+    <div >
+    <span>Action</span>
+    <i className="pi pi-wrench" style={{ fontSize: '13px' ,marginLeft : "3px" }} ></i>
+    </div>
+  );
 
 
   const changeUserStatus = (e, id) => {
@@ -389,9 +401,10 @@ const UsersTable = (props) => {
   };
 
   return (
-    <div>
-      <div className="container-fluid table-scroll">
+  
+      <div className="container-fluid  ">
         <DataTable
+          header="USERS INFORMATION"
           value={users}
           paginator
           responsiveLayout="scroll"
@@ -410,7 +423,7 @@ const UsersTable = (props) => {
             filter
             filterField="name"
             filterPlaceholder="Search... "
-            style={{ width: "12.5%" }}
+           
             body={UserNamekeletonTemplate}
           ></Column>
 
@@ -421,7 +434,7 @@ const UsersTable = (props) => {
             filter
             filterField="email"
             filterPlaceholder="Search... "
-            style={{ width: "12.5%" }}
+         
             body={EmailskeletonTemplate}
           ></Column>
          
@@ -432,13 +445,13 @@ const UsersTable = (props) => {
             filter
             filterField="phoneNumber"
             filterPlaceholder="Search"
-            style={{ width: "12.5%" }}
+           
             body={PhoneskeletonTemplate}
           ></Column>
             
-          <Column header="Action" body={bodyTemplate}  style={{ width: "12.5%" }}/> 
-        </DataTable>
-      </div>
+            <Column field="id" header={customHeaderTemplate}  body={bodyTemplate}></Column>
+            </DataTable>
+      
 
       {/* {isModalOpen && ( */}
       <SaveUserModal

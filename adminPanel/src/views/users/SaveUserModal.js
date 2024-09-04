@@ -311,7 +311,7 @@ const SaveUserModal = (props) => {
               <Col sm="12">
                 <Card>
                   <CardBody>
-                    <div className="px-1">
+                    <div className="  px-1">
                       <Form>
                         <div className="form-body">
                           <Row>

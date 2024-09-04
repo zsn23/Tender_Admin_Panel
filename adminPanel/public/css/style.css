@@ -85,7 +85,7 @@ a{
   border-radius: 5px;
   right: 0px;
   left: auto;
-  top: 65px ;
+  top: 57px ;
   z-index: 9999 !important;
 }
 .saved-role-input .p-inputtext{
@@ -1544,10 +1544,11 @@ thead.p-datatable-thead {
   border: 5px solid transparent;
   background-clip: padding-box;
   background: radial-gradient(circle, #0B2B11, #2a6a43) !important; 
+  
   box-shadow: 
     0 12px 24px rgba(0, 0, 0, 0.5), 
     0 24px 48px rgba(0, 0, 0, 0.4);  
-  padding: 20px 0 20px 0; /* Padding for spacing */
+  padding: 10px 0 20px 0; /* Padding for spacing */
  
 }
 
@@ -3369,6 +3370,15 @@ h5.card-title {
   }
 }
 
-.p-datatable .p-paginator-bottom{
-  border-width: 0PX !important;
+
+.p-datatable .p-datatable-header {
+  background: none !important;
+  color: #5E5C56;
+  border: none !important;
+   
+  border-width: 0px !important;
+  padding-bottom: 1rem !important;
+  font-weight: 900 !important;
+  text-align: center !important;
+  font-size: 40px !important;
 }

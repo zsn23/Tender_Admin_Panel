@@ -40,6 +40,7 @@ const CustomDataTable = (props) => {
     category: { value: null, matchMode: FilterMatchMode.CONTAINS },
     cityName: { value: null, matchMode: FilterMatchMode.CONTAINS },
     newPaperName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    
   });
 
   useEffect(() => {
@@ -74,19 +75,19 @@ const CustomDataTable = (props) => {
   };
 
   
-  const deleteTender = (data) => {
-    console.log('Delete button clicked', data);
-    setDataForEdit(data);
-    setOpenConfirmation(true);
-  };
+  // const deleteTender = (data) => {
+  //   console.log('Delete button clicked', data);
+  //   setDataForEdit(data);
+  //   setOpenConfirmation(true);
+  // };
   
 
-  const acceptConfirmation = () => {
-    console.log('Accept confirmation clicked', dataForEdit);
-    if (dataForEdit != null) {
-      deleteRecords();
-    }
-  };
+  // const acceptConfirmation = () => {
+  //   console.log('Accept confirmation clicked', dataForEdit);
+  //   if (dataForEdit != null) {
+  //     deleteRecords();
+  //   }
+  // };
 const confirmDelete = (data) => {
   setDataForEdit(data);
   setDeleteDialogVisible(true);
@@ -239,12 +240,13 @@ const confirmDelete = (data) => {
     </div>
   );
   return (
-    <div>
+    
+      
+      <div className="container-fluid mb-5" >
       <button style={{ position: 'relative', bottom: 42 }} className="btn-style" onClick={exportToExcel}>Export</button>
-      <div className="container-fluid mb-5">
         <DataTable
-        header="Tender Table"
-         tableStyle={{ minWidth: '50rem' }}
+        header="TENDER RECORDS"
+         tableStyle={{ width: '100%' }}
           value={loader ? Array.from({ length: 5 }) : gridData}
           paginator
           responsiveLayout="scroll"
@@ -276,17 +278,14 @@ const confirmDelete = (data) => {
           {/* <Column field="tenderImage" header="Download"    body={TenderImageTemplate}></Column> */}
           <Column field="id" header={customHeaderTemplate}  body={bodyTemplate}></Column>
         </DataTable>
-      </div>
+      
     
                   <Toast open={openSnackBar}
                 severity={severity}
                 handleClose={() => setOpenSnackBar(false)}
                 message={responseMsg} />
 
-            <ConfirmationDialog 
-            openConfirmModal={openConfirmation} 
-            acceptConfirmation={() => acceptConfirmation()} 
-            rejectConfirmation={() => rejectConfirmation()} />
+            
             <ConfirmDialog
         visible={deleteDialogVisible}
         onHide={() => setDeleteDialogVisible(false)}
@@ -296,8 +295,8 @@ const confirmDelete = (data) => {
         accept={deleteRecords}
         reject={() => setDeleteDialogVisible(false)}
       />
-
-    </div>
+</div>
+   
   );
 };
 

@@ -89,17 +89,26 @@ const CustomDataTable = (props) => {
     setOpenConfirmation(false)
   }
 
-  const bodyTemplate = (rowData) => {
-    if (loader == true) {
-      return <Skeleton shape="circle" size="2rem" className="mr-2"></Skeleton>;
-    }
-    return (
-      <span>
-        <span style={{margin:"5px"}}><i onClick={() => editSetting(rowData)} className="pi pi-pencil "></i></span>
-        {/* <i onClick={() => deleteSetting(rowData)} className="pi pi-trash"></i> */}
-      </span>
-    );
-  };
+  const bodyTemplate = (rowData) => loader ? (
+    <Skeleton shape="circle" size="1rem" className="mr-2" />
+  ) : (
+    <div style={{ display: 'flex', alignItems: 'center' , justifyContent:"center " }}>
+      <Button
+        icon="pi pi-pencil"
+        onClick={() => editSetting(rowData)}
+        className="p-button-rounded p-button-warning my-2"
+        style={{ margin: '0.5rem' }} // Optional: adds spacing between buttons
+      />
+    </div>
+  );
+
+  const customHeaderTemplate = () => (
+  
+    <div >
+    <span>Action</span>
+    <i className="pi pi-wrench" style={{ fontSize: '13px' ,marginLeft : "3px" }} ></i>
+    </div>
+  );
 
   const filterClearTemplate = (options) => {
     return (
@@ -174,9 +183,10 @@ const CustomDataTable = (props) => {
   }
 
   return (
-    <div>
+    
       <div className="container-fluid" >
         <DataTable
+          header="TENDER SETTINGS"
           value={loader ? Array.from({ length: 5 }) : gridData}
           paginator
           responsiveLayout="scroll"
@@ -196,7 +206,7 @@ const CustomDataTable = (props) => {
             sortable
             filter
             filterPlaceholder="Search"
-            style={{ width: "30%" }}
+          
             filterClear={filterClearTemplate}
             filterApply={filterApplyTemplate}
             
@@ -208,16 +218,17 @@ const CustomDataTable = (props) => {
             sortable
             filter
             filterPlaceholder="Search"
-            style={{ width: "30%" }}
+           
             filterClear={filterClearTemplate}
             filterApply={filterApplyTemplate}
             
             body={answerBodyTemplate}
           ></Column>
          
-          <Column header="Action" body={bodyTemplate}      style={{ width: "15%" }}/>
+         <Column field="id" header={customHeaderTemplate}  body={bodyTemplate}></Column>
+
         </DataTable>
-      </div>
+      
 
       {isModalOpen && (<SaveSettingModal
         dataForEdit={dataForEdit}

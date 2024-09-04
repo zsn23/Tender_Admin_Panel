@@ -100,8 +100,8 @@ class Customizer extends Component {
               <XCircle size={18} />
             </span>
             <PerfectScrollbar>
-              <div className="customizer-content m-3">
-                <h4 className="text-uppercase mb-0 text-bold-400">
+              <div className="customizer-content mt-5">
+                <h4 className=" mb-0 text-bold-400 text-center ">
                   Dark Theme Customizer
                 </h4>
                 <hr className="my-3" />
