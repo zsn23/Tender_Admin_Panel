@@ -1,0 +1,26 @@
+.sidebar-header____ {
+    z-index: 1000 !important;
+    
+  }
+  
+  .logo-container_______ {
+    display: flex !important;
+    align-items: center !important;
+    text-decoration: none !important;
+    background-color: #000000 !important;
+  }
+  
+  .sidebar-logo_____ {
+    width: 100% !important;
+    height: auto !important;
+    transition: transform 0.3s !important;
+    z-index: 1000 !important;
+    background: radial-gradient(circle, #0B2B11, #2a6a43); /* Optional: Adjust based on your theme */
+    padding: 8%;
+   
+  }
+  
+  .sidebar-logo:hover {
+    transform: scale(1.05) !important; /* Optional: Adds a hover effect */
+  }
+  

@@ -160,7 +160,7 @@ class ThemeNavbar extends Component {
     return (
       <div>
         <Navbar className="navbar navbar-expand-lg bg-navbar justify-content-center">
-          <div className="container-fluid ">
+          <div className="container-fluid " style={{paddingBottom:"6px"}}>
             <h5 className="page-hd p-3 text-light">{this.getHeading()}</h5>
 
 

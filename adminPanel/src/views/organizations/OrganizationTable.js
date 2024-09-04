@@ -6,6 +6,7 @@ import { Button } from "primereact/button";
 import { FilterMatchMode } from "primereact/api";
 import { Skeleton } from "primereact/skeleton";
 import ConfirmationDialog from "./../alert/ConfirmationDialog";
+import { ConfirmDialog } from "primereact/confirmdialog";
 import { billingApiServices } from '../../services/BillingApiService';
 import * as XLSX from 'xlsx';
 import FileSaver from 'file-saver';
@@ -28,6 +29,7 @@ const CustomDataTable = (props) => {
   const _userData = localStorageService.getPersistedData("USER_DETAILS")
   const [names, setNames] = useState([]);
   const [stateManager, setStateManager] = useState(0);
+  const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
 
 
   let [filterArray, setfilterArray] = useState({
@@ -56,8 +58,14 @@ const CustomDataTable = (props) => {
       deleteRecords()
     }
   }
+  const confirmDelete = (data) => {
+    setDataForEdit(data);
+    setDeleteDialogVisible(true);
+  };
+    
 
   const deleteRecords = () => {
+    setDeleteDialogVisible(true);
     setOpenConfirmation(false)
 
     const body = {
@@ -101,17 +109,34 @@ const CustomDataTable = (props) => {
     setOpenConfirmation(false)
   }
 
-  const bodyTemplate = (rowData) => {
-    if (loader == true) {
-      return <Skeleton shape="circle" size="2rem" className="mr-2"></Skeleton>;
-    }
-    return (
-      <span>
-        <span style={{ margin: "5px" }}><i onClick={() => editCategory(rowData)} className="pi pi-pencil "></i></span>
-        <i onClick={() => deleteCategory(rowData)} className="pi pi-trash"></i>
-      </span>
-    );
-  };
+  const bodyTemplate = (rowData) => loader ? (
+    <Skeleton shape="circle" size="1rem" className="mr-2" />
+  ) : (
+    <div style={{ display: 'flex', alignItems: 'center' ,justifyContent:"center"}}>
+      <Button
+        icon="pi pi-pencil"
+        onClick={() => editCategory(rowData)}
+        className="p-button-rounded p-button-warning my-2"
+        style={{ margin: '0.5rem' }} // Optional: adds spacing between buttons
+      />
+      <Button
+        icon="pi pi-trash"
+        onClick={() => confirmDelete(rowData)}
+        className="p-button-rounded p-button-warning"
+        style={{ margin: '0.5rem' }}
+      />
+
+
+
+    </div>
+  );
+  const customHeaderTemplate = () => (
+  
+    <div >
+    <span>Action</span>
+    <i className="pi pi-wrench" style={{ fontSize: '13px' ,marginLeft : "3px" }} ></i>
+    </div>
+  );
 
   const filterClearTemplate = (options) => {
     return (
@@ -231,18 +256,21 @@ const CustomDataTable = (props) => {
   
 
   return (
-    <div>
+    
+     
+    
+      <div className="container-fluid mb-5" >
+
       <button style={{
-        position: 'relative', bottom: 42
+        position: 'relative', bottom: 35
       }} className="btn-style" onClick={() => exportToExcel()}>Export</button>
 
       <button style={{
-        position: 'relative', bottom: 42,marginLeft:5
+        position: 'relative', bottom: 35,marginLeft:5
       }} className="btn-style" onClick={() => handleImport()}>Import</button>
-    
-      <div className="container-fluid " >
 
         <DataTable
+         header="ORAGANIZATION RECORDS"
           value={loader ? Array.from({ length: 5 }) : gridData}
           paginator
           responsiveLayout="scroll"
@@ -258,7 +286,7 @@ const CustomDataTable = (props) => {
           selection={selectedRows}
           onSelectionChange={(e) => setSelectedRows(e.value)}
         >
-          <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+          {/* <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column> */}
 
           <Column
             field="name"
@@ -266,7 +294,7 @@ const CustomDataTable = (props) => {
             sortable
             filter
             filterPlaceholder="Search"
-            style={{ width: "30%" }}
+            
             filterClear={filterClearTemplate}
             filterApply={filterApplyTemplate}
            
@@ -278,29 +306,29 @@ const CustomDataTable = (props) => {
             sortable
             filter
             filterPlaceholder="Search"
-            style={{ width: "25%" }}
+           
             filterClear={filterClearTemplate}
             filterApply={filterApplyTemplate}
             
             body={SubmissionDateTemplate}
           ></Column>
 
-          <Column
+          {/* <Column
             field="userName"
             header="Created By"
             sortable
             filter
             filterPlaceholder="Search"
-            style={{ width: "25%" }}
+           
             filterClear={filterClearTemplate}
             filterApply={filterApplyTemplate}
             
             body={CreatedByTemplate}
-          ></Column>
+          ></Column> */}
 
-          <Column header="Action" body={bodyTemplate} />
+          <Column header={customHeaderTemplate} body={bodyTemplate} />
         </DataTable>
-      </div>
+     
 
       {isModalOpen && (<SaveOrganizationModal
         dataForEdit={dataForEdit}
@@ -316,7 +344,15 @@ const CustomDataTable = (props) => {
         message={responseMsg} />
       <ImportFile reloadData={() => reloadData()}  onHide={()=>setIsOpen(false)} isOpen={isOpen} Type="Organization" />
 
-      <ConfirmationDialog openConfirmModal={openConfirmation} acceptConfirmation={() => acceptConfirmation()} rejectConfirmation={() => rejectConfirmation()} />
+      <ConfirmDialog
+        visible={deleteDialogVisible}
+        onHide={() => setDeleteDialogVisible(false)}
+        message="Are you sure you want to delete this record?"
+        header="Confirmation"
+        icon="pi pi-exclamation-triangle"
+        accept={deleteRecords}
+        reject={() => setDeleteDialogVisible(false)}
+      />
     </div>
   );
 };

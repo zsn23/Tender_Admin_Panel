@@ -321,3 +321,6 @@ ul.pagination .p-dropdown .p-dropdown-label,.custom-dropdown .p-inputwrapper .p-
 .p-paginator .p-paginator-first:not(.p-disabled):not(.p-highlight):hover{
     background-color: #000 !important;
 }
+.p-datatable .p-datatable-header{
+    color: #fff !important;
+}

@@ -15,30 +15,30 @@ export default function VerticalBarDemo() {
             datasets: [
                 {
                     label: 'Tenders',
-                    backgroundColor: "#F6FF00",
-                    barThickness: 12,
+                    backgroundColor: "#FAB710",
+                    barThickness: 7,
                     borderRadius: {
-                        topLeft: 8,
-                        topRight: 8,
+                        topLeft: 5,
+                        topRight: 5,
                     }, // Rounded corners for the top of the bars
                     data: [65, 59, 80, 81, 56, 55]
                 },
                 {
                     label: ' ',
                     backgroundColor: "rgba(0, 0, 0, 0)", // Transparent bars for spacing
-                    barThickness: 12,
+                    barThickness: 20,
                     data: [null, null, null, null, null, null] // Empty data for spacing
                 },
                 {
                     label: ' ',
                     backgroundColor: "rgba(0, 0, 0, 0)", // Transparent bars for spacing
-                    barThickness: 12,
+                    barThickness: 20,
                     data: [null, null, null, null, null, null] // Empty data for spacing
                 },
                 {
                     label: 'Categories',
                     backgroundColor: "#118b44",
-                    barThickness: 12,
+                    barThickness: 7,
                     borderColor: documentStyle.getPropertyValue('--pink-500'),
                     borderRadius: {
                         topLeft: 8,
@@ -49,19 +49,19 @@ export default function VerticalBarDemo() {
                 {
                     label: ' ',
                     backgroundColor: "rgba(0, 0, 0, 0)", // Transparent bars for spacing
-                    barThickness: 12,
+                    barThickness: 20,
                     data: [null, null, null, null, null, null] // Empty data for spacing
                 },
                 {
                     label: ' ',
                     backgroundColor: "rgba(0, 0, 0, 0)", // Transparent bars for spacing
-                    barThickness: 12,
+                    barThickness: 20,
                     data: [null, null, null, null, null, null] // Empty data for spacing
                 },
                 {
                     label: 'Organizations',
                     backgroundColor:"#000",
-                    barThickness: 12,
+                    barThickness: 7,
                     borderColor: documentStyle.getPropertyValue('--pink-500'),
                     borderRadius: {
                         topLeft: 8,
