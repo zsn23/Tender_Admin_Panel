@@ -93,7 +93,8 @@
     font-weight: 500;
     border-radius: 20px;
     color: #fff;
-    background-color: rgb(139, 17, 17);
+    /* background-color: rgb(139, 17, 17); */
+    background-color:#19AC55;
     border: none !important;
     transition: background 0.4s ease-in-out;
 }

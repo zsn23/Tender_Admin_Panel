@@ -36,7 +36,7 @@ const CustomDataTable = (props) => {
     setLoader(props.loading);
 
     setGridData(props.gridData);
-  }, [props.gridData]);
+  }, [props.gridData , props.loading]);
 
   const editCategory = (data) => {
     setDataForEdit(data);
