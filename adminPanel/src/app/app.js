@@ -7,6 +7,8 @@ import _EventEmitter from "../constants/emitter";
 import Cookies from "universal-cookie";
 import "./../views/alert/ConfirmationDialog.css"
 import { localStorageService } from "../services/LocalStorageService";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 const cookies = new Cookies();
 

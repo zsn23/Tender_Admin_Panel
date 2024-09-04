@@ -11,7 +11,8 @@ import Cookies from "universal-cookie";
 import { Checkbox } from "primereact/checkbox";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { RadioButton } from "primereact/radiobutton";
-import imgSrc from "../../assets/img/logos/favicon_red_background.png";
+// import imgSrc from "../../assets/img/logos/favicon_red_background.png";
+import imgSrc from "../../assets/img/logos/favicon.png";
 // import imgSrc from "../../assets/img/logos/my_logo.png";
 
 import aboutImg from "../../assets/img/logos/about-img.png";
@@ -484,7 +485,7 @@ class Login extends Component  {
                     <button
                       type="submit"
 
-                      className="btn btn-primary w-100 signin-btn"
+                      className="btn btn-transparent w-100 signin-btn"
                       onClick={() => this.handleLoginClick()}
                     >
                       {this.state.loading ? (
