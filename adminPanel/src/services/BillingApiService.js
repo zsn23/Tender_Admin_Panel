@@ -403,45 +403,65 @@ class BillingApiService {
   //     };
   //   }
   // };
-  getAllTenders = async (page, limit, sortField, sortOrder) => {
-    try {
-      // Construct query parameters for sorting
-      const sortParams = sortField && sortOrder ? `&sortField=${sortField}&sortOrder=${sortOrder}` : '';
-      let res = await axios.get(`${this.baseUrl}tender?page=${page}&limit=${limit}${sortParams}`);
+
   
-      // Check if the response is valid and has the expected data structure
-      if (res && res.data && res.data.status) {
-        // Check if tenders exist in the response data
-        if (res.data.data && res.data.data.data.length > 0) {
-          return res.data;
+    getAllTenders = async (page, limit, sortField, sortOrder) => {
+      try {
+        // Construct query parameters for sorting
+        const sortParams = sortField && sortOrder ? `&sortField=${sortField}&sortOrder=${sortOrder}` : '';
+        let res = await axios.get(`${this.baseUrl}tender?page=${page}&limit=${limit}${sortParams}`);
+    
+        // Check if the response is valid and has the expected data structure
+        if (res && res.data && res.data.status) {
+          // Check if tenders exist in the response data
+          if (res.data.data && res.data.data.data.length > 0) {
+            return res.data;
+          } else {
+            // Handle the case where no tenders are found
+            console.warn("No tenders found.");
+            return {
+              status: false,
+              message: "No tenders found.",
+              data: []
+            };
+          }
         } else {
-          // Handle the case where no tenders are found
-          console.warn("No tenders found.");
+          // Handle the case where the status is false or the structure is unexpected
+          console.error("Invalid response structure or status.");
           return {
             status: false,
-            message: "No tenders found.",
+            message: "Invalid response structure or status.",
             data: []
           };
         }
-      } else {
-        // Handle the case where the status is false or the structure is unexpected
-        console.error("Invalid response structure or status.");
+      } catch (e) {
+        // Improved error handling
+        console.error("Error occurred while fetching tenders:", e.message);
         return {
           status: false,
-          message: "Invalid response structure or status.",
+          message: "Error occurred while fetching tenders.",
           data: []
         };
       }
-    } catch (e) {
-      // Improved error handling
-      console.error("Error occurred while fetching tenders:", e.message);
-      return {
-        status: false,
-        message: "Error occurred while fetching tenders.",
-        data: []
-      };
-    }
-  };
+    };
+
+
+    // getAllTenders = async (page, limit, sortField, sortOrder) => {
+    //   try {
+    //     const sortParams = sortField && sortOrder ? `&sortField=${sortField}&sortOrder=${sortOrder}` : '';
+    //     const res = await axios.get(`${this.baseUrl}tender?page=${page}&limit=${limit}${sortParams}`);
+        
+    //     if (res && res.data && res.data.status) {
+    //       return res.data;
+    //     } else {
+    //       return { status: false, message: "No tenders found.", data: [] };
+    //     }
+    //   } catch (e) {
+    //     console.error("Error occurred while fetching tenders:", e.message);
+    //     return { status: false, message: "Error occurred while fetching tenders.", data: [] };
+    //   }
+    // };
+    
   
 
   saveTender = async (body) => {

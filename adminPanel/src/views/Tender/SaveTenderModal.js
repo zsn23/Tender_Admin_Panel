@@ -603,7 +603,7 @@ const SaveTenderModal = (props) => {
   };
 
   return (
-    <div className="container-fluid d-flex justify-content-center">
+    <div className="container-fluid d-flex justify-content-center mt-2">
       <Toast
         open={openSnackBar}
         severity={severity}
@@ -687,8 +687,9 @@ const SaveTenderModal = (props) => {
                 </div>
 
                 <div className="p-col-12">
-                  <span>
-                    Category:
+                  <span className=" d-flex mt-2 mb-2">
+
+                     Category: 
                     <span
                       className="add-minus-btn"
                       onClick={() => addCategory()}
