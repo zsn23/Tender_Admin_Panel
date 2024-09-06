@@ -27,7 +27,9 @@ const CustomDataTable = (props) => {
   
   const [currentPage, setCurrentPage] = useState(1); // Pagination state
   const [totalRecord, setTotalRecords] = useState(0); // Total records state
- 
+  
+  const [sortField, setSortField] = useState(null); // For storing current sort field
+  const [sortOrder, setSortOrder] = useState(null); // For storing current sort order
 
   const [filterArray, setFilterArray] = useState({
     name: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -43,23 +45,48 @@ const CustomDataTable = (props) => {
     
   });
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setLoader(true);
+  //     try {
+  //       const response = await billingApiServices.getAllTenders(currentPage, 25); // Use currentPage for API call
+  //       if (response && response.status) {
+  //         setGridData(response.data.data); // Adjust according to your API response structure
+  //         setTotalRecords(response.data.total); // Set total records based on API response
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //     setLoader(false);
+  //   };
+  
+  //   fetchData();
+  // }, [currentPage]); // Fetch data whenever currentPage changes
+
+  
   useEffect(() => {
     const fetchData = async () => {
       setLoader(true);
       try {
-        const response = await billingApiServices.getAllTenders(currentPage, 25); // Use currentPage for API call
+        const response = await billingApiServices.getAllTenders(currentPage, 25, sortField, sortOrder);
         if (response && response.status) {
-          setGridData(response.data.data); // Adjust according to your API response structure
-          setTotalRecords(response.data.total); // Set total records based on API response
+          setGridData(response.data.data);
+          setTotalRecords(response.data.total);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
       }
       setLoader(false);
     };
-  
+
     fetchData();
-  }, [currentPage]); // Fetch data whenever currentPage changes
+  }, [currentPage, sortField, sortOrder]); 
+
+  const onSort = (event) => {
+    setSortField(event.sortField);
+    setSortOrder(event.sortOrder);
+  };
+
 
   useEffect(() => {
     setLoader(props.loading);
@@ -224,6 +251,25 @@ const confirmDelete = (data) => {
   const filterApplyTemplate = (options) => (
     <Button type="button" icon="pi pi-check" onClick={options.filterApplyCallback} className="p-button-success"></Button>
   );
+  
+
+  const fetchTendersWithSorting = () => {
+    const page = 1; // set your desired page
+    const limit = 10; // set your desired limit
+    const sortField = setSortField; // get from your state
+    const sortOrder = setSortOrder; // get from your state
+  
+    billingApiServices.getAllTenders(page, limit, sortField, sortOrder)
+      .then((response) => {
+        // Update your state with the sorted data
+        setGridData(response.data);
+
+      })
+      .catch((error) => {
+        console.error("Error fetching sorted tenders:", error);
+      });
+  };
+  
 
   const IPLNumberTemplate = (rowData) => loader ? <Skeleton /> : <div>{rowData.IPLNumber}</div>;
   const NameTemplate = (rowData) => loader ? <Skeleton /> : <div>{rowData.name}</div>;
@@ -244,7 +290,23 @@ const confirmDelete = (data) => {
       
       <div className="container-fluid mb-5" >
       <button style={{ position: 'relative', bottom: 42 }} className="btn-style" onClick={exportToExcel}>Export</button>
-        <DataTable
+
+      <select onChange={(e) => setSortField(e.target.value)}>
+  <option value="">Select Field</option>
+  <option value="created_at">Created Date</option>
+  <option value="tender_name">Tender Name</option>
+  <option value="amount">Amount</option>
+  {/* Add more fields as necessary */}
+</select>
+
+<select onChange={(e) => setSortOrder(e.target.value)}>
+  <option value="asc">Ascending</option>
+  <option value="desc">Descending</option>
+</select>
+
+<button onClick={() => fetchTendersWithSorting()}>Sort</button>
+
+         <DataTable
         header="TENDER RECORDS"
          tableStyle={{ width: '100%' }}
           value={loader ? Array.from({ length: 5 }) : gridData}
@@ -264,6 +326,10 @@ const confirmDelete = (data) => {
           selectionMode={'checkbox'}
           selection={selectedRows}
           onSelectionChange={(e) => setSelectedRows(e.value)}
+
+          sortField={sortField}
+          sortOrder={sortOrder}
+          onSort={onSort}
         >
           {/* <Column selectionMode="multiple" ></Column> */}
           <Column field="IPLNumber" header="IPL Number" sortable filter filterPlaceholder="Search"  filterClear={filterClearTemplate} filterApply={filterApplyTemplate} body={IPLNumberTemplate}></Column>
@@ -277,7 +343,7 @@ const confirmDelete = (data) => {
           {/* <Column field="userName" header="Created By" sortable filter filterPlaceholder="Search"  filterApply={filterApplyTemplate} body={CreatedByTemplate}></Column> */}
           {/* <Column field="tenderImage" header="Download"    body={TenderImageTemplate}></Column> */}
           <Column field="id" header={customHeaderTemplate}  body={bodyTemplate}></Column>
-        </DataTable>
+        </DataTable> 
       
     
                   <Toast open={openSnackBar}

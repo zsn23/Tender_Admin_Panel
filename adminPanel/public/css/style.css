@@ -2563,6 +2563,7 @@ button#search-btn {
 @media (max-width:992px) {
   .container-fluid .page-hd{
     margin-left: 25px !important;
+    width: 20%;
   }
   .btn-style{
     left: 45px !important;
