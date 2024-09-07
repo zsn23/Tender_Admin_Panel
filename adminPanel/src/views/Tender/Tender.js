@@ -122,7 +122,7 @@ class TenderDetails extends Component {
     return (
       <>
         <div style={{ textAlign: "end", marginTop: '5px'  }}>
-          <button id="new-report" className="btn-style p-1"
+          <button id="new-report" className="btn-style  p-1"
             onClick={() => this.setState({ showModal: true })} > Add New
           </button>
         </div>

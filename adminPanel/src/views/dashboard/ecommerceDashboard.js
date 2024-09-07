@@ -106,6 +106,7 @@ class EcommerceDashboard extends Component {
          <>
             <div>
                <div className="container-fluid container-fluid_bg mb-3 mt-0 p-3">
+                  <h1 className="dashboardHeading d-flex justify-content-center m-5 mt-1">DASHBOARD</h1>
                   {/* <TreeTable/> */}
                   <div className="row ">
                      <div className="col-12 d-flex justify-content-around flex-wrap">

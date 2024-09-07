@@ -324,3 +324,51 @@ ul.pagination .p-dropdown .p-dropdown-label,.custom-dropdown .p-inputwrapper .p-
 .p-datatable .p-datatable-header{
     color: #fff !important;
 }
+.dashboardHeading{
+    color: #fff;
+}
+
+
+.sorting-container___ {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    margin: 1rem 0;
+    position: relative;
+    top: -40px;
+    left: 10px;
+  }
+  
+  .sorting-container___ .pi-sort-alpha-down {
+    position: relative;
+    bottom: 3px;
+    left: -4px;
+    color: whitesmoke !important;
+  }
+  
+  .sorting-label____ {
+    font-size: 1rem !important;
+    margin-right: 1rem !important;
+    color: #e0e0e0 !important; /* Light color for dark theme */
+    border-radius: 20px;
+  }
+  
+  .sorting-select___ {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    border: 1px solid #2C2A2A; /* Darker border for dark theme */
+    border-radius: 5px;
+    background-color: #000000; /* Dark background for dark theme */
+    color: #e0e0e0; /* Light text color for dark theme */
+    cursor: pointer;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    font-weight: bold;
+    width: 10%;
+  }
+  
+  .sorting-select___:focus {
+    border-color: #11361A;
+    box-shadow: 0 0 0 0.2rem #285B3B;
+  }
+  
+ 

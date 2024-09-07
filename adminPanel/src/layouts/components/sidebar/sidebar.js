@@ -23,10 +23,16 @@ class Sidebar extends Component {
   }
 
   updateWidth = () => {
+    const newWidth = window.innerWidth;
     this.setState({
-      width: window.innerWidth,
-      collapsedSidebar: window.innerWidth >= 991,
+      width: newWidth,
+      collapsedSidebar: newWidth >= 991,
     });
+
+    // Close the sidebar if it's open when the screen size changes
+    if (this.state.sidebarState === "open") {
+      this.setState({ sidebarState: "close" });
+    }
   };
 
   handleCollapsedSidebar = (collapsedSidebar) => {
@@ -48,11 +54,17 @@ class Sidebar extends Component {
   }
 
   handleMouseEnter = () => {
-    this.setState({ mouseEntered: true, collapsedSidebar: false });
+    // this.setState({ mouseEntered: true, collapsedSidebar: false });
+    if (this.state.width >= 992) {
+      this.setState({ mouseEntered: true, collapsedSidebar: false });
+    }
   };
 
   handleMouseLeave = () => {
-    this.setState({ collapsedSidebar: true, mouseEntered: false });
+    // this.setState({ collapsedSidebar: true, mouseEntered: false });
+    if (this.state.width >= 992) {
+      this.setState({ collapsedSidebar: true, mouseEntered: false });
+    }
   };
 
   handleIconClick = () => {
@@ -60,9 +72,14 @@ class Sidebar extends Component {
   };
 
   handleClickOutside = (event) => {
-    if (this.sidebarRef.current && !this.sidebarRef.current.contains(event.target)) {
-      this.setState({ collapsedSidebar: true, mouseEntered: false });
+    if (
+      this.sidebarRef.current &&
+      !this.sidebarRef.current.contains(event.target)
+      && this.state.width <= 992
+    ) {
+      this.setState({ collapsedSidebar: false, mouseEntered: true });
     }
+    
   };
 
   handleLeftSideBar = () => {
@@ -75,11 +92,20 @@ class Sidebar extends Component {
     this.setState({ collapsedSidebar: false, mouseEntered: true });
   };
 
+  handleSidebarItemClick = () => {
+    // Close the sidebar when any item inside it is clicked
+    if (this.state.width <= 991 && this.state.sidebarState === "open") {
+      this.setState({ sidebarState: "close"});
+    }
+  };
+
   // Define the sidebarImageUrl method
   sidebarImageUrl = (imageUrl) => {
     this.setState({ sidebarBgImage: imageUrl });
   };
-
+  handleCloseSidebar = () => {
+    this.setState({ sidebarState: "close" ,collapsedSidebar: true, mouseEntered: false}); // Function to close the sidebar
+  };
   render() {
     return (
       <Fragment>
@@ -108,6 +134,7 @@ class Sidebar extends Component {
               )}
               onMouseEnter={this.handleMouseEnter}
               onMouseLeave={this.handleMouseLeave}
+              onClick={this.handleSidebarItemClick} // Added this event handler
             >
               <SidebarHeader
                 toggleSidebarMenu={this.props.toggleSidebarMenu}
@@ -115,10 +142,29 @@ class Sidebar extends Component {
                 onIconClick={this.handleIconClick} // Pass down the click handler
               />
               <div className="sidebar-content">
+              
+                <button
+                  className="close-sidebar-btn d-lg-none d-md-flex"
+                  onClick={this.handleCloseSidebar}
+                  style={{
+                    position: "relative",
+                    top: "0px",
+                    left: "89%",
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                    fontSize: "20px",
+                    color: "white",
+                  }}
+                >
+                 ✕
+                </button>
+             
                 <SideMenuContent
+                  
                   collapsedSidebar={this.state.collapsedSidebar}
                   toggleSidebarMenu={this.props.toggleSidebarMenu}
-                  onMenuItemClick={this.handleMenuItemClick}  // Pass the click handler
+                  onMenuItemClick={this.handleMenuItemClick} // Pass the click handler
                 />
               </div>
 

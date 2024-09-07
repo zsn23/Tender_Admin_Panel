@@ -1,5 +1,7 @@
 // import external modules
 import React, { Component } from "react";
+import imgSrc from "../navbar/my_logo.png"; 
+import { NavLink } from "react-router-dom";
 import { Link } from "react-router-dom";
 import {
   Form,
@@ -160,9 +162,18 @@ class ThemeNavbar extends Component {
     return (
       <div>
         <Navbar className="navbar navbar-expand-lg bg-navbar justify-content-center">
+        
           <div className="container-fluid " style={{paddingBottom:"6px"}}>
-            <h5 className="page-hd p-3 text-light">{this.getHeading()}</h5>
+            {/* <h5 className="page-hd p-3 text-light">{this.getHeading()}</h5> */}
 
+            <NavLink to="/dashboard" >
+              <img
+                src={imgSrc}
+                alt="logo"
+               
+                style={{ width: "140px", height: "auto" ,marginLeft:"5px" }} // Adjust width and height as needed
+              />
+            </NavLink>
 
             <div className="navbar-container align-items-center">
               <Menu

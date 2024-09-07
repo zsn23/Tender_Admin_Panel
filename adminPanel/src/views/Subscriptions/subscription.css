@@ -31,6 +31,7 @@
 .button-section {
     
     margin-top: 17%;
+    margin-bottom: 10%;
     display: flex; /* Use flexbox to arrange items in a row */
     justify-content: end; /* Center the buttons horizontally */
     gap: 10px; /* Optional: Adds space between buttons */
