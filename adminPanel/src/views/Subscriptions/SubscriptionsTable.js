@@ -22,6 +22,9 @@ const CustomDataTable = (props) => {
   const [responseMsg, setResponseMsg] = useState("")
   const [selectedRows, setSelectedRows] = useState([])
 
+  const [first, setFirst] = useState(0); // Index of the first record to display
+  const [rows, setRows] = useState(25); // Number of rows per page
+
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
 
   let [filterArray, setfilterArray] = useState({
@@ -37,9 +40,10 @@ const CustomDataTable = (props) => {
 
   useEffect(() => {
     setLoader(props.loading);
-
     setGridData(props.gridData);
   }, [props.gridData , props.loading]);
+
+
 
   const editCategory = (data) => {
     setDataForEdit(data);
@@ -295,9 +299,14 @@ const CustomDataTable = (props) => {
           value={loader ? Array.from({ length: 5 }) : gridData}
           paginator
           responsiveLayout="scroll"
-          paginatorTemplate=" PrevPageLink PageLinks NextPageLink  CurrentPageReport RowsPerPageDropdown"
-          currentPageReportTemplate="Showing Records : {first} to {last} "
-          rows={25}
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
+          currentPageReportTemplate={`ON PAGE ${Math.floor(first / rows) + 1} : RECORDS {first} to {last}`}
+          rows={rows}
+          first={first}
+          onPage={(e) => {
+          setFirst(e.first);
+          setRows(e.rows);
+          }}
 
           dataKey="id"
           filters={filterArray}

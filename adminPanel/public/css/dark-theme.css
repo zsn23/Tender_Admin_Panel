@@ -78,6 +78,11 @@ i.pi.pi-pencil{
 /* .p-datatable .p-datatable-thead > tr > th{
     border: none  !important;  
 } */
+.p-datatable .p-datatable-thead > tr > th{
+    border: 1px solid #fefefe !important;
+    border-width: 0 0 3px 0 !important;
+    position: relative;
+}
 
 .section{
     background-color: #000 !important;
@@ -356,19 +361,62 @@ ul.pagination .p-dropdown .p-dropdown-label,.custom-dropdown .p-inputwrapper .p-
   .sorting-select___ {
     padding: 0.5rem;
     font-size: 0.8rem;
-    border: 1px solid #2C2A2A; /* Darker border for dark theme */
-    border-radius: 5px;
+    border: 1px solid white; /* Darker border for dark theme */
+    border-radius: 0px;
     background-color: #000000; /* Dark background for dark theme */
     color: #e0e0e0; /* Light text color for dark theme */
     cursor: pointer;
     transition: border-color 0.3s, box-shadow 0.3s;
     font-weight: bold;
-    width: 10%;
+    width: 9%;
   }
   
   .sorting-select___:focus {
-    border-color: #11361A;
-    box-shadow: 0 0 0 0.2rem #285B3B;
+    border-color: #11361A !important;
+    box-shadow: 0 0 0 0.2rem #285B3B !important;
   }
   
- 
+  .spinner {
+    width: 72px;
+    height: 72px;
+    display: grid;
+    border: 3.2px solid #0000;
+    border-radius: 50%;
+    border-color: #4CAF50 #0000; /* Bright green to stand out on black */
+    animation: spinner-e04l1k 1.4s infinite linear;
+    margin: 0 auto;
+    margin-top: 36vh;
+    background-color: #121212; /* Dark background for black theme */
+}
+
+.spinner::before,
+.spinner::after {
+    content: "";
+    grid-area: 1/1;
+    margin: 1.6px;
+    border: inherit;
+    border-radius: 50%;
+}
+
+.spinner::before {
+    border-color: #1de9b6 #0000; /* Lighter accent green */
+    animation: inherit;
+    animation-duration: 0.7s;
+    animation-direction: reverse;
+}
+
+.spinner::after {
+    margin: 6.4px;
+}
+
+@keyframes spinner-e04l1k {
+    100% {
+       transform: rotate(1turn);
+    }
+}
+
+/* Add a black background and make sure the spinner is visible */
+body {
+    background-color: #000; /* Full black background */
+    color: #fff; /* White text for contrast */
+}

@@ -26,7 +26,7 @@
     /* Enable scrolling if the image is larger than the container */
     width: 100%;
     /* Ensure the container takes the full width */
-    height: 700px;
+    /* height: 700px; */
     /* Set the initial height */
     display: flex;
     /* To center the image vertically */
@@ -120,4 +120,8 @@ input.p-inputtext.p-component.ipl-input {
 .col8 {
     grid-column: span 10;
     /* Section 2 occupies 8 columns */
+} 
+.section_____img{
+    width: 100% !important;
+    /* height: 620px !important; */
 }

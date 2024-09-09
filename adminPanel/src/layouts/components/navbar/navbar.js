@@ -163,7 +163,7 @@ class ThemeNavbar extends Component {
       <div>
         <Navbar className="navbar navbar-expand-lg bg-navbar justify-content-center">
         
-          <div className="container-fluid " style={{paddingBottom:"6px"}}>
+          <div className="container-fluid " style={{padding:"10.5px"}}>
             {/* <h5 className="page-hd p-3 text-light">{this.getHeading()}</h5> */}
 
             <NavLink to="/dashboard" >
@@ -188,13 +188,13 @@ class ThemeNavbar extends Component {
 
                   <UncontrolledDropdown nav inNavbar className="pr-1">
                     <DropdownToggle nav>
-                      <span className="fw-bold userName p-3 px-0" style={{color:'#fff' }}>
+                      <span className="fw-bold userName d-flex align-items-center px-0" style={{color:'#fff' }}>
                       {/* <i class="fa fa-user mx-1 " style={{color:'#fff' }}></i> */}
                       {/* <i className="fa fa-user-edit mx-1" style={{ color: '#fff' }}></i> */}
-                      <i className="bi bi-person-fill mx-1" style={{ color: '#fff', fontSize: '20px' }}></i>
+                      <i className="bi bi-person-circle mx-1" style={{ color: '#fff', fontSize: '20px' }}></i>
 
-                        {this.state?.userData?.name?.charAt(0)?.toUpperCase() +  this.state?.userData?.name?.slice(1)}
-                        <span className="text-muted "></span>
+                        {/* {this.state?.userData?.name?.charAt(0)?.toUpperCase() +  this.state?.userData?.name?.slice(1)} */}
+                        <span className="text-light ">ADMIN</span>
                         
                       </span>{" "}
                       {/* <img
@@ -207,13 +207,13 @@ class ThemeNavbar extends Component {
                     <DropdownMenu right>
 
 
-                      <DropdownItem
+                      {/* <DropdownItem
                       >
                         <User size={16} className="mr-1" /> 
                         {this.state.userData!=null && this.state.userData?.name?.toUpperCase()}
                       </DropdownItem>
 
-                      <DropdownItem divider />
+                      <DropdownItem divider /> */}  
 
                       <DropdownItem>
                         <span
@@ -221,7 +221,8 @@ class ThemeNavbar extends Component {
                           id="customizer-toggle-icon"
                           onClick={() => this.isThemeOpen()}
                         >
-                          <Settings size={16} className="spinner mr-1" />Dark Theme
+                         <i className="pi pi-moon mr-1" style={{ fontSize: '1rem'  }}></i>
+                            Dark Theme
                           
                         </span>
                       </DropdownItem>

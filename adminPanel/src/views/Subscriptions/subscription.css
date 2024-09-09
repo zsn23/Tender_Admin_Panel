@@ -39,7 +39,7 @@
 }
 
 .p-multiselect .p-multiselect-label {
-    padding: 0rem 0.5rem;
+    /* padding: 0rem 0.5rem; */
     transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 .add-btn{
