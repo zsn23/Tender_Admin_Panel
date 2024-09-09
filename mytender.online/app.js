@@ -883,6 +883,7 @@ app.post('/newsPaper/updateNewsPaper', (req, res) => {
 // });
 
 
+
 app.get('/tender', (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 25;
@@ -890,65 +891,114 @@ app.get('/tender', (req, res) => {
   const sortField = req.query.sortField || 'publishDate'; // Default sort field
   const sortOrder = req.query.sortOrder === 'desc' ? 'DESC' : 'ASC'; // Ensuring proper order input
 
-  // Ensure sortField matches allowed fields
-  const allowedSortFields = ['id', 'IPLNumber', 'name', 'openDate', 'publishDate', 'effectedDate', 'city', 'organization','newspaper','category']; 
-  if (!allowedSortFields.includes(sortField)) {
-    return res.status(400).json({ status: false, message: 'Invalid sorting parameters.' });
+  // Add filter conditions dynamically
+  const filters = [];
+  const values = [];
+
+  // Filter for IPLNumber
+  if (req.query.IPLNumber) {
+    filters.push('IPLNumber LIKE ?');
+    values.push(`%${req.query.IPLNumber}%`);
   }
 
-  pool.query(
-    `SELECT tenders.*, users.name AS userName, cities.name AS cityName, organizations.name AS organizationName, newspapers.name AS newPaperName 
+  // Filter for Tender name
+  if (req.query.name) {
+    filters.push('tenders.name LIKE ?');
+    values.push(`%${req.query.name}%`);
+  }
+
+  // Filter for Organization name
+  if (req.query.organizationName) {
+    filters.push('organizations.name LIKE ?');
+    values.push(`%${req.query.organizationName}%`);
+  }
+
+  // Filter for City name
+  if (req.query.cityName) {
+    filters.push('cities.name LIKE ?');
+    values.push(`%${req.query.cityName}%`);
+  }
+
+  // Filter for Category
+  if (req.query.category) {
+    filters.push('category LIKE ?');
+    values.push(`%${req.query.category}%`);
+  }
+
+  // Filter for Newspaper name
+  if (req.query.newPaperName) {
+    filters.push('newspapers.name LIKE ?');
+    values.push(`%${req.query.newPaperName}%`);
+  }
+
+
+  if (req.query.publishDate) {
+    filters.push('DATE_FORMAT(tenders.publishDate, "%Y-%m-%d") LIKE ?');
+    values.push(`${req.query.publishDate}%`); // Allow partial date match
+  }
+
+  const whereClause = filters.length ? `WHERE ${filters.join(' AND ')}` : '';
+
+  // Main Query
+  const query = `
+    SELECT tenders.*, users.name AS userName, cities.name AS cityName, organizations.name AS organizationName, newspapers.name AS newPaperName 
     FROM tenders 
     INNER JOIN users ON tenders.effectedBy = users.id 
     INNER JOIN cities ON tenders.city = cities.id 
     INNER JOIN organizations ON tenders.organization = organizations.id 
     INNER JOIN newspapers ON tenders.newspaper = newspapers.id 
+    ${whereClause} 
     ORDER BY ${sortField} ${sortOrder} 
-    LIMIT ? OFFSET ?`,
-    [limit, offset],
-    (err, results) => {
-      if (err) {
-        return res.status(500).json({ status: false, message: 'Error fetching tenders.', error: err.message });
+    LIMIT ? OFFSET ?
+  `;
+
+  pool.query(query, [...values, limit, offset], (err, results) => {
+    if (err) {
+      console.error('Error fetching tenders:', err.message);
+      return res.status(500).json({ status: false, message: 'Error fetching tenders.', error: err.message });
+    }
+
+    // Count Query
+    const countQuery = `
+      SELECT COUNT(*) AS total 
+      FROM tenders 
+      INNER JOIN users ON tenders.effectedBy = users.id 
+      INNER JOIN cities ON tenders.city = cities.id 
+      INNER JOIN organizations ON tenders.organization = organizations.id 
+      INNER JOIN newspapers ON tenders.newspaper = newspapers.id 
+      ${whereClause}
+    `;
+
+    pool.query(countQuery, values, (countErr, countResults) => {
+      if (countErr) {
+        console.error('Error fetching tender count:', countErr.message);
+        return res.status(500).json({ status: false, message: 'Error fetching tender count.', error: countErr.message });
       }
 
-      pool.query('SELECT COUNT(*) AS total FROM tenders', (err, countResults) => {
-        if (err) {
-          return res.status(500).json({ status: false, message: 'Error fetching tender count.', error: err.message });
-        }
+      const totalItems = countResults[0].total;
+      const totalPages = Math.ceil(totalItems / limit);
 
-        const totalItems = countResults[0].total;
-        const totalPages = Math.ceil(totalItems / limit);
-
-        return res.status(200).json({
-          status: true,
-          message: 'All Tenders',
-          data: {
-            // current_page: page,
-            // data: results,
-            // first_page_url: `http://localhost:${PORT}/tender?page=1&limit=${limit}`,
-            // last_page: totalPages,
-            // total: totalItems,
-            // per_page: limit,
-            // from: offset + 1,
-            // to: offset + results.length,
-            current_page: page,
-            data: results,
-            first_page_url: `http://localhost:${PORT}/tender?page=1&limit=${limit}`,
-            from: offset + 1,
-            last_page: totalPages,
-            last_page_url: `http://localhost:${PORT}/tender?page=${totalPages}&limit=${limit}`,
-            next_page_url: page < totalPages ? `http://localhost:${PORT}/tender?page=${page + 1}&limit=${limit}` : null,
-            path: `http://localhost:${PORT}/tender`,
-            per_page: limit,
-            prev_page_url: page > 1 ? `http://localhost:${PORT}/tender?page=${page - 1}&limit=${limit}` : null,
-            to: offset + results.length,
-            total: totalItems
-          },
-          statusCode: 200
-        });
+      res.status(200).json({
+        status: true,
+        message: 'All Tenders',
+        data: {
+          current_page: page,
+          data: results,
+          first_page_url: `http://localhost:${PORT}/tender?page=1&limit=${limit}`,
+          from: offset + 1,
+          last_page: totalPages,
+          last_page_url: `http://localhost:${PORT}/tender?page=${totalPages}&limit=${limit}`,
+          next_page_url: page < totalPages ? `http://localhost:${PORT}/tender?page=${page + 1}&limit=${limit}` : null,
+          path: `http://localhost:${PORT}/tender`,
+          per_page: limit,
+          prev_page_url: page > 1 ? `http://localhost:${PORT}/tender?page=${page - 1}&limit=${limit}` : null,
+          to: offset + results.length,
+          total: totalItems
+        },
+        statusCode: 200
       });
-    }
-  );
+    });
+  });
 });
 
 
@@ -1122,6 +1172,7 @@ app.post('/tender/upload', upload.single('file'), (req, res) => {
     return res.status(500).json({ success: false, message: 'Internal server error' });
   }
 });
+
 // ***************tender Api's**************************
 
 
