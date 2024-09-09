@@ -687,7 +687,7 @@ const SaveTenderModal = (props) => {
                 </div>
 
                 <div className="p-col-12">
-                  <span className=" d-flex mt-2 mb-2">
+                  <span className=" d-flex mt-2 ">
 
                      Category: 
                     <span

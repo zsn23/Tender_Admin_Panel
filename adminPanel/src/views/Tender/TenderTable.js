@@ -382,12 +382,15 @@ const CustomDataTable = (props) => {
   const [responseMsg, setResponseMsg] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
-  
+
   const [currentPage, setCurrentPage] = useState(1); // Pagination state
   const [totalRecord, setTotalRecords] = useState(0); // Total records state
-  
+
   const [sortField, setSortField] = useState(null); // For storing current sort field
   const [sortOrder, setSortOrder] = useState(null); // For storing current sort order
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const [filterArray, setFilterArray] = useState({
     name: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -407,23 +410,34 @@ const CustomDataTable = (props) => {
     setSortOrder(event.sortOrder);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoader(true);
-      try {
-        const response = await billingApiServices.getAllTenders(currentPage, 25, sortField, sortOrder === 1 ? 'asc' : 'desc');
-        if (response && response.status) {
-          setGridData(response.data.data);
-          setTotalRecords(response.data.total);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-      setLoader(false);
-    };
 
+  // Updated fetchData function to include search filters
+  const fetchData = async () => {
+    setLoader(true);
+    const filters = {}; // Store filters as query params
+    for (let key in filterArray) {
+      if (filterArray[key].value) {
+        filters[key] = filterArray[key].value;
+      }
+    }
+
+    try {
+      const response = await billingApiServices.getAllTenders(currentPage, 25, sortField, sortOrder === 1 ? 'asc' : 'desc', filters);
+      if (response && response.status) {
+        setGridData(response.data.data);
+        setTotalRecords(response.data.total);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+    setLoader(false);
+  };
+
+
+  // Reload data when filters, sorting, or pagination change
+  useEffect(() => {
     fetchData();
-  }, [currentPage, sortField, sortOrder]);
+  }, [currentPage, sortField, sortOrder, filterArray, loading]);
 
   useEffect(() => {
     setLoader(props.loading);
@@ -518,11 +532,15 @@ const CustomDataTable = (props) => {
     const date = new Date(inputDateTime);
     const hours = date.getUTCHours().toString().padStart(2, '0');
     const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-    const day = date.getUTCDate().toString().padStart(2, '0');
-    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
-    const year = date.getUTCFullYear();
 
-    return `${hours}:${minutes} ${day}-${month}-${year}`;
+    const d = new Date(date);
+    if (isNaN(d.getTime())) {
+      return null; // Invalid date
+    }
+    const year = d.getFullYear();
+    const month = ('0' + (d.getMonth() + 1)).slice(-2);
+    const day = ('0' + d.getDate()).slice(-2);
+    return `${year}-${month}-${day} ${hours}:${minutes}`; // Ensure 'YYYY-MM-DD' format
   };
 
   const bodyTemplate = (rowData) => loader ? (
@@ -581,38 +599,45 @@ const CustomDataTable = (props) => {
     </div>
   );
 
+  const handleFilterChange = (e, field) => {
+    const newFilters = { ...filterArray };
+    newFilters[field].value = e.value;
+    setFilterArray(newFilters);
+  };
+
+
+
+
+
   return (
     <div className="container-fluid mb-5">
       <button style={{ position: 'relative', bottom: 42 }} className="btn-style" onClick={exportToExcel}>Export</button>
 
       <div className="sorting-container___">
-  
-  <div className="d-flex align-items-center">
-  <i className="pi pi-sort-alpha-down " style={{ fontSize: '1rem' }}></i>
-  <label className="sorting-label____">SORT BY</label>
 
-  </div>
-   
-  <select className="sorting-select___" onChange={(e) => setSortField(e.target.value)} value={sortField || ''}>
-    <option value="">By Default Order</option>
-    <option value="IPLNumber">IPL Number</option>
-    <option value="name">Title</option>
-    <option value="organization">Organization</option>
-    <option value="category">Category</option>
-    <option value="city">City</option>
-    <option value="publishDate">Publish Date</option>
-    <option value="newspaper">Newspaper</option>
-  </select>
-  
-</div>
+        <div className="d-flex align-items-center">
+          <i className="pi pi-sort-alpha-down " style={{ fontSize: '1rem' }}></i>
+          <label className="sorting-label____">SORT BY</label>
 
-      
+        </div>
 
-      
+        <select className="sorting-select___" onChange={(e) => setSortField(e.target.value)} value={sortField || ''}>
+          <option value="">By Default Order</option>
+          <option value="IPLNumber">IPL Number</option>
+          <option value="name">Title</option>
+          <option value="organization">Organization</option>
+          <option value="category">Category</option>
+          <option value="city">City</option>
+          <option value="publishDate">Publish Date</option>
+          <option value="newspaper">Newspaper</option>
+        </select>
+
+
+      </div>
+
 
       <DataTable
         header="TENDER RECORDS"
-        tableStyle={{ width: '100%' }}
         value={loader ? Array.from({ length: 5 }) : gridData}
         paginator
         responsiveLayout="scroll"
@@ -625,23 +650,47 @@ const CustomDataTable = (props) => {
         onPage={(event) => setCurrentPage(event.page + 1)}
         dataKey="id"
         filters={filterArray}
+        onFilter={(e) => setFilterArray(e.filters)} // Set the filters when applied
         filterDisplay="row"
-        removableSort
-        selectionMode={'checkbox'}
-        selection={selectedRows}
-        onSelectionChange={(e) => setSelectedRows(e.value)}
         sortField={sortField}
         sortOrder={sortOrder}
         onSort={onSort}
       >
-        <Column field="IPLNumber" header="IPL Number"  filter filterPlaceholder="Search" filterClear={filterClearTemplate} filterApply={filterApplyTemplate} body={IPLNumberTemplate}></Column>
-        <Column field="name" header="Title"  filter filterPlaceholder="Search" filterApply={filterApplyTemplate} body={NameTemplate}></Column>
-        <Column field="organizationName" header="Organization"  filter filterPlaceholder="Search" filterApply={filterApplyTemplate} body={OrganizationBodyTemplate}></Column>
-        <Column field="category" header="Category"  filter filterPlaceholder="Search" filterApply={filterApplyTemplate} body={CategoryBodyTemplate}></Column>
-        <Column field="cityName" header="City"  filter filterPlaceholder="Search" filterApply={filterApplyTemplate} body={CityBodyTemplate}></Column>
-        <Column field="publishDate" header="Publish Date"  filter filterPlaceholder="Search" filterApply={filterApplyTemplate} body={PublishDateTemplate}></Column>
-        <Column field="newPaperName" header="Newspaper"  filter filterPlaceholder="Search" filterApply={filterApplyTemplate} body={NewsPaperBodyTemplate}></Column>
-        <Column field="id" header={customHeaderTemplate} body={bodyTemplate}></Column>
+        <Column field="IPLNumber" header="IPL Number" body={IPLNumberTemplate}
+          filter filterField="IPLNumber" filterMatchMode="contains" filterPlaceholder="Search" onFilterApplyClick={(e) => handleFilterChange(e, 'IPLNumber')}></Column>
+        <Column field="name" header="Title" body={NameTemplate}
+          filter filterField="name" filterMatchMode="contains" filterPlaceholder="Search" onFilterApplyClick={(e) => handleFilterChange(e, 'name')}></Column>
+        <Column field="organizationName" header="Organization" body={OrganizationBodyTemplate}
+          filter filterField="organizationName" filterMatchMode="contains" filterPlaceholder="Search" onFilterApplyClick={(e) => handleFilterChange(e, 'organizationName')}></Column>
+        <Column field="category" header="Category" body={CategoryBodyTemplate}
+          filter filterField="category" filterMatchMode="contains" filterPlaceholder="Search" onFilterApplyClick={(e) => handleFilterChange(e, 'category')}></Column>
+        <Column field="cityName" header="City" body={CityBodyTemplate}
+          filter filterField="cityName" filterMatchMode="contains" filterPlaceholder="Search" onFilterApplyClick={(e) => handleFilterChange(e, 'cityName')}></Column>
+
+        <Column
+          field="newPaperName"
+          header="Newspaper"
+          body={NewsPaperBodyTemplate}
+          filter
+          filterField="newPaperName"
+          filterMatchMode="contains"
+          filterPlaceholder="Search"
+          onFilterApplyClick={(e) => handleFilterChange(e, 'newPaperName')}
+        />
+
+        <Column
+          field="publishDate"
+          header="Publish Date"
+          body={PublishDateTemplate}
+          filter
+          filterField="publishDate"
+          filterMatchMode="contains"
+          filterPlaceholder="Y-MM-DD" // Indicate the format required
+          onFilterApplyClick={(e) => handleFilterChange(e, 'publishDate')}
+        />
+
+
+        <Column field="id" header={customHeaderTemplate}  body={bodyTemplate}></Column>
       </DataTable>
 
       <Toast open={openSnackBar}
@@ -663,3 +712,4 @@ const CustomDataTable = (props) => {
 };
 
 export default CustomDataTable;
+

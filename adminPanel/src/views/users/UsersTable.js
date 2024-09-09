@@ -31,6 +31,8 @@ const UsersTable = (props) => {
   const [responseMsg, setResponseMsg] = useState("")
   const [userStatus, setUserStatus] = useState('Disable');
   const options = ['Disable', 'Enable'];
+  const [first, setFirst] = useState(0); // Index of the first record to display
+ const [rows, setRows] = useState(25); // Number of rows per page
 
 
   
@@ -408,9 +410,14 @@ const UsersTable = (props) => {
           value={users}
           paginator
           responsiveLayout="scroll"
-          paginatorTemplate=" PrevPageLink PageLinks NextPageLink  CurrentPageReport RowsPerPageDropdown"
-          currentPageReportTemplate="Showing Records : {first} to {last} "
-          rows={25}
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
+          currentPageReportTemplate={`ON PAGE ${Math.floor(first / rows) + 1} : RECORDS {first} to {last}`}
+          rows={rows}
+          first={first}
+          onPage={(e) => {
+          setFirst(e.first);
+          setRows(e.rows);
+          }}
           
           dataKey="id"
           filters={filterArray}

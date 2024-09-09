@@ -12,7 +12,8 @@ class SpinnerComponent extends React.Component {
 	};
 	render() {
 		return (
-			<div className="loader">  <img src={blackLogo} height="30px" alt="Loading.." className="spinner-img" />
+			<div className="spinner"> 
+			 {/* <img src={blackLogo} height="30px" alt="Loading.." className="spinner-img" /> */}
 			</div>
 
 		)

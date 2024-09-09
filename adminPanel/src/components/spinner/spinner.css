@@ -1,4 +1,4 @@
-.loader {
+/* .loader {
     border: 16px solid #180303;
     border-radius: 50%;
     border-top: 10px solid #ef6767;
@@ -35,4 +35,42 @@
     100% {
         transform: rotate(360deg);
     }
-}
+} */
+
+.spinner {
+    width: 72px;
+   height: 72px;
+    display: grid;
+    border: 3.2px solid #0000;
+    border-radius: 50%;
+    border-color: #2a6a43 #0000;
+    animation: spinner-e04l1k 1.4s infinite linear;
+    margin: 0 auto;
+    margin-top: 36vh;
+ }
+ 
+ .spinner::before,
+ .spinner::after {
+    content: "";
+    grid-area: 1/1;
+    margin: 1.6px;
+    border: inherit;
+    border-radius: 50%;
+ }
+ 
+ .spinner::before {
+    border-color: #0b2b11 #0000;
+    animation: inherit;
+    animation-duration: 0.7s;
+    animation-direction: reverse;
+ }
+ 
+ .spinner::after {
+    margin: 6.4px;
+ }
+ 
+ @keyframes spinner-e04l1k {
+    100% {
+       transform: rotate(1turn);
+    }
+ }
