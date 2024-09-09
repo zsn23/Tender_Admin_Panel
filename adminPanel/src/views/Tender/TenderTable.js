@@ -387,10 +387,15 @@ const CustomDataTable = (props) => {
   const [totalRecord, setTotalRecords] = useState(0); // Total records state
 
   const [sortField, setSortField] = useState(null); // For storing current sort field
-  const [sortOrder, setSortOrder] = useState(null); // For storing current sort order
+  // const [sortOrder, setSortOrder] = useState(null); // For storing current sort order
+  const [sortOrder, setSortOrder] = useState(1); // 1 for 'asc', -1 for 'desc'
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const toggleSortOrder = () => {
+    setSortOrder((prevOrder) => (prevOrder === 1 ? -1 : 1)); // Toggle between 1 (asc) and -1 (desc)
+  };
 
   const [filterArray, setFilterArray] = useState({
     name: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -561,7 +566,7 @@ const CustomDataTable = (props) => {
       />
       <Button
         style={{ cursor: "pointer", margin: '0.5rem' }}
-        icon="fa-duotone fa-download"
+        icon="pi pi-download"
         onClick={() => handleDownload(rowData)}
         className="p-button-rounded p-button-warning"
         iconStyle={{ color: 'black' }}
@@ -614,26 +619,30 @@ const CustomDataTable = (props) => {
       <button style={{ position: 'relative', bottom: 42 }} className="btn-style" onClick={exportToExcel}>Export</button>
 
       <div className="sorting-container___">
+     
+  <div className="d-flex align-items-center">
+    <i className="pi pi-sort-alpha-down " style={{ fontSize: '1rem' }}></i>
+    <label className="sorting-label____">SORT BY</label>
+  </div>
 
-        <div className="d-flex align-items-center">
-          <i className="pi pi-sort-alpha-down " style={{ fontSize: '1rem' }}></i>
-          <label className="sorting-label____">SORT BY</label>
+  <select className="sorting-select___" onChange={(e) => setSortField(e.target.value)} value={sortField || ''}>
+    <option value="">By Default Order</option>
+    <option value="IPLNumber">IPL Number</option>
+    <option value="name">Title</option>
+    <option value="organization">Organization</option>
+    <option value="category">Category</option>
+    <option value="city">City</option>
+    <option value="publishDate">Publish Date</option>
+    <option value="newspaper">Newspaper</option>
+  </select>
 
-        </div>
+  <button className="btn-style" onClick={toggleSortOrder}>
+    {sortOrder === 1 ? 'Sort Ascending' : 'Sort Descending'}
+  </button>
 
-        <select className="sorting-select___" onChange={(e) => setSortField(e.target.value)} value={sortField || ''}>
-          <option value="">By Default Order</option>
-          <option value="IPLNumber">IPL Number</option>
-          <option value="name">Title</option>
-          <option value="organization">Organization</option>
-          <option value="category">Category</option>
-          <option value="city">City</option>
-          <option value="publishDate">Publish Date</option>
-          <option value="newspaper">Newspaper</option>
-        </select>
-
-
-      </div>
+  {/* Add the toggle button for sorting order */}
+ 
+</div>
 
 
       <DataTable
@@ -651,25 +660,27 @@ const CustomDataTable = (props) => {
         dataKey="id"
         filters={filterArray}
         onFilter={(e) => setFilterArray(e.filters)} // Set the filters when applied
+        removableSort
         filterDisplay="row"
         sortField={sortField}
         sortOrder={sortOrder}
         onSort={onSort}
       >
         <Column field="IPLNumber" header="IPL Number" body={IPLNumberTemplate}
-          filter filterField="IPLNumber" filterMatchMode="contains" filterPlaceholder="Search" onFilterApplyClick={(e) => handleFilterChange(e, 'IPLNumber')}></Column>
+          filter filterField="IPLNumber" filterMatchMode="contains" sortable filterPlaceholder="Search" onFilterApplyClick={(e) => handleFilterChange(e, 'IPLNumber')}></Column>
         <Column field="name" header="Title" body={NameTemplate}
-          filter filterField="name" filterMatchMode="contains" filterPlaceholder="Search" onFilterApplyClick={(e) => handleFilterChange(e, 'name')}></Column>
+          filter filterField="name" filterMatchMode="contains" sortable filterPlaceholder="Search" onFilterApplyClick={(e) => handleFilterChange(e, 'name')}></Column>
         <Column field="organizationName" header="Organization" body={OrganizationBodyTemplate}
-          filter filterField="organizationName" filterMatchMode="contains" filterPlaceholder="Search" onFilterApplyClick={(e) => handleFilterChange(e, 'organizationName')}></Column>
+          filter filterField="organizationName" filterMatchMode="contains" sortable filterPlaceholder="Search" onFilterApplyClick={(e) => handleFilterChange(e, 'organizationName')}></Column>
         <Column field="category" header="Category" body={CategoryBodyTemplate}
-          filter filterField="category" filterMatchMode="contains" filterPlaceholder="Search" onFilterApplyClick={(e) => handleFilterChange(e, 'category')}></Column>
+          filter filterField="category" filterMatchMode="contains" sortable filterPlaceholder="Search" onFilterApplyClick={(e) => handleFilterChange(e, 'category')}></Column>
         <Column field="cityName" header="City" body={CityBodyTemplate}
-          filter filterField="cityName" filterMatchMode="contains" filterPlaceholder="Search" onFilterApplyClick={(e) => handleFilterChange(e, 'cityName')}></Column>
+          filter filterField="cityName" sortable filterMatchMode="contains" filterPlaceholder="Search" onFilterApplyClick={(e) => handleFilterChange(e, 'cityName')}></Column>
 
         <Column
           field="newPaperName"
           header="Newspaper"
+          sortable
           body={NewsPaperBodyTemplate}
           filter
           filterField="newPaperName"
@@ -677,20 +688,30 @@ const CustomDataTable = (props) => {
           filterPlaceholder="Search"
           onFilterApplyClick={(e) => handleFilterChange(e, 'newPaperName')}
         />
+          <Column 
+          field="effectedDate" 
+          header="Submit Date" 
+          sortable 
+          filter 
+          filterPlaceholder="Y-MM-DD"  
+          body={SubmissionDateTemplate}
+          onFilterApplyClick={(e) => handleFilterChange(e, 'effectedDate')}
+          ></Column>
+       
+        <Column 
+        field="publishDate" 
+        header="Publish Date" 
+        sortable  
+        body={PublishDateTemplate}
+        filter
+        filterField="publishDate"
+        // filterMatchMode="contains"
+        filterPlaceholder="Y-MM-DD" // Indicate the format required
+        onFilterApplyClick={(e) => handleFilterChange(e, 'publishDate')}></Column>
 
-        <Column
-          field="publishDate"
-          header="Publish Date"
-          body={PublishDateTemplate}
-          filter
-          filterField="publishDate"
-          filterMatchMode="contains"
-          filterPlaceholder="Y-MM-DD" // Indicate the format required
-          onFilterApplyClick={(e) => handleFilterChange(e, 'publishDate')}
-        />
 
 
-        <Column field="id" header={customHeaderTemplate}  body={bodyTemplate}></Column>
+        <Column field="id"  header={customHeaderTemplate}  body={bodyTemplate}></Column>
       </DataTable>
 
       <Toast open={openSnackBar}
