@@ -847,7 +847,7 @@ const SaveTenderModal = (props) => {
                       height="700px"
                       src={selectedImg}
                       style={{ transform: `scale(${zoom})`, transformOrigin: 'top left', cursor: 'zoom-in' }}
-                      onClick={handleZoomIn}
+                      onClick={handleZoomIn}  
                       onContextMenu={(e) => {
                         e.preventDefault(); // Prevent context menu on right-click
                         handleZoomOut();
