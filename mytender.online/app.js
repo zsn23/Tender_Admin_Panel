@@ -1834,38 +1834,68 @@ const checkCityExists = (data) => {
 });
 
 // Endpoint to send email
-app.post('/send-email/', (req, res) => {
-      const { dataForEmail } = req.body;
+// app.post('/send-email/', (req, res) => {
+//       const { dataForEmail } = req.body;
 
-    try {
-        if(dataForEmail.length>0){
-            dataForEmail.forEach((items)=>{
+//     try {
+//         if(dataForEmail.length>0){
+//             dataForEmail.forEach((items)=>{
          
-                var mailOptions = {
-                from: 'info@tender786.com',                   // Sender address
-                to: items.userInfo.email,       // List of recipients
-                subject: 'Today Tender List',              // Subject line
-                html:items.tenderInfo              
-                };
-                            // Send email
-                transporter.sendMail(mailOptions, (error, info) => {
-                    if (error) {
-                        console.error('Error occurred:', error);
-                        res.status(500).json({ message: 'Error sending email', error: error.toString() });
-                    } else {
-                        console.log('Message sent:', info.messageId);
-                        res.status(200).json({ message: 'Email sent successfully', messageId: info.messageId });
-                    }
-                });
-            });
-        }
+//                 var mailOptions = {
+//                 from: 'info@tender786.com',                   // Sender address
+//                 to: items.userInfo.email,       // List of recipients
+//                 subject: 'Today Tender List',              // Subject line
+//                 html:items.tenderInfo              
+//                 };
+//                             // Send email
+//                 transporter.sendMail(mailOptions, (error, info) => {
+//                     if (error) {
+//                         console.error('Error occurred:', error);
+//                         res.status(500).json({ message: 'Error sending email', error: error.toString() });
+//                     } else {
+//                         console.log('Message sent:', info.messageId);
+//                         res.status(200).json({ message: 'Email sent successfully', messageId: info.messageId });
+//                     }
+//                 });
+//             });
+//         }
        
       
-    } catch (err) {
-        console.error('Error in sending email:', err);
-        res.status(500).json({ message: 'Failed to send email', error: err.toString() });
-    }
+//     } catch (err) {
+//         console.error('Error in sending email:', err);
+//         res.status(500).json({ message: 'Failed to send email', error: err.toString() });
+//     }
+// });
+
+
+app.post('/send-email/', (req, res) => {
+  const { dataForEmail } = req.body;
+  console.log("Data for Email:", dataForEmail); // Add this log
+
+  if (dataForEmail.length > 0) {
+    dataForEmail.forEach((items) => {
+      const mailOptions = {
+        from: 'info@tender786.com',
+        to: items.userInfo.email,
+        subject: 'Today Tender List',
+        html: items.tenderInfo,
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error('Error occurred:', error);
+          res.status(500).json({ message: 'Error sending email', error: error.toString() });
+        } else {
+          console.log('Message sent:', info.messageId);
+          res.status(200).json({ message: 'Email sent successfully', messageId: info.messageId });
+        }
+      });
+    });
+  } else {
+    res.status(400).json({ message: 'No data to send email' });
+  }
 });
+
 
 
 

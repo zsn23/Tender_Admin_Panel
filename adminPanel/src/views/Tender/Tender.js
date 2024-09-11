@@ -123,7 +123,7 @@ class TenderDetails extends Component {
       <>
         <div style={{ textAlign: "end", marginTop: '5px'  }}>
           <button id="new-report" className="btn-style  p-1"
-            onClick={() => this.setState({ showModal: true })} > Add New
+            onClick={() => this.setState({ showModal: true, dataForEdit: null, isEditMode: false })} > Add New
           </button>
         </div>
         {!this.state.showModal && <TenderTable
