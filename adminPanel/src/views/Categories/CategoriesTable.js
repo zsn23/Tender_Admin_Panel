@@ -226,10 +226,13 @@ const CustomDataTable = (props) => {
       <div className="container-fluid mb-5" >
       <button style={{
         position:'relative',bottom:35
-      }} className="btn-style" onClick={() => exportToExcel()}>Export</button>
- <button style={{
+      }} className="btn-style" onClick={() => exportToExcel()}>Export
+      </button>
+
+      <button style={{
         position: 'relative', bottom: 35, marginLeft: 5
-      }} className="btn-style" onClick={() => handleImport()}>Import</button>
+      }} className="btn-style" onClick={() => handleImport()}>Import
+      </button>
 
         <DataTable
                 header="CATEGORY RECORDS"
@@ -254,7 +257,7 @@ const CustomDataTable = (props) => {
           selection={selectedRows}
           onSelectionChange={(e) => setSelectedRows(e.value)}
         >
-          {/* <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column> */}
+          <Column selectionMode="multiple"  header="Export" headerStyle={{ width: '3rem' }}></Column>
 
           <Column
             field="name"

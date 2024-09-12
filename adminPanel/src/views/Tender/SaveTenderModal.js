@@ -358,8 +358,8 @@ const SaveTenderModal = (props) => {
         setLoader(false);
         handleToast("success", response?.data?.message);
         props.reloadData();
-        // setModal(false);
-        // props.onClose()
+        setModal(false);
+        props.onClose()
         resetInput();
       } else {
         handleToast("error", response?.data?.message);
@@ -775,7 +775,7 @@ const SaveTenderModal = (props) => {
 
                 <div className="p-col-12">
                   <span>
-                    Publish Date:{" "}
+                    Submit/End Date:{" "}
                     {publishDate == null && (
                       <span className="validation-error">* Required</span>
                     )}
@@ -838,9 +838,9 @@ const SaveTenderModal = (props) => {
             </div>
 
              {/* water mark */}
-            <div className="section_____img section col8" ref={gridRef}>
+            {/* <div className="section_____img section col8" ref={gridRef}>
               <div className="content" style={{ overflow: 'auto' }}>
-                <Watermark text='Tender786 Bismillah' textColor='green' textSize='10'>
+                <Watermark text='Tender786 Bismillah' textColor='white' textSize='10'>
                   <div style={{ overflow: 'auto', width: '100%', height: '100%', textAlign: 'center' }}>
                     <img
                       alt=""
@@ -860,10 +860,10 @@ const SaveTenderModal = (props) => {
               <div className="p-col-12">
                 <h2 sx={{ fontSize: '22px', fontWeight: 500, color: 'red', display: 'flex', justifyContent: 'center' }}>{`© ${selectedNewsPaper?.name} ${selectedCity?.name} ${moment(new Date()).format("YYYY-MM-DD")}`}</h2>
               </div>
-            </div>
+            </div> */}
 
            
-            <div className=" section col8">
+            {/* <div className=" section col8">
                <span className="imgFile__">IMAGE FILE.</span>
               {selectedFile == null ? (
                 <div
@@ -927,6 +927,7 @@ const SaveTenderModal = (props) => {
                           cursor: "zoom-in",
                           height: "100%",
                           width: "100%",
+                          zIndex:"0"
                         }}
                         width="100%"
                         height="100%"
@@ -956,7 +957,62 @@ const SaveTenderModal = (props) => {
                   </div>
                 </>
               )}
-            </div>
+            </div> */}
+
+
+            <div className="section_____img section col8" ref={gridRef}>
+  <div className="content" style={{ overflow: 'auto' }}>
+    <Watermark
+       text="Tender786"
+  textColor="rgba(255, 255, 255, 0.3)"
+  textSize="10px"
+  // style={{
+  //   position: 'absolute',
+  //   top: 0,
+  //   left: -100,
+  //   right: 0,
+  //   bottom: 0,
+  //   backgroundRepeat: 'repeat',
+  //   backgroundSize: '100px 100px',
+  //   zIndex: 1,
+  //     }}
+    >
+      <div style={{ overflow: 'auto', width: '100%', height: '100%', position: 'relative' }}>
+        <img
+          alt=""
+          height="700px"
+          src={selectedImg}
+          style={{
+            transform: `scale(${zoom})`,
+            transformOrigin: 'top left',
+            cursor: 'zoom-in',
+            zIndex: 0, // Image stays below the watermark
+          }}
+          onClick={handleZoomIn}
+          onContextMenu={(e) => {
+            e.preventDefault(); // Prevent context menu on right-click
+            handleZoomOut();
+          }}
+        />
+      </div>
+    </Watermark>
+  </div>
+
+  <div className="p-col-12">
+    <h2
+      style={{
+        fontSize: '22px',
+        fontWeight: 500,
+        color: 'red',
+        display: 'flex',
+        justifyContent: 'center',
+      }}
+    >
+      {`© ${selectedNewsPaper?.name} ${selectedCity?.name} ${moment(new Date()).format('YYYY-MM-DD')}`}
+    </h2>
+  </div>
+</div>
+
             {/* water mark */}
 
           </div>
@@ -985,6 +1041,7 @@ const SaveTenderModal = (props) => {
 };
 
 export default SaveTenderModal;
+
 
 
 
@@ -1569,8 +1626,8 @@ export default SaveTenderModal;
 //   };
 
 //   const reloadOrganizations = () => {
-//     setOrganizationLoader(true)
-//     props.reloadOrganizations()
+//     // setOrganizationLoader(true)
+//     // props.reloadOrganizations()
 //   };
 
 //   const getSelectedItems = (items) => {
@@ -1594,7 +1651,7 @@ export default SaveTenderModal;
 //   };
 
 //   return (
-//     <div className="container-fluid d-flex justify-content-start mt-2">
+//     <div className="container-fluid d-flex justify-content-center mt-2">
 //       <Toast
 //         open={openSnackBar}
 //         severity={severity}
@@ -1665,9 +1722,9 @@ export default SaveTenderModal;
 //                     itemTemplate={(e) => organizationTemplate(e)}
 //                     filter
 //                     filterBy="name"
-//                     filterInputAutoFocus={false}
-//                     focusInputRef={true}
-//                     showOnFocus={true}
+//                     // filterInputAutoFocus={false}
+//                     // focusInputRef={true}
+//                     // showOnFocus={true}
 //                     filterPlaceholder="Search"
 //                     onChange={(e) => handleOrganization(e)}
 //                     optionLabel="name"
@@ -1713,9 +1770,9 @@ export default SaveTenderModal;
 //                     optionLabel="name"
 //                     filter
 //                     filterBy="name"
-//                     filterInputAutoFocus={false}
-//                     focusInputRef={true}
-//                     showOnFocus={true}
+//                     // filterInputAutoFocus={false}
+//                     // focusInputRef={true}
+//                     // showOnFocus={true}
 //                     filterPlaceholder="Search"
 //                     value={selectedNewsPaper}
 //                     placeholder="Select News Paper"
@@ -1751,7 +1808,7 @@ export default SaveTenderModal;
 //                   />
 //                 </div>
 
-//                 <div className="p-col-12">
+//                 {/* <div className="p-col-12">
 //                     <span>Open Date:</span>
 //                     <div className="card flex justify-content-center">
 //                       <Calendar value={openDate} onChange={(e) => {
@@ -1760,7 +1817,7 @@ export default SaveTenderModal;
 //                       }} />
 //                       {openDate == null && <span className="validation-error">* Required</span>} 
 //                     </div>
-//                   </div>
+//                   </div> */}
 
 //                 <div className="p-col-12">
 //                   <span>
@@ -1826,9 +1883,9 @@ export default SaveTenderModal;
 //               </div>
 //             </div>
 
-//             <div className="section col8" ref={gridRef}>
+//             {/* <div className="section col8" ref={gridRef}>
 //               <div className="content" style={{ overflow: 'auto' }}>
-//                 <Watermark text='Tender786 Bismillah' textColor='white' textSize='20'>
+//                 <Watermark text='Tender786 Bismillah' textColor='red' textSize='40'>
 //                   <div style={{ overflow: 'auto', width: '100%', height: '100%', textAlign: 'center' }}>
 //                     <img
 //                       alt=""
@@ -1848,7 +1905,7 @@ export default SaveTenderModal;
 //               <div className="p-col-12">
 //                 <h2 sx={{ fontSize: '22px', fontWeight: 500, color: 'red', display: 'flex', justifyContent: 'center' }}>{`© ${selectedNewsPaper?.name} ${selectedCity?.name} ${moment(new Date()).format("YYYY-MM-DD")}`}</h2>
 //               </div>
-//             </div>
+//             </div> */}
 //             <div className=" section col8">
 //                <span className="imgFile__">IMAGE FILE.</span>
 //               {selectedFile == null ? (
@@ -1890,10 +1947,10 @@ export default SaveTenderModal;
 //                       <Watermark
 //                         multiline={true}
 //                         text="Tender786"
-//                         width="80%"
-//                         height="80%"
+//                         width="100%"
+//                         height="100%"
 //                         textColor="red"
-//                         textSize="20"
+//                         textSize="10"
 //                       >
 //                       <img
 //                         src={selectedImg}
@@ -1915,9 +1972,9 @@ export default SaveTenderModal;
 //                         alt="TenderImage"
 //                         data-magnify-src=""
 //                       />
-//                       </Watermark>
+//                        </Watermark>
 //                     )}
-//                     <div className="p-col-12">
+//                     {/* <div className="p-col-12">
 //                       <h2
 //                         className="footer-img"
 //                         sx={{
@@ -1933,7 +1990,7 @@ export default SaveTenderModal;
 //                               new Date()
 //                             ).format("YYYY-MM-DD")}`}
 //                       </h2>
-//                     </div>
+//                     </div> */}
 //                   </div>
 //                 </>
 //               )}
