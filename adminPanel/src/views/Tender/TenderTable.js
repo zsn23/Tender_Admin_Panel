@@ -312,11 +312,11 @@
 //           filters={filterArray}
 //           filterDisplay="row"
 //           removableSort
-//           selectionMode={'checkbox'}
-//           selection={selectedRows}
-//           onSelectionChange={(e) => setSelectedRows(e.value)}
+          // selectionMode={'checkbox'}
+          // selection={selectedRows}
+          // onSelectionChange={(e) => setSelectedRows(e.value)}
 
-//           sortField={sortField}
+          // sortField={sortField}
 //           sortOrder={sortOrder}
 //           onSort={onSort}
 //         >
@@ -386,7 +386,7 @@ const CustomDataTable = (props) => {
   const [currentPage, setCurrentPage] = useState(1); // Pagination state
   const [totalRecord, setTotalRecords] = useState(0); // Total records state
 
-  const [sortField, setSortField] = useState(null); // For storing current sort field
+  const [sortField, setSortField] = useState('effectedDate'); // For storing current sort field
   // const [sortOrder, setSortOrder] = useState(null); // For storing current sort order
   const [sortOrder, setSortOrder] = useState(1); // 1 for 'asc', -1 for 'desc'
 
@@ -427,7 +427,7 @@ const CustomDataTable = (props) => {
     }
 
     try {
-      const response = await billingApiServices.getAllTenders(currentPage, 25, sortField, sortOrder === 1 ? 'asc' : 'desc', filters);
+      const response = await billingApiServices.getAllTenders(currentPage, 25, sortField, sortOrder === 1 ? 'desc' : 'asc', filters);
       if (response && response.status) {
         setGridData(response.data.data);
         setTotalRecords(response.data.total);
@@ -545,7 +545,7 @@ const CustomDataTable = (props) => {
     const year = d.getFullYear();
     const month = ('0' + (d.getMonth() + 1)).slice(-2);
     const day = ('0' + d.getDate()).slice(-2);
-    return `${year}-${month}-${day} ${hours}:${minutes}`; // Ensure 'YYYY-MM-DD' format
+    return `${year}-${month}-${day} `; // Ensure 'YYYY-MM-DD' format
   };
 
   const bodyTemplate = (rowData) => loader ? (
@@ -632,8 +632,10 @@ const CustomDataTable = (props) => {
     <option value="organization">Organization</option>
     <option value="category">Category</option>
     <option value="city">City</option>
+    <option value="effectedDate">Submit Date</option>
     <option value="publishDate">Publish Date</option>
     <option value="newspaper">Newspaper</option>
+
   </select>
 
   <button className="btn-style" onClick={toggleSortOrder}>
@@ -665,7 +667,12 @@ const CustomDataTable = (props) => {
         sortField={sortField}
         sortOrder={sortOrder}
         onSort={onSort}
+
+        selectionMode={'checkbox'}
+        selection={selectedRows}
+        onSelectionChange={(e) => setSelectedRows(e.value)}
       >
+        <Column selectionMode="multiple" header="Export"></Column>
         <Column field="IPLNumber" header="IPL Number" body={IPLNumberTemplate}
           filter filterField="IPLNumber" filterMatchMode="contains" sortable filterPlaceholder="Search" onFilterApplyClick={(e) => handleFilterChange(e, 'IPLNumber')}></Column>
         <Column field="name" header="Title" body={NameTemplate}
@@ -700,7 +707,7 @@ const CustomDataTable = (props) => {
        
         <Column 
         field="publishDate" 
-        header="Publish Date" 
+        header="End Date" 
         sortable  
         body={PublishDateTemplate}
         filter

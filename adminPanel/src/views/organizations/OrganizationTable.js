@@ -292,11 +292,11 @@ const CustomDataTable = (props) => {
           filterDisplay="row"
           removableSort
 
-          // selectionMode={'checkbox'}
-          // selection={selectedRows}
-          // onSelectionChange={(e) => setSelectedRows(e.value)}
+          selectionMode={'checkbox'}
+          selection={selectedRows}
+          onSelectionChange={(e) => setSelectedRows(e.value)}
         >
-          {/* <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column> */}
+          <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
 
           <Column
             field="name"

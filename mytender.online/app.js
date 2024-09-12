@@ -1824,14 +1824,14 @@ const checkCityExists = (data) => {
 //     }
 // });
 
- const transporter = nodemailer.createTransport({
-    host: 'business200.mypowerfulserver.com',
-    port: 25,
-    auth: {
-        user: 'tedner786@tender786.com',
-        pass: 'P@ssw0rd123///'
-    }
-});
+//  const transporter = nodemailer.createTransport({
+//     host: 'business200.mypowerfulserver.com',
+//     port: 25,
+//     auth: {
+//         user: 'saadsaleem7452@gmail.com',
+//         pass: 'P@ssw0rd123///'
+//     }
+// });
 
 // Endpoint to send email
 // app.post('/send-email/', (req, res) => {
@@ -1868,6 +1868,26 @@ const checkCityExists = (data) => {
 // });
 
 
+
+
+
+// const transporter = nodemailer.createTransport({
+//   service: "Gmail",
+//   host: "smtp.gmail.com",
+//   port: 465,
+//   secure: true,
+//   auth: {
+//     user: "awaisijaz686@gmail.com",
+//     pass: "Zsn_230102",
+//   },
+// });
+// transporter.sendMail( (error, info) => {
+//   if (error) {
+//     console.error("Error sending email: ", error);
+//   } else {
+//     console.log("Email sent: ", info.response);
+//   }
+// });
 app.post('/send-email/', (req, res) => {
   const { dataForEmail } = req.body;
   console.log("Data for Email:", dataForEmail); // Add this log
@@ -2656,6 +2676,10 @@ app.get('/tender', (req, res) => {
 
   if (req.query.publishDate) {
     filters.push('DATE_FORMAT(tenders.publishDate, "%Y-%m-%d") LIKE ?');
+    values.push(`${req.query.publishDate}%`); // Allow partial date match
+  }
+  else if(req.query.publishDate) {
+    filters.push('DATE_FORMAT(tenders.publishDate, "%m-%Y-%d") LIKE ?');
     values.push(`${req.query.publishDate}%`); // Allow partial date match
   }
 
