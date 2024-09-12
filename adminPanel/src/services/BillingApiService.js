@@ -72,6 +72,20 @@ class BillingApiService {
     }
   };
 
+  importToExcelUsers = async (body) => {
+    try {
+      let res = await axios.post(
+        this.baseUrl + "user/saveMultipleUsers/",
+        body
+      );
+      return res;
+    } catch (e) {
+      // Optionally, log the error or handle it as needed
+      console.error('Error importing users:', e);
+      return null;
+    }
+  };
+
   sendEmail = async (body) => {
     try {
       let res = await axios.post(this.baseUrl + "send-email", body);
@@ -216,6 +230,21 @@ class BillingApiService {
     }
   };
 
+
+  importToExcelNewspaper = async (body) => {
+    try {
+      let res = await axios.post(
+         this.baseUrl + "newspapers/saveMultipleNewspapers/",
+        body
+      );
+      return res;
+    } catch (e) {
+      // Optionally, log the error or handle it as needed
+      console.error('Error importing newspapers:', e);
+      return null;
+    }
+  };
+
   getAllCities = async () => {
     try {
       let res = await axios.get(this.baseUrl + "cities/");
@@ -251,6 +280,20 @@ class BillingApiService {
       return null;
     }
   };
+  
+  importToExcelCities = async (body) => {
+    try {
+      let res = await axios.post(
+        this.baseUrl + "cities/saveMultipleCities/",
+        body
+      );
+      return res;
+    } catch (e) {
+      // Optionally, log the error or handle it as needed
+      console.error('Error importing cities:', e);
+      return null;
+    }
+  };
 
   getAllFAQs = async () => {
     try {
@@ -278,6 +321,20 @@ class BillingApiService {
       return null;
     }
   };
+  
+  importToExcelFaqs = async (body) => {
+    try {
+      let res = await axios.post(
+        this.baseUrl + "FAQs/saveMultipleFaqs/",
+        body
+      );
+      return res;
+    } catch (e) {
+      // Optionally, log the error or handle it as needed
+      console.error('Error importing FAQs:', e);
+      return null;
+    }
+  };
 
   getAllSettings = async () => {
     try {
@@ -299,6 +356,17 @@ class BillingApiService {
       return null;
     }
   };
+
+  createSetting = async (body) => {
+    try {
+      let res = await axios.post(this.baseUrl + "Settings/", body);
+      return res;
+    } catch (e) {
+      return null;
+    }
+  };
+  
+
 
   deleteFAQ = async (body) => {
     try {
@@ -471,6 +539,7 @@ class BillingApiService {
       return null;
     }
   };
+
   saveRoles = async (body) => {
     try {
       let res = await axios.post(this.baseUrl + "rolesManagement/", body);

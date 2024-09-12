@@ -10,7 +10,8 @@ import { ConfirmDialog } from "primereact/confirmdialog";
 import { billingApiServices } from '../../services/BillingApiService';
 import Toast from "../alert/Toast"
 import XLSX from "xlsx";
-import FileSaver from 'file-saver';import ImportFile from "./../organizations/ImportFile";
+import FileSaver from 'file-saver';
+import ImportFile from "./../organizations/ImportFile";
 
 
 const CustomDataTable = (props) => {
@@ -215,18 +216,24 @@ const CustomDataTable = (props) => {
     fileName = fileName + ".xlsx"
     FileSaver.saveAs(dataToSave, fileName);
   }
+  const customExportTemplate=()=>(
+    <div >
+    <span>Export</span>
+    <i className="pi pi-file-excel" style={{ fontSize: '14px' ,marginLeft : "2px" }} ></i>
+    </div>
+  );
+
   const handleImport=()=>{
     setIsOpen(true)
-    setStateManager(new Date()?.toString())
-    setStateManager(new Date()?.toString())
+    setStateManager(new Date()?.toString());
   }
   return (
    
      
       <div className="container-fluid mb-5" >
       <button style={{
-        position:'relative',bottom:35
-      }} className="btn-style" onClick={() => exportToExcel()}>Export
+        position:'relative',bottom:35 ,  cursor: selectedRows.length === 0 ? 'not-allowed' : 'pointer'
+      }} className="btn-style" onClick={() => exportToExcel()} disabled={selectedRows.length === 0}>Export
       </button>
 
       <button style={{
@@ -257,7 +264,7 @@ const CustomDataTable = (props) => {
           selection={selectedRows}
           onSelectionChange={(e) => setSelectedRows(e.value)}
         >
-          <Column selectionMode="multiple"  header="Export" headerStyle={{ width: '3rem' }}></Column>
+          <Column selectionMode="multiple"  header={customExportTemplate} headerStyle={{ width: '5%' }}></Column>
 
           <Column
             field="name"

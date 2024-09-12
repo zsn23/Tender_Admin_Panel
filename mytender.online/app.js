@@ -2029,6 +2029,61 @@ app.post('/city/updateCity', (req, res) => {
     return res.status(200).json({ status: false, data: [], message: MESSAGES.FAILED_MESSAGE });
   }
 });
+
+
+app.post('/cities/saveMultipleCities', (req, res) => {
+  const { values, effectedBy } = req.body;
+
+  try {
+    // Insert records into the database
+    const insertPromises = values.map(city => {
+      const sql = 'INSERT INTO cities (name, effectedBy, effectedDate) VALUES (?, ?, ?)';
+      const values = [city.name, effectedBy, new Date()];
+      return new Promise((resolve, reject) => {
+        pool.query(sql, values, (error, results) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(results.insertId);
+          }
+        });
+      });
+    });
+
+    Promise.all(insertPromises)
+      .then(insertedIds => {
+        // Fetch all inserted records
+        const selectPromises = insertedIds.map(insertedId => {
+          const sql = 'SELECT * FROM cities WHERE id = ?';
+          const values = [insertedId];
+          return new Promise((resolve, reject) => {
+            pool.query(sql, values, (err, response) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(response);
+              }
+            });
+          });
+        });
+
+        Promise.all(selectPromises)
+          .then(responses => {
+            res.status(200).json({ status: true, data: responses.flat(), message: "Multiple cities created successfully" });
+          })
+          .catch(error => {
+            res.status(500).json({ status: false, data: [], message: error.toString() });
+          });
+      })
+      .catch(error => {
+        res.status(500).json({ status: false, data: [], message: error.toString() });
+      });
+  } catch (err) {
+    res.status(500).json({ status: false, data: [], message: err.toString() });
+  }
+});
+
+
 // ***************City Api's**************************
 
 
@@ -2294,6 +2349,59 @@ app.post('/user/updateUser', (req, res) => {
     res.status(200).json({ status: false, data: [], message: MESSAGES.ERROR_MESSAGE + err });
   }
 });
+
+app.post('/user/saveMultipleUsers', (req, res) => {
+  const { values, effectedBy } = req.body;
+
+  try {
+    // Insert records into the database
+    const insertPromises = values.map(user => {
+      const sql = 'INSERT INTO users (name, email, password, phoneNumber, status ,effectedDate) VALUES (?, ?, ?, ?, ?, ?)';
+      const values = [user.name, user.email, user.password, user.phoneNumber,effectedBy, new Date()];
+      return new Promise((resolve, reject) => {
+        pool.query(sql, values, (error, results) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(results.insertId);
+          }
+        });
+      });
+    });
+
+    Promise.all(insertPromises)
+      .then(insertedIds => {
+        // Fetch all inserted records
+        const selectPromises = insertedIds.map(insertedId => {
+          const sql = 'SELECT * FROM users WHERE id = ?';
+          const values = [insertedId];
+          return new Promise((resolve, reject) => {
+            pool.query(sql, values, (err, response) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(response);
+              }
+            });
+          });
+        });
+
+        Promise.all(selectPromises)
+          .then(responses => {
+            res.status(200).json({ status: true, data: responses.flat(), message: "Multiple users created successfully" });
+          })
+          .catch(error => {
+            res.status(500).json({ status: false, data: [], message: error.toString() });
+          });
+      })
+      .catch(error => {
+        res.status(500).json({ status: false, data: [], message: error.toString() });
+      });
+  } catch (err) {
+    res.status(500).json({ status: false, data: [], message: err.toString() });
+  }
+});
+
 // ***************User Api's**************************
 
 // ***************Organizations Api's**************************
@@ -2570,6 +2678,61 @@ app.post('/newsPaper/updateNewsPaper', (req, res) => {
     return res.status(200).json({ status: false, data: [], message: MESSAGES.FAILED_MESSAGE });
   }
 });
+
+
+
+app.post('/newspapers/saveMultipleNewspapers', (req, res) => {
+  const { values, effectedBy } = req.body;
+
+  try {
+    // Insert records into the database
+    const insertPromises = values.map(newspaper => {
+      const sql = 'INSERT INTO newspapers (name, effectedBy, effectedDate) VALUES (?, ?, ?)';
+      const values = [newspaper.name, effectedBy, new Date()];
+      return new Promise((resolve, reject) => {
+        pool.query(sql, values, (error, results) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(results.insertId);
+          }
+        });
+      });
+    });
+
+    Promise.all(insertPromises)
+      .then(insertedIds => {
+        // Fetch all inserted records
+        const selectPromises = insertedIds.map(insertedId => {
+          const sql = 'SELECT * FROM newspapers WHERE id = ?';
+          const values = [insertedId];
+          return new Promise((resolve, reject) => {
+            pool.query(sql, values, (err, response) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(response);
+              }
+            });
+          });
+        });
+
+        Promise.all(selectPromises)
+          .then(responses => {
+            res.status(200).json({ status: true, data: responses.flat(), message: "Multiple newspapers created successfully" });
+          })
+          .catch(error => {
+            res.status(500).json({ status: false, data: [], message: error.toString() });
+          });
+      })
+      .catch(error => {
+        res.status(500).json({ status: false, data: [], message: error.toString() });
+      });
+  } catch (err) {
+    res.status(500).json({ status: false, data: [], message: err.toString() });
+  }
+});
+
 // ***************newspapers Api's**************************
 
 
@@ -3118,6 +3281,59 @@ app.post('/FAQs/updateFAQ', (req, res) => {
 
   } catch (err) {
     return res.status(200).json({ status: false, data: [], message: MESSAGES.FAILED_MESSAGE });
+  }
+});
+
+
+app.post('/FAQs/saveMultipleFaqs', (req, res) => {
+  const { values, effectedBy } = req.body;
+
+  try {
+    // Insert records into the database
+    const insertPromises = values.map(faq => {
+      const sql = 'INSERT INTO faqs (question, answer, effectedBy, effectedDate) VALUES (?, ?, ?, ?)';
+      const values = [faq.question, faq.answer, effectedBy, new Date()];
+      return new Promise((resolve, reject) => {
+        pool.query(sql, values, (error, results) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(results.insertId);
+          }
+        });
+      });
+    });
+
+    Promise.all(insertPromises)
+      .then(insertedIds => {
+        // Fetch all inserted records
+        const selectPromises = insertedIds.map(insertedId => {
+          const sql = 'SELECT * FROM faqs WHERE id = ?';
+          const values = [insertedId];
+          return new Promise((resolve, reject) => {
+            pool.query(sql, values, (err, response) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(response);
+              }
+            });
+          });
+        });
+
+        Promise.all(selectPromises)
+          .then(responses => {
+            res.status(200).json({ status: true, data: responses.flat(), message: "Multiple FAQs created successfully" });
+          })
+          .catch(error => {
+            res.status(500).json({ status: false, data: [], message: error.toString() });
+          });
+      })
+      .catch(error => {
+        res.status(500).json({ status: false, data: [], message: error.toString() });
+      });
+  } catch (err) {
+    res.status(500).json({ status: false, data: [], message: err.toString() });
   }
 });
 // ***************FAQs Api's**************************

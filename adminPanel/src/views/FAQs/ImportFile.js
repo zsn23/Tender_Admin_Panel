@@ -2,48 +2,42 @@ import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
 import { Button, Modal } from "reactstrap";
 import { billingApiServices } from '../../services/BillingApiService';
-import Toast from "../alert/Toast"
+import Toast from "../alert/Toast";
 import "./ImportFile.css";
 
 import {
     Card,
     CardBody,
-    CardTitle,
     Row,
     Col,
-    Form,
-    FormGroup,
-    Label,
-    Input,
+    Form
 } from "reactstrap";
 import { CheckSquare } from 'react-feather';
 import { localStorageService } from "../../services/LocalStorageService";
 
 function ImportFile(props) {
-    const [names, setNames] = useState([]);
-    const [importDialog, setImportDialog] = useState(true);
+    const [faqs, setFaqs] = useState([]);
     const [modal, setModal] = useState(false);
-    const _userData = localStorageService.getPersistedData("USER_DETAILS")
-    const [severity, setSeverity] = useState("")
-    const [openSnackBar, setOpenSnackBar] = useState(false)
-    const [responseMsg, setResponseMsg] = useState("")
+    const _userData = localStorageService.getPersistedData("USER_DETAILS");
+    const [severity, setSeverity] = useState("");
+    const [openSnackBar, setOpenSnackBar] = useState(false);
+    const [responseMsg, setResponseMsg] = useState("");
 
     useEffect(() => {
         if (props.isOpen) {
-            setModal(true)
+            setModal(true);
         }
-        // if cache store pass to display in pass and confirm pass field that would be set empty
-
-    }, [props.isOpen])
+    }, [props.isOpen]);
 
     const handleToast = (severity, message) => {
-        setSeverity(severity)
-        setResponseMsg(message)
-        setOpenSnackBar(true)
+        setSeverity(severity);
+        setResponseMsg(message);
+        setOpenSnackBar(true);
         setTimeout(() => {
-            setOpenSnackBar(false)
+            setOpenSnackBar(false);
         }, 2000);
-    }
+    };
+
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         const reader = new FileReader();
@@ -55,110 +49,50 @@ function ImportFile(props) {
             const sheet = workbook.Sheets[sheetName];
             const columnData = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false });
 
-            // Assuming the "Name" column is the first column (index 0)
-            const namesArray = columnData.map((e) => ({ name: e[0] }));
-            const modifiedNamesArray = namesArray.slice(1);
-                      
-            setNames(modifiedNamesArray);
+            // Assuming the "Question" column is the first column and "Answer" column is the second column
+            const faqsArray = columnData.map((e) => ({ question: e[0], answer: e[1] }));
+            const modifiedFaqsArray = faqsArray.slice(1); // Skipping the header row if needed
+
+            setFaqs(modifiedFaqsArray);
         };
 
         reader.readAsBinaryString(file);
     };
 
     const importRecords = () => {
-        if (names?.length == 0) {
-            alert("select file with records")
+        if (faqs.length === 0) {
+            alert("Select a file with records");
             return;
         }
+
         const body = {
-            values: names,
+            values: faqs,
             effectedBy: _userData?.id
-        }
-        
-        if (props.Type == "Cities") {
-            billingApiServices.importToExcelCities(body).then((response) => {
-                if (response == null || response == undefined) {
-                    handleToast("error", "associated with some tenders,please remove the tender at first(Null)")
-                    return
+        };
+
+        if (props.Type === "Faq") {
+            billingApiServices.importToExcelFaqs(body).then((response) => {
+                if (response == null) {
+                    handleToast("error", "Error occurred while importing FAQs.");
+                    return;
                 }
 
                 if (response?.data?.status) {
-
-                    handleToast("success", response?.data?.message)
-                    props.reloadData()
-                    onHide()
-                }
-                else {
-                    handleToast("error", "associated with some tenders,please remove the tender at first.")
+                    handleToast("success", response?.data?.message);
+                    props.reloadData();
+                    onHide();
+                } else {
+                    handleToast("error", "Error occurred while importing FAQs.");
                 }
             });
         }
+    };
 
-        if (props.Type == "Newspaper") {
-            billingApiServices.importToExcelNewspaper(body).then((response) => {
-                if (response == null || response == undefined) {
-                    handleToast("error", "associated with some tenders,please remove the tender at first(Null)")
-                    return
-                }
-
-                if (response?.data?.status) {
-
-                    handleToast("success", response?.data?.message)
-                    props.reloadData()
-                    onHide()
-                }
-                else {
-                    handleToast("error", "associated with some tenders,please remove the tender at first.")
-                }
-            });
-        }
-        if (props.Type == "Category") {
-            billingApiServices.importToExcelCategory(body).then((response) => {
-                if (response == null || response == undefined) {
-                    handleToast("error", "associated with some tenders,please remove the tender at first.")
-                    return
-                }
-
-                if (response?.data?.status) {
-
-                    handleToast("success", response?.data?.message)
-                    props.reloadData()
-                    onHide()
-                }
-                else {
-                    handleToast("error", "associated with some tenders,please remove the tender at first.")
-                }
-            });
-        }
-        else {
-            billingApiServices.importToExcel(body).then((response) => {
-                if (response == null || response == undefined) {
-                    handleToast("error", "associated with some tenders,please remove the tender at first.")
-                    return
-                }
-
-                if (response?.data?.status) {
-                   
-                    handleToast("success", response?.data?.message)
-                    props.reloadData()
-                    onHide()
-                }
-                else {
-                    handleToast("error", "associated with some tenders,please remove the tender at first.")
-                }
-            });
-        }
-        
-
-
-
-    }
     const onHide = () => {
-        setNames([])
-        setModal(false)
-        props.onHide()
-    }
-
+        setFaqs([]);
+        setModal(false);
+        props.onHide();
+    };
 
     return (
         <div>
@@ -184,15 +118,14 @@ function ImportFile(props) {
                                                 <Row>
                                                     <Col xs="12">
                                                         <input type="file" onChange={handleFileChange} accept=".xlsx, .xls" />
-
                                                     </Col>
                                                 </Row>
                                                 <Row>
                                                     <Col xs="12">
                                                         <div className='contant'>
                                                             <ul>
-                                                                {names?.map((ele, index) => (
-                                                                    <li key={index}>{ele.name}</li>
+                                                                {faqs.map((ele, index) => (
+                                                                    <li key={index}>{ele.question} - {ele.answer}</li>
                                                                 ))}
                                                             </ul>
                                                         </div>

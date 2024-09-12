@@ -9,6 +9,9 @@ import ConfirmationDialog from "../alert/ConfirmationDialog";
 import { billingApiServices } from '../../services/BillingApiService';
 import Toast from "../alert/Toast"
 import { ConfirmDialog } from "primereact/confirmdialog";
+import XLSX from "xlsx";
+import FileSaver from 'file-saver';
+import ImportFile from "./ImportFile";  
 
 
 const CustomDataTable = (props) => {
@@ -24,6 +27,8 @@ const CustomDataTable = (props) => {
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
   const [first, setFirst] = useState(0); // Index of the first record to display
  const [rows, setRows] = useState(25); // Number of rows per page
+ const [isOpen, setIsOpen] = useState(false);
+ const [stateManager, setStateManager] = useState(0);
 
 
   let [filterArray, setfilterArray] = useState({
@@ -202,13 +207,47 @@ const CustomDataTable = (props) => {
     const month = (date.getUTCMonth() + 1).toString().padStart(2, '0'); // Adding 1 to the month since it's zero-based
     const year = date.getUTCFullYear();
 
-    const formattedDateTime = `${hours}:${minutes} ${day}-${month}-${year}`;
+    const formattedDateTime = `${day}-${month}-${year}`;
     return formattedDateTime
+  }
+
+  const exportToExcel = () => {
+    let fileName = 'FAQ';
+
+    const response = selectedRows.map((d) => ({
+      question: d.question,
+      answer: d.answer
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(response);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const dataToSave = new Blob([excelBuffer], { type: "application/octet-stream" });
+    FileSaver.saveAs(dataToSave, `${fileName}.xlsx`);
+  };
+
+  const customExportTemplate=()=>(
+    <div >
+    <span>Export</span>
+    <i className="pi pi-file-excel" style={{ fontSize: '14px' ,marginLeft : "2px" }} ></i>
+    </div>
+  );
+  const handleImport=()=>{
+    setIsOpen(true)
+    setStateManager(new Date()?.toString());
   }
 
   return (
    
       <div className="container-fluid" >
+          <button style={{ position: 'relative', bottom: 36 ,  cursor: selectedRows.length === 0 ? 'not-allowed' : 'pointer'}} className="btn-style" onClick={exportToExcel} disabled={selectedRows.length === 0}>Export</button>
+        
+          <button style={{
+        position: 'relative', bottom: 36, marginLeft: 5
+      }} className="btn-style" onClick={() => handleImport()}>Import
+      </button>
+
         <DataTable
         header="FREQUENTLY ASKED QUESTIONS "
           value={loader ? Array.from({ length: 5 }) : gridData}
@@ -231,7 +270,7 @@ const CustomDataTable = (props) => {
           selection={selectedRows}
           onSelectionChange={(e) => setSelectedRows(e.value)} 
         >
-           {/* <Column selectionMode="multiple" ></Column> */}
+            <Column selectionMode="multiple" header={customExportTemplate} headerStyle={{ width: '5%' }}></Column>
           <Column
             field="question"
             header="Question"
@@ -256,18 +295,16 @@ const CustomDataTable = (props) => {
             
             body={answerBodyTemplate}
           ></Column>
+          
           <Column
             field="effectedDate"
             header="Created Date"
             sortable
             filter
             filterPlaceholder="Search"
-            
-            filterClear={filterClearTemplate}
-            filterApply={filterApplyTemplate}
-            
             body={SubmissionDateTemplate}
           ></Column>
+          
 
           {/* <Column
             field="userName"
@@ -299,6 +336,9 @@ const CustomDataTable = (props) => {
         severity={severity}
         handleClose={() => setOpenSnackBar(false)}
         message={responseMsg} />
+
+<ImportFile reloadData={() => reloadData()} onHide={() => setIsOpen(false)} isOpen={isOpen} Type="Faq" />
+
 
 <ConfirmDialog
         visible={deleteDialogVisible}

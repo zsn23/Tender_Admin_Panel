@@ -253,8 +253,14 @@ const CustomDataTable = (props) => {
   const handleImport=()=>{
     setIsOpen(true)
     setStateManager(new Date()?.toString())
-    setStateManager(new Date()?.toString())
   }
+
+  const customExportTemplate=()=>(
+    <div >
+    <span>Export</span>
+    <i className="pi pi-file-excel" style={{ fontSize: '14px' ,marginLeft : "2px" }} ></i>
+    </div>
+  );
 
   
 
@@ -265,8 +271,9 @@ const CustomDataTable = (props) => {
       <div className="container-fluid mb-5" >
 
       <button style={{
-        position: 'relative', bottom: 35
-      }} className="btn-style" onClick={() => exportToExcel()}>Export</button>
+        position: 'relative', bottom: 35 , cursor: selectedRows.length === 0 ? 'not-allowed' : 'pointer'
+      }} className="btn-style" onClick={() => exportToExcel()} disabled={selectedRows.length === 0}>Export
+      </button>
 
       <button style={{
         position: 'relative', bottom: 35,marginLeft:5
@@ -296,7 +303,8 @@ const CustomDataTable = (props) => {
           selection={selectedRows}
           onSelectionChange={(e) => setSelectedRows(e.value)}
         >
-          <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+           <Column selectionMode="multiple" header={customExportTemplate} headerStyle={{ width: '5%' }} ></Column>
+          
 
           <Column
             field="name"
@@ -337,6 +345,7 @@ const CustomDataTable = (props) => {
           ></Column> */}
 
           <Column header={customHeaderTemplate} body={bodyTemplate} />
+         
         </DataTable>
      
 
@@ -352,6 +361,7 @@ const CustomDataTable = (props) => {
         severity={severity}
         handleClose={() => setOpenSnackBar(false)}
         message={responseMsg} />
+        
       <ImportFile reloadData={() => reloadData()}  onHide={()=>setIsOpen(false)} isOpen={isOpen} Type="Organization" />
 
       <ConfirmDialog

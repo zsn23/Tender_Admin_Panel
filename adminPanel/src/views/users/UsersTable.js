@@ -14,6 +14,11 @@ import { InputSwitch } from 'primereact/inputswitch';
 import { billingApiServices } from '../../services/BillingApiService';
 import _EventEmitter from "./../../constants/emitter";
 // import { ConfirmDialog } from "primereact/confirmdialog";
+import XLSX from "xlsx";
+import FileSaver from 'file-saver';
+import { Password } from "primereact/password";
+import { Phone } from "react-feather";
+import ImportFile from "./ImportFile";
 
 
 const UsersTable = (props) => {
@@ -33,6 +38,9 @@ const UsersTable = (props) => {
   const options = ['Disable', 'Enable'];
   const [first, setFirst] = useState(0); // Index of the first record to display
  const [rows, setRows] = useState(25); // Number of rows per page
+ const [selectedRows, setSelectedRows] = useState([])
+ const [isOpen, setIsOpen] = useState(false);
+ const [stateManager, setStateManager] = useState(0)
 
 
   
@@ -46,6 +54,8 @@ const UsersTable = (props) => {
     email: { value: null, matchMode: FilterMatchMode.CONTAINS },
     phoneNumber: { value: null, matchMode: FilterMatchMode.CONTAINS },
     role: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    password: {value:null , matchMode: FilterMatchMode.CONTAINS},
+    effectedDate: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
 
   useEffect(() => {
@@ -281,7 +291,9 @@ const UsersTable = (props) => {
     }
 
   };
-
+  const reloadData = () => {
+    props.reloadData()
+  }
 
   const userStatusTemplate = (rowData) => {
     // toggle();
@@ -365,6 +377,14 @@ const UsersTable = (props) => {
       return <div>{rowData.email}</div>;
     }
   };
+  const PasswordskeletonTemplate=(rowData)=>{
+    if (rowData == undefined || loader == true) {
+      return <Skeleton></Skeleton>;
+    } else {
+      return <div>{rowData.password}</div>;
+    }
+  };
+
   const UserNamekeletonTemplate = (rowData) => {
     if (rowData == undefined || loader == true) {
       return <Skeleton></Skeleton>;
@@ -402,9 +422,63 @@ const UsersTable = (props) => {
     }
   };
 
+  const exportToExcel = () => {
+    let fileName = 'Users';
+
+    const response = selectedRows.map((d) => ({
+      Username: d.name,
+      email: d.email,
+      password: d.password,
+      Phone: d.phoneNumber,
+      joinDate: d.effectedDate
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(response);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const dataToSave = new Blob([excelBuffer], { type: "application/octet-stream" });
+    FileSaver.saveAs(dataToSave, `${fileName}.xlsx`);
+  };
+
+  const customExportTemplate=()=>(
+    <div >
+    <span>Export</span>
+    <i className="pi pi-file-excel" style={{ fontSize: '14px' ,marginLeft : "2px" }} ></i>
+    </div>
+  );
+
+  const convertDateBestFormate = (inputDateTime) => {
+    const date = new Date(inputDateTime);
+    const hours = date.getUTCHours().toString().padStart(2, '0');
+    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+
+    const d = new Date(date);
+    if (isNaN(d.getTime())) {
+      return null; // Invalid date
+    }
+    const year = d.getFullYear();
+    const month = ('0' + (d.getMonth() + 1)).slice(-2);
+    const day = ('0' + d.getDate()).slice(-2);
+    return `${year}-${month}-${day} `; // Ensure 'YYYY-MM-DD' format
+  };
+
+  const JoinDateTemplate = (rowData) => loader ? <Skeleton /> : <div>{convertDateBestFormate(rowData.effectedDate)}</div>;
+
+  const handleImport=()=>{
+    setIsOpen(true)
+    setStateManager(new Date()?.toString());
+  }
   return (
   
       <div className="container-fluid  ">
+          <button style={{ position: 'relative', bottom: 35 ,  cursor: selectedRows.length === 0 ? 'not-allowed' : 'pointer'}} className="btn-style" onClick={exportToExcel} disabled={selectedRows.length === 0}>Export</button>
+         
+          <button style={{
+        position: 'relative', bottom: 35, marginLeft: 5
+      }} className="btn-style" onClick={() => handleImport()}>Import
+      </button>
+
         <DataTable
           header="USERS INFORMATION"
           value={users}
@@ -422,7 +496,14 @@ const UsersTable = (props) => {
           dataKey="id"
           filters={filterArray}
           filterDisplay="row"
+
+          removableSort
+          selectionMode={'checkbox'}
+          selection={selectedRows}
+          onSelectionChange={(e) => setSelectedRows(e.value)} 
         >
+
+<Column selectionMode="multiple" header={customExportTemplate} headerStyle={{ width: '7%' }}></Column>
          <Column
             field="name"
             header="Username"
@@ -435,7 +516,7 @@ const UsersTable = (props) => {
           ></Column>
 
          <Column
-            field="email"
+            // field="email"
             header="Email"
             sortable
             filter
@@ -444,6 +525,17 @@ const UsersTable = (props) => {
          
             body={EmailskeletonTemplate}
           ></Column>
+
+          <Column
+            field="password"
+            header="Password"
+            sortable
+            filter
+            filterField="password"
+            filterPlaceholder="Search... "
+            body={PasswordskeletonTemplate}
+          ></Column>
+
          
          <Column
             field="phoneNumber"
@@ -454,6 +546,16 @@ const UsersTable = (props) => {
             filterPlaceholder="Search"
            
             body={PhoneskeletonTemplate}
+          ></Column>
+
+          <Column
+          field="effectedDate"
+          header="Join Date"
+          sortable
+          filter
+          filterField="effectedDate"
+          filterPlaceholder="Search"
+          body={JoinDateTemplate}
           ></Column>
             
             <Column field="id" header={customHeaderTemplate}  body={bodyTemplate}></Column>
@@ -467,12 +569,18 @@ const UsersTable = (props) => {
         modalopening={isModalOpen}
         userData={(users_data) => userData(users_data)}
         closemodal={() => setisModalOpen(false)}
+        
       />
+
+<ImportFile reloadData={() => this.reloadData()} onHide={() => setIsOpen(false)} isOpen={isOpen} Type="User" />
+
+
       <Toast open={openSnackBar}
         severity={severity}
         handleClose={() => setOpenSnackBar(false)}
         message={responseMsg} />
       {/* )} */}
+
     </div>
   );
 };

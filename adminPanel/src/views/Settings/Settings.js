@@ -54,11 +54,11 @@ class SettingDetails extends Component {
   render() {
     return (
       <>
-        {/* <div style={{ textAlign: "end", marginTop: '5px' }}>
+        <div style={{ textAlign: "end", marginTop: '5px' }}>
           <button id="new-report" className="btn-style"
             onClick={() => this.setState({ showModal: true })} > Add New
           </button>
-        </div> */}
+        </div>
         <SettingTable
           gridData={this.state.gridData}
           loading={this.state.loading}
