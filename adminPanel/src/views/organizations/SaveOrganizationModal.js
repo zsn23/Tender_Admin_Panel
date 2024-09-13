@@ -161,7 +161,7 @@ const SaveOrganizationModal = (props) => {
                     <div className="px-1">
                         <div className="form-body">
                           <FormGroup>
-                            <Label for="name">
+                            <Label className="LableINdarkmode" for="name">
                               Write Organization name
                             </Label>
                             <Input

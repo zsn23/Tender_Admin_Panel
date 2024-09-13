@@ -12,6 +12,7 @@ import Toast from "../alert/Toast"
 import { Dropdown } from "primereact/dropdown";
 import XLSX from "xlsx";
 import FileSaver from 'file-saver';
+import ImportFile from "./ImportFile";
 
 const CustomDataTable = (props) => {
   const [isModalOpen, setisModalOpen] = useState(false);
@@ -29,6 +30,9 @@ const CustomDataTable = (props) => {
 
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
 
+  const [isOpen, setIsOpen] = useState(false);
+  const [stateManager, setStateManager] = useState(0);
+
   let [filterArray, setfilterArray] = useState({
     email: { value: null, matchMode: FilterMatchMode.CONTAINS },
     phoneNumber: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -37,7 +41,9 @@ const CustomDataTable = (props) => {
     status: { value: null, matchMode: FilterMatchMode.CONTAINS },
     billingPeriod: { value: null, matchMode: FilterMatchMode.CONTAINS },
     categories: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    billingDate: { value: null, matchMode: FilterMatchMode.CONTAINS }
+    billingDate: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    BillingAmount:{ value: null, matchMode: FilterMatchMode.CONTAINS },
+    effectedDate: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
 
   useEffect(() => {
@@ -212,6 +218,15 @@ const CustomDataTable = (props) => {
     }
   };
 
+  const BillingAmountBodyTemplate = (rowData) => {
+    if (loader == true) {
+      return <Skeleton></Skeleton>;
+    }
+    else {
+      return <div>{rowData.BillingAmount}</div>;
+    }
+  };
+
   const CompanyBodyTemplate = (rowData) => {
     if (loader == true) {
       return <Skeleton></Skeleton>;
@@ -282,7 +297,7 @@ const CustomDataTable = (props) => {
       return <Skeleton></Skeleton>;
     } else {
       var effectedDate = convertDateBestFormate(rowData.billingDate)
-      const dateOnly = effectedDate.slice(6);
+      const dateOnly = effectedDate;
       return <div>{dateOnly}</div>
     }
   };
@@ -298,14 +313,17 @@ const CustomDataTable = (props) => {
   const convertDateBestFormate = (inputDateTime) => {
 
     const date = new Date(inputDateTime);
-    const hours = date.getUTCHours().toString().padStart(2, '0');
-    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-    const day = date.getUTCDate().toString().padStart(2, '0');
-    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
-    const year = date.getUTCFullYear();
+    // const hours = date.getUTCHours().toString().padStart(2, '0');
+    // const minutes = date.getUTCMinutes().toString().padStart(2, '0');
 
-    const formattedDateTime = `${hours}:${minutes} ${day}-${month}-${year}`;
-    return formattedDateTime
+    const d = new Date(date);
+    if (isNaN(d.getTime())) {
+      return null; // Invalid date
+    }
+    const year = d.getFullYear();
+    const month = ('0' + (d.getMonth() + 1)).slice(-2);
+    const day = ('0' + d.getDate()).slice(-2);
+    return `${year}-${month}-${day} `; // Ensure 'YYYY-MM-DD' format
   }
   const customHeaderTemplate = () => (
   
@@ -321,11 +339,21 @@ const CustomDataTable = (props) => {
     </div>
   );
 
+  const handleImport=()=>{
+    setIsOpen(true)
+    setStateManager(new Date()?.toString());
+  }
 
   return (
   
       <div className="container-fluid" >
           <button style={{ position: 'relative', bottom: 36 ,  cursor: selectedRows.length === 0 ? 'not-allowed' : 'pointer'}} className="btn-style" onClick={exportToExcel} disabled={selectedRows.length === 0}>Export</button>
+          
+          <button style={{
+        position: 'relative', bottom: 36, marginLeft: 5
+      }} className="btn-style" onClick={() => handleImport()}>Import
+      </button>
+
         <DataTable
         header="SUBSCRIPTION RECORDS"
           value={loader ? Array.from({ length: 5 }) : gridData}
@@ -344,12 +372,14 @@ const CustomDataTable = (props) => {
           filters={filterArray}
           filterDisplay="row"
           removableSort
+          sortField="effectedDate" 
+          sortOrder={-1}
 
           selectionMode={'checkbox'}
           selection={selectedRows}
           onSelectionChange={(e) => setSelectedRows(e.value)}
         >
-           <Column selectionMode="multiple" header={customExportTemplate} headerStyle={{ width: '5%' }}></Column>
+           <Column selectionMode="multiple" header={customExportTemplate} headerStyle={{ width: '10%' }}></Column>
           <Column
             field="userName"
             header="Name"
@@ -403,16 +433,7 @@ const CustomDataTable = (props) => {
             
           ></Column>
 
-          <Column
-            field="status"
-            header="Status"
-            sortable
-            filter
-            filterElement={statusFilterTemplate}
-           
-            body={StatusBodyTemplate}
-
-          ></Column>
+          
 
           <Column
             field="billingPeriod"
@@ -441,8 +462,42 @@ const CustomDataTable = (props) => {
             filterApply={filterApplyTemplate}
             
           ></Column>
+          
+          <Column
+            field="BillingAmount"
+            header="Bill   Amount"
+            sortable
+           
+            body={BillingAmountBodyTemplate}
+
+            filter
+            filterPlaceholder="Search"
+            filterClear={filterClearTemplate}
+            filterApply={filterApplyTemplate}
+            
+          ></Column>
+          
+
+          <Column
+            field="status"
+            header="Status"
+            sortable
+            filter
+            filterElement={statusFilterTemplate}
+           
+            body={StatusBodyTemplate}
+          ></Column>
 
 
+<Column 
+          field="effectedDate" 
+          header="Submit Date" 
+          sortable 
+          filter 
+          filterPlaceholder="Search"  
+          body={SubmissionDateTemplate}
+          
+          ></Column>
           <Column
             field="billingDate"
             header="Billing Date"
@@ -466,7 +521,10 @@ const CustomDataTable = (props) => {
         handleClose={() => setOpenSnackBar(false)}
         message={responseMsg} />
 
-     
+<ImportFile reloadData={() => reloadData()} 
+onHide={() => setIsOpen(false)} 
+isOpen={isOpen} 
+Type="Subscription" />
       
       <ConfirmDialog
         visible={deleteDialogVisible}

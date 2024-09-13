@@ -162,7 +162,7 @@ const SaveNewsPaperModal = (props) => {
                     <div className="px-1">
                         <div className="form-body">
                           <FormGroup>
-                            <Label for="name">
+                            <Label className="LableINdarkmode" for="name">
                               Write NewsPaper name
                             </Label>
                             <Input

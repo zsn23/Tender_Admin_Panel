@@ -39,6 +39,7 @@ const CustomDataTable = (props) => {
     name: { value: null, matchMode: FilterMatchMode.CONTAINS },
     effectedDate: { value: null, matchMode: FilterMatchMode.CONTAINS },
     userName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    id: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
 
   useEffect(() => {
@@ -65,7 +66,7 @@ const CustomDataTable = (props) => {
     setDataForEdit(data);
     setDeleteDialogVisible(true);
   };
-    
+
 
   const deleteRecords = () => {
     setDeleteDialogVisible(true);
@@ -115,7 +116,7 @@ const CustomDataTable = (props) => {
   const bodyTemplate = (rowData) => loader ? (
     <Skeleton shape="circle" size="1rem" className="mr-2" />
   ) : (
-    <div style={{ display: 'flex', alignItems: 'center' ,justifyContent:"center"}}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: "center" }}>
       <Button
         icon="pi pi-pencil"
         onClick={() => editCategory(rowData)}
@@ -134,10 +135,10 @@ const CustomDataTable = (props) => {
     </div>
   );
   const customHeaderTemplate = () => (
-  
+
     <div >
-    <span>Action</span>
-    <i className="pi pi-wrench" style={{ fontSize: '13px' ,marginLeft : "3px" }} ></i>
+      <span>Action</span>
+      <i className="pi pi-wrench" style={{ fontSize: '13px', marginLeft: "3px" }} ></i>
     </div>
   );
 
@@ -187,7 +188,7 @@ const CustomDataTable = (props) => {
     if (loader == true) {
       return <Skeleton></Skeleton>;
     } else {
-      
+
       return <div>{rowData?.userName}</div>
     }
   };
@@ -250,88 +251,95 @@ const CustomDataTable = (props) => {
 
   }
 
-  const handleImport=()=>{
+  const handleImport = () => {
     setIsOpen(true)
     setStateManager(new Date()?.toString())
   }
 
-  const customExportTemplate=()=>(
+  const customExportTemplate = () => (
     <div >
-    <span>Export</span>
-    <i className="pi pi-file-excel" style={{ fontSize: '14px' ,marginLeft : "2px" }} ></i>
+      <span>Export</span>
+      <i className="pi pi-file-excel" style={{ fontSize: '14px', marginLeft: "2px" }} ></i>
     </div>
   );
 
-  
+
 
   return (
-    
-     
-    
-      <div className="container-fluid mb-5" >
+
+
+
+    <div className="container-fluid mb-5" >
 
       <button style={{
-        position: 'relative', bottom: 35 , cursor: selectedRows.length === 0 ? 'not-allowed' : 'pointer'
+        position: 'relative', bottom: 35, cursor: selectedRows.length === 0 ? 'not-allowed' : 'pointer'
       }} className="btn-style" onClick={() => exportToExcel()} disabled={selectedRows.length === 0}>Export
       </button>
 
       <button style={{
-        position: 'relative', bottom: 35,marginLeft:5
+        position: 'relative', bottom: 35, marginLeft: 5
       }} className="btn-style" onClick={() => handleImport()}>Import</button>
 
-        <DataTable
-         header="ORAGANIZATION RECORDS"
-          value={loader ? Array.from({ length: 5 }) : gridData}
-          paginator
-          responsiveLayout="scroll"
-          
-          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
-          currentPageReportTemplate={`ON PAGE ${Math.floor(first / rows) + 1} : RECORDS {first} to {last}`}
-          rows={rows}
-          first={first}
-          onPage={(e) => {
+      <DataTable
+        header="ORAGANIZATION RECORDS"
+        value={loader ? Array.from({ length: 5 }) : gridData}
+        paginator
+        responsiveLayout="scroll"
+        sortField="effectedDate" 
+        sortOrder={-1 }
+
+        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
+        currentPageReportTemplate={`ON PAGE ${Math.floor(first / rows) + 1} : RECORDS {first} to {last}`}
+        rows={rows}
+        first={first}
+        onPage={(e) => {
           setFirst(e.first);
           setRows(e.rows);
-          }}  
+        }}
+
+        dataKey="id"
+        filters={filterArray}
+        filterDisplay="row"
+        removableSort
+
+        selectionMode={'checkbox'}
+        selection={selectedRows}
+        onSelectionChange={(e) => setSelectedRows(e.value)}
+      >
+        <Column field="id" header="ID"
+          sortable
+        ></Column>
         
-          dataKey="id"
-          filters={filterArray}
-          filterDisplay="row"
-          removableSort
+        <Column selectionMode="multiple" header={customExportTemplate} headerStyle={{ width: '5%' }} ></Column>
 
-          selectionMode={'checkbox'}
-          selection={selectedRows}
-          onSelectionChange={(e) => setSelectedRows(e.value)}
-        >
-           <Column selectionMode="multiple" header={customExportTemplate} headerStyle={{ width: '5%' }} ></Column>
-          
+        
 
-          <Column
-            field="name"
-            header="Name"
-            sortable
-            filter
-            filterPlaceholder="Search"
-            
-            filterClear={filterClearTemplate}
-            filterApply={filterApplyTemplate}
-           
-            body={NameBodyTemplate}
-          ></Column>
-          <Column
-            field="effectedDate"
-            header="Created Date"
-            sortable
-            filter
-            filterPlaceholder="Search"
-           
-            filterClear={filterClearTemplate}
-            filterApply={filterApplyTemplate}
-            
-            body={SubmissionDateTemplate}
-          ></Column>
+        <Column
+          field="name"
+          header="Name"
+          sortable
+          filter
+          filterPlaceholder="Search"
 
-          {/* <Column
+          filterClear={filterClearTemplate}
+          filterApply={filterApplyTemplate}
+
+          body={NameBodyTemplate}
+        ></Column>
+        <Column
+          field="effectedDate"
+          header="Created Date"
+          sortable
+          filter
+          filterPlaceholder="Search"
+
+          filterClear={filterClearTemplate}
+          filterApply={filterApplyTemplate}
+
+          body={SubmissionDateTemplate}
+        ></Column>
+
+        {/* <Column
             field="userName"
             header="Created By"
             sortable
@@ -344,10 +352,10 @@ const CustomDataTable = (props) => {
             body={CreatedByTemplate}
           ></Column> */}
 
-          <Column header={customHeaderTemplate} body={bodyTemplate} />
-         
-        </DataTable>
-     
+        <Column header={customHeaderTemplate} body={bodyTemplate} />
+
+      </DataTable>
+
 
       {isModalOpen && (<SaveOrganizationModal
         dataForEdit={dataForEdit}
@@ -361,8 +369,8 @@ const CustomDataTable = (props) => {
         severity={severity}
         handleClose={() => setOpenSnackBar(false)}
         message={responseMsg} />
-        
-      <ImportFile reloadData={() => reloadData()}  onHide={()=>setIsOpen(false)} isOpen={isOpen} Type="Organization" />
+
+      <ImportFile reloadData={() => reloadData()} onHide={() => setIsOpen(false)} isOpen={isOpen} Type="Organization" />
 
       <ConfirmDialog
         visible={deleteDialogVisible}

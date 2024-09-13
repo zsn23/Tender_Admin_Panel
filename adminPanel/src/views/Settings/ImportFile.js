@@ -5,6 +5,7 @@ import { billingApiServices } from '../../services/BillingApiService';
 import Toast from "../alert/Toast";
 import "./ImportFile.css";
 
+
 import {
     Card,
     CardBody,
@@ -16,18 +17,30 @@ import { CheckSquare } from 'react-feather';
 import { localStorageService } from "../../services/LocalStorageService";
 
 function ImportFile(props) {
-    const [faqs, setFaqs] = useState([]);
+    const [records, setRecords] = useState([]);
     const [modal, setModal] = useState(false);
     const _userData = localStorageService.getPersistedData("USER_DETAILS");
     const [severity, setSeverity] = useState("");
     const [openSnackBar, setOpenSnackBar] = useState(false);
     const [responseMsg, setResponseMsg] = useState("");
+    const [gridData, setGridData] = useState(Array.from({ length: 5 }));
+    const [loader, setLoader] = useState(true);
+
 
     useEffect(() => {
         if (props.isOpen) {
             setModal(true);
         }
     }, [props.isOpen]);
+
+
+
+    useEffect(() => {
+        setLoader(props.loading);
+        setGridData(props.gridData)
+      }, [props.gridData]);
+
+    
 
     const handleToast = (severity, message) => {
         setSeverity(severity);
@@ -39,7 +52,6 @@ function ImportFile(props) {
     };
 
     const handleFileChange = (e) => {
-        
         const file = e.target.files[0];
         const reader = new FileReader();
 
@@ -50,49 +62,58 @@ function ImportFile(props) {
             const sheet = workbook.Sheets[sheetName];
             const columnData = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false });
 
-            // Assuming the "Question" column is the first column and "Answer" column is the second column
-            const faqsArray = columnData.map((e) => ({ question: e[0], answer: e[1] }));
-            const modifiedFaqsArray = faqsArray.slice(1); // Skipping the header row if needed
+            // Assuming the "phoneNumber" is the first column and "sliderMessage" is the second column
+            const recordsArray = columnData.map((e) => ({
+               
+                sliderMessage: e[0],
+                phoneNumber: e[1]
+            }));
+            const modifiedRecordsArray = recordsArray.slice(1); // Skip the header row
 
-            setFaqs(modifiedFaqsArray);
+            setRecords(modifiedRecordsArray);
         };
 
         reader.readAsBinaryString(file);
     };
 
+    const reloadData = () => {
+        props.reloadData()
+      }
+
     const importRecords = () => {
-        if (faqs.length === 0) {
+        if (records.length === 0) {
             alert("Select a file with records");
             return;
         }
 
         const body = {
-            values: faqs,
+            values: records,
             effectedBy: _userData?.id
         };
 
-        if (props.Type === "Faq") {
-            billingApiServices.importToExcelFaqs(body).then((response) => {
+        if (props.Type === "Settings") {
+            billingApiServices.importToExcelSettings(body).then((response) => {
                 if (response == null) {
-                    handleToast("error", "Error occurred while importing FAQs.");
+                    handleToast("error", "Error occurred while importing settings.");
                     return;
                 }
 
                 if (response?.data?.status) {
                     handleToast("success", response?.data?.message);
                     props.reloadData();
-                    
-                   onHide();
+                     
+                     onHide();
                 } else {
-                    handleToast("error", "Error occurred while importing FAQs.");
+                    handleToast("error", "Error occurred while importing settings.");
                 }
             });
-        }
+        } 
+    
     };
 
     const onHide = () => {
-        setFaqs([]);
-        setModal(false);
+        setRecords([]);
+        setModal(false); 
         props.onHide();
     };
 
@@ -107,15 +128,14 @@ function ImportFile(props) {
                 <div className="modal-lg" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
-                        Import Data Only From Excel File
+                            Import Data Only From Excel File
                         </div>
                         <div>
                             <p className='text-danger d-flex justify-content-center align-items-center m-0 p-1'>
                                 Important Note: In Excel file write proper column headings and follow same order as you see in table.
-                                Date is auto generated (Current date will be added to date column.  Change date after data added)
+                                Date is auto generated. 
                             </p>
                         </div>
-                        
                     </div>
                     <Row>
                         <Col sm="12">
@@ -131,20 +151,23 @@ function ImportFile(props) {
                                                 </Row>
                                                 <Row>
                                                     <Col xs="12">
-                                                        <div className='contant'>
+                                                        <div className='content'>
                                                             <ul>
                                                             <table>
                                                                 <thead>
-                                                                    <tr className=' d-flex gap-4' >
-                                                                        <th className='textofExcelFileIndarkMode' >Question</th>
-                                                                        <th className='textofExcelFileIndarkMode'>Answer</th>
+                                                                    <tr className='d-flex gap-4' >
+                                                                        <th className='textofExcelFileIndarkMode'>Message</th>
+                                                                        <th className='textofExcelFileIndarkMode'>phoneNumber</th>
                                                                        
                                                                     </tr>
                                                                 </thead>
                                                                 
                                                                 </table>
-                                                                {faqs.map((ele, index) => (
-                                                                    <li className='textofExcelFileIndarkMode' key={index}>{ele.question} - {ele.answer}</li>
+
+                                                                {records.map((ele, index) => (
+                                                                    <li className='textofExcelFileIndarkMode'  key={index}>
+                                                                        {ele.sliderMessage} - {ele.phoneNumber}
+                                                                    </li>
                                                                 ))}
                                                             </ul>
                                                         </div>
