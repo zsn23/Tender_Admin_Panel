@@ -123,7 +123,8 @@ function ImportFile(props) {
 
                     handleToast("success", response?.data?.message)
                     props.reloadData()
-                    onHide()
+                    setModal(false)
+                    //onHide()
                 }
                 else {
                     handleToast("error", "associated with some tenders,please remove the tender at first.")
@@ -171,8 +172,26 @@ function ImportFile(props) {
                 <div className="modal-lg" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
-                            Import
+                        Import Data Only From Excel File
                         </div>
+                        <p>
+                            <span className='ml-3'>Important Notes:</span>
+                            <ul className='text-danger fs-4'>
+
+                                <li>
+                                    <p>
+                                        In Excel file write proper column headings and follow same order as you see in table.
+                                        Date is auto generated (Current date will be added to date column.  Change date after data added)
+                                    </p>
+                                </li>
+                                <li>
+                                    <p>
+                                        Write only name in excel file.
+                                    </p>
+                                </li>
+
+                            </ul>
+                        </p>
                     </div>
                     <Row>
                         <Col sm="12">
@@ -183,7 +202,7 @@ function ImportFile(props) {
                                             <div className="form-body">
                                                 <Row>
                                                     <Col xs="12">
-                                                        <input type="file" onChange={handleFileChange} accept=".xlsx, .xls" />
+                                                        <input className='NofileSelINdarkMopde' type="file" onChange={handleFileChange} accept=".xlsx, .xls" />
 
                                                     </Col>
                                                 </Row>
@@ -191,8 +210,19 @@ function ImportFile(props) {
                                                     <Col xs="12">
                                                         <div className='contant'>
                                                             <ul>
+                                                            <table>
+                                                                <thead>
+                                                                    <tr className='d-flex gap-4' >
+                                                                        
+                                                                        <th className='textofExcelFileIndarkMode'>Name</th>
+                                                                        
+                                                                    </tr>
+                                                                </thead>
+                                                                
+                                                                </table>
+
                                                                 {names?.map((ele, index) => (
-                                                                    <li key={index}>{ele.name}</li>
+                                                                    <li className='textofExcelFileIndarkMode' key={index}>{ele.name}</li>
                                                                 ))}
                                                             </ul>
                                                         </div>

@@ -370,6 +370,7 @@ import ConfirmationDialog from "../alert/ConfirmationDialog";
 import { ConfirmDialog } from "primereact/confirmdialog";
 import XLSX from "xlsx";
 import FileSaver from 'file-saver';
+import ImportFile from "./ImportFile";
 
 const CustomDataTable = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -392,6 +393,9 @@ const CustomDataTable = (props) => {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [stateManager, setStateManager] = useState(0);
 
   const toggleSortOrder = () => {
     setSortOrder((prevOrder) => (prevOrder === 1 ? -1 : 1)); // Toggle between 1 (asc) and -1 (desc)
@@ -536,8 +540,8 @@ const CustomDataTable = (props) => {
 
   const convertDateBestFormate = (inputDateTime) => {
     const date = new Date(inputDateTime);
-    const hours = date.getUTCHours().toString().padStart(2, '0');
-    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+    // const hours = date.getUTCHours().toString().padStart(2, '0');
+    // const minutes = date.getUTCMinutes().toString().padStart(2, '0');
 
     const d = new Date(date);
     if (isNaN(d.getTime())) {
@@ -617,13 +621,21 @@ const CustomDataTable = (props) => {
     </div>
   );
 
-
+  const handleImport=()=>{
+    setIsOpen(true)
+    setStateManager(new Date()?.toString());
+  }
 
 
 
   return (
     <div className="container-fluid mb-5">
-      <button style={{ position: 'relative', bottom: 42 ,  cursor: selectedRows.length === 0 ? 'not-allowed' : 'pointer'}} className="btn-style" onClick={exportToExcel} disabled={selectedRows.length === 0}>Export</button>
+      <button style={{ position: 'relative', bottom: 36 ,  cursor: selectedRows.length === 0 ? 'not-allowed' : 'pointer'}} className="btn-style" onClick={exportToExcel} disabled={selectedRows.length === 0}>Export</button>
+          
+      <button style={{
+        position: 'relative', bottom: 36, marginLeft: 5
+      }} className="btn-style" onClick={() => handleImport()}>Import
+      </button>
 
       <div className="sorting-container___">
      
@@ -732,6 +744,11 @@ const CustomDataTable = (props) => {
         severity={severity}
         handleClose={() => setOpenSnackBar(false)}
         message={responseMsg} />
+
+<ImportFile reloadData={() => reloadData()} 
+onHide={() => setIsOpen(false)} 
+isOpen={isOpen} 
+Type="Tenders" />
 
       <ConfirmDialog
         visible={deleteDialogVisible}

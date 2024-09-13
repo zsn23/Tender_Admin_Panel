@@ -12,8 +12,9 @@ import Toast from "../alert/Toast"
 import "primeicons/primeicons.css";
 import { InputSwitch } from 'primereact/inputswitch';
 import { billingApiServices } from '../../services/BillingApiService';
+
 import _EventEmitter from "./../../constants/emitter";
-// import { ConfirmDialog } from "primereact/confirmdialog";
+
 import XLSX from "xlsx";
 import FileSaver from 'file-saver';
 import { Password } from "primereact/password";
@@ -21,10 +22,14 @@ import { Phone } from "react-feather";
 import ImportFile from "./ImportFile";
 
 
+
+
+
 const UsersTable = (props) => {
   const [isModalOpen, setisModalOpen] = useState(false);
   const [userID, setuserID] = useState(0);
   const [dataForEdit, setdataForEdit] = useState(null);
+  
   const [users, setusers] = useState(Array.from({ length: 5 }));
   const [loader, setLoader] = useState(true);
   const [refreshstate, setRefreshState] = useState()
@@ -42,8 +47,8 @@ const UsersTable = (props) => {
  const [isOpen, setIsOpen] = useState(false);
  const [stateManager, setStateManager] = useState(0)
 
-
-  
+ const [openConfirmation, setOpenConfirmation] = useState(false);
+ const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
 
 
 
@@ -94,6 +99,46 @@ const UsersTable = (props) => {
     setisModalOpen(!isModalOpen);
     setRefreshState(new Date())
   };
+
+  const confirmDelete = (data) => {
+    setdataForEdit(data);
+    setDeleteDialogVisible(true);
+  };
+
+  const deleteRecords = () => {
+    setDeleteDialogVisible(true);
+  
+    setOpenConfirmation(false);
+  
+    const body = {
+      id: dataForEdit?.id
+    }
+  
+    billingApiServices.deleteUser(body).then((response) => {
+      if (response == null || response == undefined) {
+        handleToast("error", "Operation failed, check your internet connection");
+        return;
+      }
+  
+      if (response?.data?.status) {
+        handleToast("success", response?.data?.message);
+        setdataForEdit(null);
+        _EventEmitter.emit("RefreshUserData", "")
+      } else {
+        handleToast("error", response?.data?.message);
+      }
+    });
+  }
+
+  const handleToast = (severity, message) => {
+    setSeverity(severity)
+    setResponseMsg(message)
+    setOpenSnackBar(true)
+    setTimeout(() => {
+      setOpenSnackBar(false)
+    }, 2000);
+  }
+  
  
   const closeModal = () => {
     // alert("close model")
@@ -148,7 +193,7 @@ const UsersTable = (props) => {
 
       setTimeout(() => {
         // toggle();
-      }, 3000);
+      }, 1000);
     });
 
 
@@ -185,7 +230,7 @@ const UsersTable = (props) => {
 
       setTimeout(() => {
         // toggle();
-      }, 3000);
+      }, 1000);
     });
 
 
@@ -217,6 +262,12 @@ const UsersTable = (props) => {
         onClick={() => edituser(rowData)}
         className="p-button-rounded p-button-warning my-2"
         style={{ margin: '0.5rem' }} // Optional: adds spacing between buttons
+      />
+        <Button
+        icon="pi pi-trash"
+        onClick={() => confirmDelete(rowData)}
+        className="p-button-rounded p-button-warning"
+        style={{ margin: '0.5rem' }}
       />
     </div>
   );
@@ -492,6 +543,8 @@ const UsersTable = (props) => {
           setFirst(e.first);
           setRows(e.rows);
           }}
+          sortField="effectedDate" 
+          sortOrder={-1}
           
           dataKey="id"
           filters={filterArray}
@@ -516,7 +569,7 @@ const UsersTable = (props) => {
           ></Column>
 
          <Column
-            // field="email"
+            field="email"
             header="Email"
             sortable
             filter
@@ -580,6 +633,16 @@ const UsersTable = (props) => {
         handleClose={() => setOpenSnackBar(false)}
         message={responseMsg} />
       {/* )} */}
+
+      <ConfirmDialog
+        visible={deleteDialogVisible}
+        onHide={() => setDeleteDialogVisible(false)}
+        message="Are you sure you want to delete this record?"
+        header="Confirmation"
+        icon="pi pi-exclamation-triangle"
+        accept={deleteRecords}
+        reject={() => setDeleteDialogVisible(false)}
+      />  
 
     </div>
   );

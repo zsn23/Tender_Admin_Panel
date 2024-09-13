@@ -84,8 +84,10 @@ const SaveCityModal = (props) => {
         handleToast("success", response?.data?.message)
         setCityName("")
         props.reloadData()
-        setModal(false);
-        props.onClose()
+        setTimeout(() => {
+          setModal(false);
+          props.onClose();
+        }, 1000); // 1000 ms = 1 second
       }
       else {
         handleToast("error", response?.data?.message)
@@ -109,6 +111,11 @@ const SaveCityModal = (props) => {
         handleToast("success", response?.data?.message)
         setCityName("")
         props.reloadData()
+
+        setTimeout(() => {
+          setModal(false);
+          props.onClose();
+        }, 1000); // 1000 ms = 1 second
       }
       else {
         handleToast("error", response?.data?.message)
@@ -166,7 +173,7 @@ const SaveCityModal = (props) => {
                     <div className="px-1">
                       <div className="form-body">
                         <FormGroup>
-                          <Label for="name">
+                          <Label className="LableINdarkmode" for="name">
                             Write City name
                           </Label>
                           <Input
@@ -189,7 +196,7 @@ const SaveCityModal = (props) => {
                         >
                           <X size={16} color="#FFF" /> Cancel
                         </Button>
-                        <Button
+                         <Button
                           color="primary"
                           onClick={() => SubmitForm('top')}
                           icon="pi pi-arrow-down" label="Top"

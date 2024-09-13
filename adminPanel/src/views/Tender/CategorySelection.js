@@ -69,7 +69,8 @@ export default function CustomizedHook(props) {
                   key={option.id || option.name || Math.random()} // Ensuring unique key
                   active={selectedValues.includes(option)}
                   onClick={() => handleSelect(option)}
-                  className="custom-dropdown-item"
+                  className="custom-dropdown-item "
+                  style={{width:"760px"}}
                 >
                   {option.name || 'Unnamed'}
                   {selectedValues.includes(option) && (

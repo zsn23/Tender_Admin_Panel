@@ -251,6 +251,8 @@ const CustomDataTable = (props) => {
           setFirst(e.first);
           setRows(e.rows);
           }}
+          sortField="effectedDate" 
+          sortOrder={-1}
 
           dataKey="id"
           filters={filterArray}
@@ -261,6 +263,11 @@ const CustomDataTable = (props) => {
           selection={selectedRows}
           onSelectionChange={(e) => setSelectedRows(e.value)} 
         >
+          <Column field="id" header="ID"
+          sortable
+          
+        ></Column>
+
              <Column selectionMode="multiple" header={customExportTemplate} headerStyle={{ width: '5%' }}></Column>
           <Column
             field="name"

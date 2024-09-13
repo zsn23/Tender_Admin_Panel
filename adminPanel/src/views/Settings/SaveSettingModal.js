@@ -196,7 +196,7 @@ const SaveFAQModal = (props) => {
                     <div className="px-1">
                         <div className="form-body">
                           <FormGroup>
-                            <Label for="name">
+                            <Label className="LableINdarkmode" for="name">
                               Write Message here
                             </Label>
                             <Input
@@ -214,7 +214,7 @@ const SaveFAQModal = (props) => {
 
                         <div className="form-body">
                           <FormGroup>
-                            <Label for="name">
+                            <Label className="LableINdarkmode" for="name">
                               Write PhoneNumber here
                             </Label>
                             <Input

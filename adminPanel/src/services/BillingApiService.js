@@ -72,6 +72,17 @@ class BillingApiService {
     }
   };
 
+  deleteUser = async (body) => {
+    try {
+      let res = await axios.post(this.baseUrl + "users/deleteUser", body);
+      return res;
+    } catch (e) {
+      console.error("Error deleting user:", e);
+      return null;
+    }
+  };
+  
+
   importToExcelUsers = async (body) => {
     try {
       let res = await axios.post(
@@ -365,6 +376,31 @@ class BillingApiService {
       return null;
     }
   };
+
+  deleteSetting = async (body) => {
+    try {
+      let res = await axios.post(this.baseUrl + "settings/deleteSetting", body);
+      return res;
+    } catch (e) {
+      console.error("Error deleting setting:", e);
+      return null;
+    }
+  };
+  
+
+  
+importToExcelSettings = async (body) => {
+  try {
+    const res = await axios.post(
+      this.baseUrl +"settings/saveMultipleSettings",
+      body
+    );
+    return res;
+  } catch (e) {
+    return null;
+  }
+}
+
   
 
 
@@ -506,6 +542,16 @@ class BillingApiService {
       return null;
     }
   };
+
+  importToExcelTenders= async (body) => {
+    try {
+        const res = await axios.post(this.baseUrl+ "tenders/saveMultipleTenders", body);
+        return res;
+    } catch (e) {
+        return null;
+    }
+};
+
   // ***************tender Api's**************************
 
   getAllRoles = async () => {
@@ -596,6 +642,19 @@ c
       return null;
     }
   };
+
+  importToExcelSubscriptions= async (body) => {
+    try {
+        const res = await axios.post(
+            this.baseUrl+"subscriptions/saveMultipleSubscriptions",
+            body
+        );
+        return res;
+    } catch (e) {
+        return null;
+    }
+}
+
 
   // uploadFile = async (selectedFiles, invoiceid, fileNames) => {
   //   try {

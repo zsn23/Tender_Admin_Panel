@@ -261,6 +261,8 @@ const CustomDataTable = (props) => {
           setFirst(e.first);
           setRows(e.rows);
           }}
+          sortField="effectedDate" 
+          sortOrder={-1}
          
           dataKey="id"
           filters={filterArray}
@@ -348,7 +350,8 @@ const CustomDataTable = (props) => {
         icon="pi pi-exclamation-triangle"
         accept={deleteRecords}
         reject={() => setDeleteDialogVisible(false)}
-      />      </div>
+      />      
+      </div>
   );
 };
 export default CustomDataTable;

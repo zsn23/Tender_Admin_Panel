@@ -169,7 +169,7 @@ const SaveCategoryModal = (props) => {
                     <div className="px-1">
                       <div className="form-body">
                         <FormGroup>
-                          <Label for="name">
+                          <Label className="LableINdarkmode" for="name">
                             Write category name
                           </Label>
                           <Input

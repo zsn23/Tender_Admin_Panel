@@ -4,6 +4,7 @@ import { Button, Modal } from "reactstrap";
 import { billingApiServices } from '../../services/BillingApiService';
 import Toast from "../alert/Toast";
 import "./ImportFile.css";
+import _EventEmitter from "./../../constants/emitter";
 
 import {
     Card,
@@ -80,13 +81,13 @@ function ImportFile(props) {
         if (props.Type === "User") {
             billingApiServices.importToExcelUsers(body).then((response) => {
                 if (response == null) {
-                    handleToast("error", "Error occurred while importing users(NULL)");
+                    handleToast("error", "Error occurred while importing users(NULL). May be data already exsisted");
                     return;
                 }
 
                 if (response?.data?.status) {
                     handleToast("success", response?.data?.message);
-                    window.location.reload();
+                    _EventEmitter.emit("RefreshUserData", "");
                     onHide();
                 } else {
                     handleToast("error", "Error occurred while importing users.");
@@ -113,7 +114,13 @@ function ImportFile(props) {
                 <div className="modal-lg" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
-                            Import
+                        Import Data Only From Excel File
+                        </div>
+                        <div>
+                            <p className='text-danger d-flex justify-content-center align-items-center m-0 p-1'>
+                                Important Note: In Excel file write proper column headings and follow same order as you see in table.
+                                Date is auto generated (Current date will be added to date column).
+                            </p>
                         </div>
                     </div>
                     <Row>
@@ -125,16 +132,30 @@ function ImportFile(props) {
                                             <div className="form-body">
                                                 <Row>
                                                     <Col xs="12">
-                                                        <input type="file" onChange={handleFileChange} accept=".xlsx, .xls" />
+                                                        <input className='NofileSelINdarkMopde' type="file" onChange={handleFileChange} accept=".xlsx, .xls" />
                                                     </Col>
                                                 </Row>
                                                 <Row>
                                                     <Col xs="12">
                                                         <div className='contant'>
                                                             <ul>
+
+                                                            <table>
+                                                                <thead>
+                                                                    <tr className='d-flex gap-4' >
+                                                                        <th className='textofExcelFileIndarkMode'>name</th>
+                                                                        <th className='textofExcelFileIndarkMode'>email</th>
+                                                                        <th className='textofExcelFileIndarkMode'>password</th>
+                                                                        <th className='textofExcelFileIndarkMode'>phoneNumber</th>
+                                                                       
+                                                                    </tr>
+                                                                </thead>
+                                                                
+                                                                </table>
+
                                                                 {users.map((ele, index) => (
-                                                                    <li key={index}>
-                                                                        {ele.name} - {ele.email} - {ele.password} - {ele.phoneNumber} - {ele.effectedDate}
+                                                                    <li className='textofExcelFileIndarkMode' key={index}>
+                                                                        {ele.name} - {ele.email} - {ele.password} - {ele.phoneNumber} 
                                                                     </li>
                                                                 ))}
                                                             </ul>

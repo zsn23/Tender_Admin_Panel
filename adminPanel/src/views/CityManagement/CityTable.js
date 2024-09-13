@@ -241,11 +241,17 @@ const CustomDataTable = (props) => {
           filters={filterArray}
           filterDisplay="row"
           removableSort
+          sortField="effectedDate" 
+          sortOrder={-1}
 
           selectionMode={'checkbox'}
           selection={selectedRows}
           onSelectionChange={(e) => setSelectedRows(e.value)} 
         >
+          <Column field="id" header="ID"
+          sortable
+        ></Column>
+        
             <Column selectionMode="multiple" header={customExportTemplate} headerStyle={{ width: '5%' }}></Column>
           <Column
             field="name"

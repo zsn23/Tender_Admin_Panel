@@ -52,27 +52,51 @@ const SaveUserModal = (props) => {
 
   const twofactorauthentication = ["true", "false"]
 
+
+
   useEffect(() => {
     if (props.modalopening) {
-      setModal(true)
-      // setId(props.user)
-      // getUserDetails();
-      handleProps()
+      setModal(true);
+        //      setId(props.user)
+  //      getUserDetails();
+
+
+      if (props.dataForEdit) {
+        // If editing a user, populate form fields with user data
+        handleProps();
+      } else {
+        // If adding a new user, clear all form fields
+        clearFormFields();
+      }
     }
-    // if cache store pass to display in pass and confirm pass field that would be set empty
-   
-  }, [props.modalopening])
+  }, [props.modalopening]);
+
+
+
 
   const handleProps = async () => {
+
     // await getRoles();
-    if (props.dataForEdit != null) {
-      setUsername(props.dataForEdit.name)
-      setEmail(props.dataForEdit.email)
-      setPhone(props.dataForEdit?.phoneNumber)
-      setPassword(props.dataForEdit?.password)
-      setId(props.dataForEdit?.id)
+    if (props.dataForEdit) {
+      // Editing user
+      setUsername(props.dataForEdit.name || "");
+      setEmail(props.dataForEdit.email || "");
+      setPhone(props.dataForEdit.phoneNumber || "");
+      setPassword(props.dataForEdit?.password); 
+      setCPassword(props.dataForEdit?.password);
+      setId(props.dataForEdit.id || "");
     }
-  }
+  };
+  
+  const clearFormFields = () => {
+    setUsername("");
+    setEmail("");
+    setPhone("");
+    setPassword("");
+    setCPassword("");
+    setId("");
+  };
+  
 
   const toggle = () => {
     setModal(false);
@@ -141,7 +165,7 @@ const SaveUserModal = (props) => {
 
       setTimeout(() => {
         toggle();
-      }, 3000);
+      }, 1000);
     }
     else {
       setSeverity("success")
@@ -178,7 +202,7 @@ const SaveUserModal = (props) => {
 
       setTimeout(() => {
         toggle();
-      }, 3000);
+      }, 1000);
     }
     else {
       setSeverity("success")
@@ -324,11 +348,9 @@ const SaveUserModal = (props) => {
                                     id="username"
                                     name="username"
                                     value={username}
-                                    onChange={(e) =>
-                                      setUsername(e.target.value)
-                                    }
+                                    onChange={(e) => setUsername(e.target.value)}
                                     className={`form-control ${errors.username && "is-invalid"}`}
-                                    disabled={id > 0 ? true : false}
+                                   
                                   />
                                   <div className="form-control-position"></div>
                                   {errors.username ? (
@@ -350,7 +372,7 @@ const SaveUserModal = (props) => {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     className={`form-control ${errors.email && "is-invalid"}`}
-                                    disabled={id > 0 ? true : false}
+                                    
                                   />
                                   <div className="form-control-position">
                                   </div>

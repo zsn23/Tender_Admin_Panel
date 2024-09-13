@@ -10,6 +10,10 @@ import { billingApiServices } from '../../services/BillingApiService';
 import Toast from "../alert/Toast"
 import XLSX from "xlsx";
 import FileSaver from 'file-saver';
+import ImportFile from "./ImportFile";
+
+import { ConfirmDialog } from "primereact/confirmdialog";
+
 
 const CustomDataTable = (props) => {
   const [isModalOpen, setisModalOpen] = useState(false);
@@ -23,6 +27,11 @@ const CustomDataTable = (props) => {
   const [first, setFirst] = useState(0); // Index of the first record to display
  const [rows, setRows] = useState(25); // Number of rows per page
  const [selectedRows, setSelectedRows] = useState([])
+ const [isOpen, setIsOpen] = useState(false);
+ const [stateManager, setStateManager] = useState(0)
+
+ const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
+
 
   let [filterArray, setfilterArray] = useState({
     sliderMessage: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -52,14 +61,21 @@ const CustomDataTable = (props) => {
     }
   }
 
+  const confirmDelete = (data) => {
+    setDataForEdit(data);
+    setDeleteDialogVisible(true);
+  };
+
   const deleteRecords = () => {
+
+    setDeleteDialogVisible(true);
     setOpenConfirmation(false)
 
     const body = {
       id: dataForEdit?.id
     }
 
-    billingApiServices.deleteFAQ(body).then((response) => {
+    billingApiServices.deleteSetting(body).then((response) => {
       if (response == null || response == undefined) {
         handleToast("error", "Operation failed, check your internet connection")
         return
@@ -105,6 +121,13 @@ const CustomDataTable = (props) => {
         onClick={() => editSetting(rowData)}
         className="p-button-rounded p-button-warning my-2"
         style={{ margin: '0.5rem' }} // Optional: adds spacing between buttons
+      />
+
+<Button
+        icon="pi pi-trash"
+        onClick={() => confirmDelete(rowData)}
+        className="p-button-rounded p-button-warning"
+        style={{ margin: '0.5rem' }}
       />
     </div>
   );
@@ -210,10 +233,19 @@ const CustomDataTable = (props) => {
     <i className="pi pi-file-excel" style={{ fontSize: '14px' ,marginLeft : "2px" }} ></i>
     </div>
   );
+  const handleImport=()=>{
+    setIsOpen(true)
+    setStateManager(new Date()?.toString());
+  }
   return (
     
       <div className="container-fluid" >
           <button style={{ position: 'relative', bottom: 36 ,  cursor: selectedRows.length === 0 ? 'not-allowed' : 'pointer'}} className="btn-style" onClick={exportToExcel} disabled={selectedRows.length === 0}>Export</button>
+
+          <button style={{
+        position: 'relative', bottom: 36, marginLeft: 5
+      }} className="btn-style" onClick={() => handleImport()}>Import
+      </button>
 
         <DataTable
           header="TENDER SETTINGS"
@@ -228,6 +260,8 @@ const CustomDataTable = (props) => {
           setFirst(e.first);
           setRows(e.rows);
           }}
+          sortField="effectedDate" 
+          sortOrder={-1}
          
           dataKey="id"
           filters={filterArray}
@@ -285,13 +319,28 @@ const CustomDataTable = (props) => {
         reloadData={() => reloadData()}
       />)}
 
-      <Toast open={openSnackBar}
+<Toast open={openSnackBar}
         severity={severity}
         handleClose={() => setOpenSnackBar(false)}
         message={responseMsg} />
 
-      <ConfirmationDialog openConfirmModal={openConfirmation} acceptConfirmation={() => acceptConfirmation()} rejectConfirmation={() => rejectConfirmation()} />
-    </div>
+<ImportFile reloadData={() => reloadData()} 
+            onHide={() => setIsOpen(false)} 
+            isOpen={isOpen} 
+            Type="Settings" />
+
+        
+
+<ConfirmDialog
+        visible={deleteDialogVisible}
+        onHide={() => setDeleteDialogVisible(false)}
+        message="Are you sure you want to delete this record?"
+        header="Confirmation"
+        icon="pi pi-exclamation-triangle"
+        accept={deleteRecords}
+        reject={() => setDeleteDialogVisible(false)}
+      />  
+          </div>
   );
 };
 export default CustomDataTable;

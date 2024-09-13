@@ -2402,6 +2402,30 @@ app.post('/user/saveMultipleUsers', (req, res) => {
   }
 });
 
+app.post('/users/deleteUser', (req, res) => {
+  try {
+    const { id } = req.body;
+
+    const sql = 'DELETE FROM users WHERE id = ?';
+    const values = [id];
+
+    pool.query(sql, values, (error, results) => {
+
+      if (error) {
+        return res.status(500).json({ status: false, data: [], message: 'Database query error' });
+      }
+
+      if (results.affectedRows > 0) {
+        res.status(200).json({ status: true, data: results, message: 'User deleted successfully' });
+      } else {
+        res.status(200).json({ status: false, data: results, message: 'No user found with the given ID' });
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ status: false, data: [], message: 'Internal server error' });
+  }
+});
+
 // ***************User Api's**************************
 
 // ***************Organizations Api's**************************
@@ -3113,6 +3137,155 @@ const checkOriginal = (origin, callback) => {
     callback(new Error('Not allowed by CORS'));
   }
 };
+
+
+// app.post('/tenders/saveMultipleTenders', (req, res) => {
+//   const { values, effectedBy } = req.body;
+
+//   if (!values || !effectedBy) {
+//     return res.status(400).json({ status: false, message: "Missing required fields" });
+//   }
+
+//   try {
+//     // Insert records into the database
+//     const insertPromises = values.map(tender => {
+//       const sql = 'INSERT INTO tenders (IPLNumber, name, organization, category, city, newspaper , effectedDate, publishDate, openDate, effectedBy) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+//       const insertValues = [
+//         tender.IPLNumber,
+//         tender.name,
+//         tender.organization,
+//         tender.category,
+//         tender.city,
+//         tender.newspaper,
+//         new Date(),  // effectedDate (current date)
+//         new Date(),  // publishDate (current date)
+//         new Date(),
+//         effectedBy
+//       ];
+//       return new Promise((resolve, reject) => {
+//         pool.query(sql, insertValues, (error, results) => {
+//           if (error) {
+//             console.error('Error inserting record:', error);
+//             reject(error);
+//           } else {
+//             resolve(results.insertId);
+//           }
+//         });
+//       });
+//     });
+
+//     Promise.all(insertPromises)
+//       .then(insertedIds => {
+//         // Fetch all inserted records
+//         const selectPromises = insertedIds.map(insertedId => {
+//           const sql = 'SELECT * FROM tenders WHERE id = ?';
+//           const selectValues = [insertedId];
+//           return new Promise((resolve, reject) => {
+//             pool.query(sql, selectValues, (err, response) => {
+//               if (err) {
+//                 console.error('Error fetching record:', err);
+//                 reject(err);
+//               } else {
+//                 resolve(response);
+//               }
+//             });
+//           });
+//         });
+
+//         Promise.all(selectPromises)
+//           .then(responses => {
+//             res.status(200).json({ status: true, data: responses.flat(), message: "Multiple tenders created successfully" });
+//           })
+//           .catch(error => {
+//             console.error('Error during select promises:', error);
+//             res.status(500).json({ status: false, data: [], message: error.toString() });
+//           });
+//       })
+//       .catch(error => {
+//         console.error('Error during insert promises:', error);
+//         res.status(500).json({ status: false, data: [], message: error.toString() });
+//       });
+//   } catch (err) {
+//     console.error('Unexpected error:', err);
+//     res.status(500).json({ status: false, data: [], message: err.toString() });
+//   }
+// });
+
+
+app.post('/tenders/saveMultipleTenders', (req, res) => {
+  const { values, effectedBy } = req.body;
+
+  if (!values || !effectedBy) {
+      return res.status(400).json({ status: false, message: "Missing required fields" });
+  }
+
+  try {
+      // Insert records into the database
+      const insertPromises = values.map(tender => {
+          const sql = 'INSERT INTO tenders (IPLNumber, name, organization, category, city, newspaper, effectedDate, publishDate, openDate, effectedBy) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+          const insertValues = [
+              tender.IPLNumber,
+              tender.name,
+              tender.organization !== null ? tender.organization : null, // Ensure correct handling of null values
+              tender.category,
+              tender.city !== null ? tender.city : null, // Ensure correct handling of null values
+              tender.newspaper !== null ? tender.newspaper : null, // Ensure correct handling of null values
+              new Date(),  // effectedDate (current date)
+              new Date(),  // publishDate (current date)
+              new Date(),  // openDate (current date)
+              effectedBy
+          ];
+
+          return new Promise((resolve, reject) => {
+              pool.query(sql, insertValues, (error, results) => {
+                  if (error) {
+                      console.error('Error inserting record:', error);
+                      reject(error);
+                  } else {
+                      resolve(results.insertId);
+                  }
+              });
+          });
+      });
+
+      Promise.all(insertPromises)
+          .then(insertedIds => {
+              // Fetch all inserted records
+              const selectPromises = insertedIds.map(insertedId => {
+                  const sql = 'SELECT * FROM tenders WHERE id = ?';
+                  const selectValues = [insertedId];
+                  return new Promise((resolve, reject) => {
+                      pool.query(sql, selectValues, (err, response) => {
+                          if (err) {
+                              console.error('Error fetching record:', err);
+                              reject(err);
+                          } else {
+                              resolve(response);
+                          }
+                      });
+                  });
+              });
+
+              Promise.all(selectPromises)
+                  .then(responses => {
+                      res.status(200).json({ status: true, data: responses.flat(), message: "Multiple tenders created successfully" });
+                  })
+                  .catch(error => {
+                      console.error('Error during select promises:', error);
+                      res.status(500).json({ status: false, data: [], message: error.toString() });
+                  });
+          })
+          .catch(error => {
+              console.error('Error during insert promises:', error);
+              res.status(500).json({ status: false, data: [], message: error.toString() });
+          });
+  } catch (err) {
+      console.error('Unexpected error:', err);
+      res.status(500).json({ status: false, data: [], message: err.toString() });
+  }
+});
+
+
 // // ***************tender Api's**************************
 
 
@@ -3170,6 +3343,85 @@ app.post('/Settings/updateSetting', (req, res) => {
     return res.status(200).json({ status: false, data: [], message: MESSAGES.FAILED_MESSAGE });
   }
 });
+
+// Backend query for settings
+app.post('/settings/saveMultipleSettings', (req, res) => {
+  const { values, effectedBy } = req.body;
+
+  try {
+    // Insert records into the database
+    const insertPromises = values.map(setting => {
+      const sql = 'INSERT INTO settings (sliderMessage , phoneNumber, effectedBy, effectedDate) VALUES (?, ?, ?, ?)';
+      const values = [ setting.sliderMessage , setting.phoneNumber, effectedBy, new Date()];
+      
+      return new Promise((resolve, reject) => {
+        pool.query(sql, values, (error, results) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(results.insertId);
+          }
+        });
+      });
+    });
+
+    // After all insertions are completed, fetch the newly inserted records
+    Promise.all(insertPromises)
+      .then(insertedIds => {
+        const selectPromises = insertedIds.map(insertedId => {
+          const sql = 'SELECT * FROM settings WHERE id = ?';
+          const values = [insertedId];
+          return new Promise((resolve, reject) => {
+            pool.query(sql, values, (err, response) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(response);
+              }
+            });
+          });
+        });
+
+        Promise.all(selectPromises)
+          .then(responses => {
+            res.status(200).json({ status: true, data: responses.flat(), message: "Multiple settings created successfully" });
+          })
+          .catch(error => {
+            res.status(500).json({ status: false, data: [], message: error.toString() });
+          });
+      })
+      .catch(error => {
+        res.status(500).json({ status: false, data: [], message: error.toString() });
+      });
+  } catch (err) {
+    res.status(500).json({ status: false, data: [], message: err.toString() });
+  }
+});
+
+app.post('/settings/deleteSetting', (req, res) => {
+  try {
+    const { id } = req.body;
+
+    const sql = 'DELETE FROM settings WHERE id = ?';
+    const values = [id];
+
+    pool.query(sql, values, (error, results) => {
+
+      if (error) {
+        return res.status(500).json({ status: false, data: [], message: 'Database query error' });
+      }
+
+      if (results.affectedRows > 0) {
+        res.status(200).json({ status: true, data: results, message: 'Setting deleted successfully' });
+      } else {
+        res.status(200).json({ status: false, data: results, message: 'No setting found with the given ID' });
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ status: false, data: [], message: 'Internal server error' });
+  }
+});
+
 // ***************Settings Api's**************************
 
 
@@ -3361,7 +3613,7 @@ const checkExistsSubscriptions = (data) => {
 };
 
 app.post('/Subscriptions/', (req, res) => {
-  const { userName, email, phoneNumber, company, billingPeriod, BillingAmount, categories, billingDate, effectedBy } = req.body;
+  const { userName, email, phoneNumber, company, billingPeriod, BillingAmount, categories, billingDate, effectedBy,effectedDate } = req.body;
 
   try {
 
@@ -3371,8 +3623,8 @@ app.post('/Subscriptions/', (req, res) => {
         res.status(200).json({ status: false, data: {}, message: MESSAGES.ALREADY_EXISTS });
       }
       else {
-        const sql = 'INSERT INTO subscriptions (userName,email,phoneNumber,company,billingPeriod,BillingAmount,categories,billingDate, effectedBy,status ) VALUES (?,?,?,?,?,?,?,?,?,?)';
-        const values = [userName, email, phoneNumber, company, billingPeriod, BillingAmount, categories, billingDate, effectedBy,false];
+        const sql = 'INSERT INTO subscriptions (userName,email,phoneNumber,company,billingPeriod,BillingAmount,categories,billingDate, effectedBy,status,effectedDate ) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
+        const values = [userName, email, phoneNumber, company, billingPeriod, BillingAmount, categories, billingDate, effectedBy,false, new Date()];
 
         pool.query(sql, values, (error, results) => {
           if (error) {
@@ -3474,6 +3726,72 @@ app.post('/Subscriptions/deleteSubscription', (req, res) => {
     res.status(200).json({ status: false, data: [], message: MESSAGES.FAILED_MESSAGE });
   }
 });
+
+
+app.post('/subscriptions/saveMultipleSubscriptions', (req, res) => {
+  const { values, effectedBy } = req.body;
+
+  try {
+      // Insert records into the database
+      const insertPromises = values.map(subscription => {
+          const sql = 'INSERT INTO subscriptions (userName, phoneNumber, email, company, status , billingPeriod, categories , BillingAmount ,billingDate, effectedBy,effectedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?)';
+          const values = [
+              subscription.userName,
+              subscription.phoneNumber,
+              subscription.email,
+              subscription.company,
+              '0',
+              subscription.billingPeriod,
+              subscription.categories,
+              subscription.BillingAmount,
+              new Date(),
+              effectedBy,
+              new Date(),
+          ];
+          return new Promise((resolve, reject) => {
+              pool.query(sql, values, (error, results) => {
+                  if (error) {
+                      reject(error);
+                  } else {
+                      resolve(results.insertId);
+                  }
+              });
+          });
+      });
+
+      Promise.all(insertPromises)
+          .then(insertedIds => {
+              // Fetch all inserted records
+              const selectPromises = insertedIds.map(insertedId => {
+                  const sql = 'SELECT * FROM subscriptions WHERE id = ?';
+                  const values = [insertedId];
+                  return new Promise((resolve, reject) => {
+                      pool.query(sql, values, (err, response) => {
+                          if (err) {
+                              reject(err);
+                          } else {
+                              resolve(response);
+                          }
+                      });
+                  });
+              });
+
+              Promise.all(selectPromises)
+                  .then(responses => {
+                      res.status(200).json({ status: true, data: responses.flat(), message: "Multiple subscriptions created successfully" });
+                  })
+                  .catch(error => {
+                      res.status(500).json({ status: false, data: [], message: error.toString() });
+                  });
+          })
+          .catch(error => {
+              res.status(500).json({ status: false, data: [], message: error.toString() });
+          });
+  } catch (err) {
+      res.status(500).json({ status: false, data: [], message: err.toString() });
+  }
+});
+
 // ***************Subscriptions Api's**************************
 
 

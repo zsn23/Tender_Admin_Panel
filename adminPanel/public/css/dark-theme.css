@@ -420,3 +420,22 @@ body {
     background-color: #000; /* Full black background */
     color: #fff; /* White text for contrast */
 }
+.LableINdarkmode{
+    color: #fff !important;
+}
+.NofileSelINdarkMopde{
+    color: #fff !important;
+}
+.textofExcelFileIndarkMode{
+    color: #fff !important;
+
+}
+
+.p-datepicker table td.p-datepicker-today > span{
+    color: white !important;
+}
+
+.section_____img{
+    width: 46% !important;
+    /* height: 620px !important; */
+}
