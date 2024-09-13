@@ -10,6 +10,8 @@ import { ConfirmDialog } from "primereact/confirmdialog";
 import { billingApiServices } from '../../services/BillingApiService';
 import Toast from "../alert/Toast"
 import { Dropdown } from "primereact/dropdown";
+import XLSX from "xlsx";
+import FileSaver from 'file-saver';
 
 const CustomDataTable = (props) => {
   const [isModalOpen, setisModalOpen] = useState(false);
@@ -110,6 +112,28 @@ const CustomDataTable = (props) => {
   const rejectConfirmation = () => {
     setOpenConfirmation(false)
   }
+
+  const exportToExcel = () => {
+    let fileName = 'SubscriptionDetail';
+
+    const response = selectedRows.map((d) => ({
+      userName: d.userName,
+      phoneNumber: d.phoneNumber, 
+      email: d.email,
+      company: d.company,
+      billingPeriod: d.billingPeriod,
+      categories: d.categories,
+      billingDate: d.billingDate,
+      BillingAmount: d.BillingAmount
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(response);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const dataToSave = new Blob([excelBuffer], { type: "application/octet-stream" });
+    FileSaver.saveAs(dataToSave, `${fileName}.xlsx`);
+  };
 
   const bodyTemplate = (rowData) => loader ? (
     <Skeleton shape="circle" size="1rem" className="mr-2" />
@@ -290,10 +314,18 @@ const CustomDataTable = (props) => {
     <i className="pi pi-wrench" style={{ fontSize: '13px' ,marginLeft : "3px" }} ></i>
     </div>
   );
+  const customExportTemplate=()=>(
+    <div >
+    <span>Export</span>
+    <i className="pi pi-file-excel" style={{ fontSize: '14px' ,marginLeft : "2px" }} ></i>
+    </div>
+  );
+
 
   return (
   
       <div className="container-fluid" >
+          <button style={{ position: 'relative', bottom: 36 ,  cursor: selectedRows.length === 0 ? 'not-allowed' : 'pointer'}} className="btn-style" onClick={exportToExcel} disabled={selectedRows.length === 0}>Export</button>
         <DataTable
         header="SUBSCRIPTION RECORDS"
           value={loader ? Array.from({ length: 5 }) : gridData}
@@ -312,11 +344,12 @@ const CustomDataTable = (props) => {
           filters={filterArray}
           filterDisplay="row"
           removableSort
+
           selectionMode={'checkbox'}
           selection={selectedRows}
           onSelectionChange={(e) => setSelectedRows(e.value)}
         >
-          {/* <Column selectionMode="multiple" ></Column> */}
+           <Column selectionMode="multiple" header={customExportTemplate} headerStyle={{ width: '5%' }}></Column>
           <Column
             field="userName"
             header="Name"

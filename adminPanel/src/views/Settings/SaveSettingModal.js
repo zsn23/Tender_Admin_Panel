@@ -11,7 +11,7 @@ import {
   Label,
   Input,
 } from "reactstrap";
-import { X, CheckSquare } from "react-feather";
+import { X, CheckSquare, Save } from "react-feather";
 import Toast from "../alert/Toast"
 import { billingApiServices } from '../../services/BillingApiService';
 import { localStorageService } from "../../services/LocalStorageService";
@@ -62,8 +62,11 @@ const SaveFAQModal = (props) => {
   const SubmitForm = () => {
     if (isValid()) {
       if (props.isEditMode) {
-        Edit()
+        Edit();
+      }else {
+        Save();
       }
+      
     }
   }
 
@@ -95,6 +98,33 @@ const SaveFAQModal = (props) => {
     });
   }
 
+  const Save = () => {
+    const body = {
+      sliderMessage: message?.trim(),
+      phoneNumber: phoneNumber?.trim(),
+      effectedBy: _userData?.id
+    };
+  
+    billingApiServices.createSetting(body).then((response) => {
+      if (!response || response === undefined) {
+        handleToast("error", "Operation failed, check your internet connection");
+        return;
+      }
+  
+      if (response?.data?.status) {
+        handleToast("success", response?.data?.message);
+        setMessage("");
+        setPhoneNumber("");
+        props.reloadData();
+        setModal(false);
+        props.onClose();
+      } else {
+        handleToast("error", response?.data?.message);
+      }
+    });
+  };
+  
+
 
 
   const handleToast = (severity, message) => {
@@ -106,10 +136,18 @@ const SaveFAQModal = (props) => {
     }, 2000);
   }
 
+  // const isValid = () => {
+  //   if (message?.trim() == "" || phoneNumber?.trim() == "") {
+  //     setErrors(true)
+  //     return false
+  //   }
+  //   return true;
+  // };
   const isValid = () => {
-    if (message?.trim() == "" || phoneNumber?.trim() == "") {
-      setErrors(true)
-      return false
+    if (message?.trim() === "" || phoneNumber?.trim() === "") {
+      setErrors(true);
+      handleToast("error", "Message and Phone Number are required fields.");
+      return false;
     }
     return true;
   };
@@ -143,7 +181,7 @@ const SaveFAQModal = (props) => {
         <div className="modal-lg" role="document">
           <div className="modal-content">
             <div className="modal-header">
-              <CardTitle>{!props.isEditMode ? "Insert FAQ" : "Update Settings"}</CardTitle>
+              <CardTitle>{!props.isEditMode ? "Insert Setting" : "Update Settings"}</CardTitle>
               <button
                 className="cross-btn"
                 onClick={() => toggle()}

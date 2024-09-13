@@ -8,6 +8,8 @@ import { Skeleton } from "primereact/skeleton";
 import ConfirmationDialog from "../alert/ConfirmationDialog";
 import { billingApiServices } from '../../services/BillingApiService';
 import Toast from "../alert/Toast"
+import XLSX from "xlsx";
+import FileSaver from 'file-saver';
 
 const CustomDataTable = (props) => {
   const [isModalOpen, setisModalOpen] = useState(false);
@@ -20,11 +22,14 @@ const CustomDataTable = (props) => {
   const [responseMsg, setResponseMsg] = useState("")
   const [first, setFirst] = useState(0); // Index of the first record to display
  const [rows, setRows] = useState(25); // Number of rows per page
+ const [selectedRows, setSelectedRows] = useState([])
 
   let [filterArray, setfilterArray] = useState({
     sliderMessage: { value: null, matchMode: FilterMatchMode.CONTAINS },
     phoneNumber: { value: null, matchMode: FilterMatchMode.CONTAINS },
- });
+    effectedDate: { value: null, matchMode: FilterMatchMode.CONTAINS },
+ 
+  });
 
   useEffect(() => {
     setLoader(props.loading);
@@ -174,19 +179,42 @@ const CustomDataTable = (props) => {
   const convertDateBestFormate = (inputDateTime) => {
 
     const date = new Date(inputDateTime);
-    const hours = date.getUTCHours().toString().padStart(2, '0');
-    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
     const day = date.getUTCDate().toString().padStart(2, '0');
     const month = (date.getUTCMonth() + 1).toString().padStart(2, '0'); // Adding 1 to the month since it's zero-based
     const year = date.getUTCFullYear();
 
-    const formattedDateTime = `${hours}:${minutes} ${day}-${month}-${year}`;
+    const formattedDateTime = `${day}-${month}-${year}`;
     return formattedDateTime
   }
+  
+  const exportToExcel = () => {
+    let fileName = 'Settings';
 
+    const response = selectedRows.map((d) => ({
+      Message: d.sliderMessage,
+      phoneNumber: d.phoneNumber,
+      CreatedDate: d.effectedDate
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(response);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const dataToSave = new Blob([excelBuffer], { type: "application/octet-stream" });
+    FileSaver.saveAs(dataToSave, `${fileName}.xlsx`);
+  };
+
+  const customExportTemplate=()=>(
+    <div >
+    <span>Export</span>
+    <i className="pi pi-file-excel" style={{ fontSize: '14px' ,marginLeft : "2px" }} ></i>
+    </div>
+  );
   return (
     
       <div className="container-fluid" >
+          <button style={{ position: 'relative', bottom: 36 ,  cursor: selectedRows.length === 0 ? 'not-allowed' : 'pointer'}} className="btn-style" onClick={exportToExcel} disabled={selectedRows.length === 0}>Export</button>
+
         <DataTable
           header="TENDER SETTINGS"
           value={loader ? Array.from({ length: 5 }) : gridData}
@@ -205,8 +233,11 @@ const CustomDataTable = (props) => {
           filters={filterArray}
           filterDisplay="row"
           removableSort
+          selectionMode={'checkbox'}
+          selection={selectedRows}
+          onSelectionChange={(e) => setSelectedRows(e.value)} 
         >
-
+           <Column selectionMode="multiple" header={customExportTemplate} headerStyle={{ width: '5%' }}></Column>
           <Column
             field="sliderMessage"
             header="Message"
@@ -230,6 +261,15 @@ const CustomDataTable = (props) => {
             filterApply={filterApplyTemplate}
             
             body={answerBodyTemplate}
+          ></Column>
+          
+          <Column
+            field="effectedDate"
+            header="Created Date"
+            sortable
+            filter
+            filterPlaceholder="Search"
+            body={SubmissionDateTemplate}
           ></Column>
          
          <Column field="id" header={customHeaderTemplate}  body={bodyTemplate}></Column>

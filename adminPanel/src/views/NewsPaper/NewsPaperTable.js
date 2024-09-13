@@ -9,6 +9,10 @@ import ConfirmationDialog from "../alert/ConfirmationDialog";
 import { ConfirmDialog } from "primereact/confirmdialog";
 import { billingApiServices } from '../../services/BillingApiService';
 import Toast from "../alert/Toast"
+import XLSX from "xlsx";
+import FileSaver from 'file-saver';
+import ImportFile from "./../organizations/ImportFile";
+
 
 const CustomDataTable = (props) => {
   const [isModalOpen, setisModalOpen] = useState(false);
@@ -21,6 +25,8 @@ const CustomDataTable = (props) => {
   const [responseMsg, setResponseMsg] = useState("")
   const [selectedRows, setSelectedRows] = useState([])
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [stateManager, setStateManager] = useState(0);
 
  const [first, setFirst] = useState(0); // Index of the first record to display
  const [rows, setRows] = useState(25); // Number of rows per page
@@ -195,10 +201,43 @@ const CustomDataTable = (props) => {
     const formattedDateTime = `${hours}:${minutes} ${day}-${month}-${year}`;
     return formattedDateTime
   }
+  const customExportTemplate=()=>(
+    <div >
+    <span>Export</span>
+    <i className="pi pi-file-excel" style={{ fontSize: '14px' ,marginLeft : "2px" }} ></i>
+    </div>
+  );
+  const exportToExcel = () => {
+    let fileName = 'Newspapers';
+
+    const response = selectedRows.map((d) => ({
+      name: d.name,
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(response);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const dataToSave = new Blob([excelBuffer], { type: "application/octet-stream" });
+    FileSaver.saveAs(dataToSave, `${fileName}.xlsx`);
+  };
+  const handleImport=()=>{
+    setIsOpen(true)
+    setStateManager(new Date()?.toString());
+  }
+
+
 
   return (
     
       <div className="container-fluid mb-5" >
+          <button style={{ position: 'relative', bottom: 35 ,  cursor: selectedRows.length === 0 ? 'not-allowed' : 'pointer'}} className="btn-style" onClick={exportToExcel} disabled={selectedRows.length === 0}>Export</button>
+        
+  <button style={{
+    position: 'relative', bottom: 35, marginLeft: 5
+  }} className="btn-style" onClick={() => handleImport()}>Import
+  </button>
+
         <DataTable
         header="NEWSPAPER RECORDS"
           value={loader ? Array.from({ length: 5 }) : gridData}
@@ -218,11 +257,11 @@ const CustomDataTable = (props) => {
           filterDisplay="row"
           removableSort
 
-          // selectionMode={'checkbox'}
-          // selection={selectedRows}
-          // onSelectionChange={(e) => setSelectedRows(e.value)} 
+          selectionMode={'checkbox'}
+          selection={selectedRows}
+          onSelectionChange={(e) => setSelectedRows(e.value)} 
         >
-           {/* <Column selectionMode="multiple"></Column> */}
+             <Column selectionMode="multiple" header={customExportTemplate} headerStyle={{ width: '5%' }}></Column>
           <Column
             field="name"
             header="Name"
@@ -277,6 +316,9 @@ const CustomDataTable = (props) => {
         severity={severity}
         handleClose={() => setOpenSnackBar(false)}
         message={responseMsg} />
+
+<ImportFile reloadData={() => reloadData()} onHide={() => setIsOpen(false)} isOpen={isOpen} Type="Newspaper" />
+
 
 <ConfirmDialog
         visible={deleteDialogVisible}

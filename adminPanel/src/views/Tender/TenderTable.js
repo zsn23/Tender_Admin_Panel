@@ -520,7 +520,8 @@ const CustomDataTable = (props) => {
       organizationName: d.organizationName,
       category: d.category,
       cityName: d.cityName,
-      publishDate: d.publishDate,
+      SubmitDate: d.effectedDate,
+      endDate: d.publishDate,
       newPaperName: d.newPaperName,
       tenderImage: d.tenderImage,
     }));
@@ -609,6 +610,12 @@ const CustomDataTable = (props) => {
     newFilters[field].value = e.value;
     setFilterArray(newFilters);
   };
+  const customExportTemplate=()=>(
+    <div >
+    <span>Export</span>
+    <i className="pi pi-file-excel" style={{ fontSize: '14px' ,marginLeft : "2px" }} ></i>
+    </div>
+  );
 
 
 
@@ -616,7 +623,7 @@ const CustomDataTable = (props) => {
 
   return (
     <div className="container-fluid mb-5">
-      <button style={{ position: 'relative', bottom: 42 }} className="btn-style" onClick={exportToExcel}>Export</button>
+      <button style={{ position: 'relative', bottom: 42 ,  cursor: selectedRows.length === 0 ? 'not-allowed' : 'pointer'}} className="btn-style" onClick={exportToExcel} disabled={selectedRows.length === 0}>Export</button>
 
       <div className="sorting-container___">
      
@@ -672,7 +679,7 @@ const CustomDataTable = (props) => {
         selection={selectedRows}
         onSelectionChange={(e) => setSelectedRows(e.value)}
       >
-        <Column selectionMode="multiple" header="Export"></Column>
+        <Column selectionMode="multiple" header={customExportTemplate} headerStyle={{ width: '5%' }}></Column>
         <Column field="IPLNumber" header="IPL Number" body={IPLNumberTemplate}
           filter filterField="IPLNumber" filterMatchMode="contains" sortable filterPlaceholder="Search" onFilterApplyClick={(e) => handleFilterChange(e, 'IPLNumber')}></Column>
         <Column field="name" header="Title" body={NameTemplate}

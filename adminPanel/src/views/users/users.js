@@ -76,7 +76,7 @@ class Users extends Component {
       <Fragment>
         <div style={{ textAlign: "end", marginTop: '5px' }}>
           <button type="button" id="new-report" className="btn-style"
-            onClick={() => this.setState({ showModal: true })} > New
+            onClick={() => this.setState({ showModal: true })} >Add New
           </button>
         </div>
         <div>

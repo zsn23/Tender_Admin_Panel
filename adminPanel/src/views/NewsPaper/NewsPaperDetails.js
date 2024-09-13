@@ -5,6 +5,7 @@ import SaveNewsPaperModal from "./SaveNewsPaperModal";
 import { billingApiServices } from '../../services/BillingApiService';
 
 
+
 class NewsPaperDetails extends Component {
   constructor(props) {
     super(props);
