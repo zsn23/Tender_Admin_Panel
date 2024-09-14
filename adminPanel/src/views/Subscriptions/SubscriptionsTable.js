@@ -42,14 +42,14 @@ const CustomDataTable = (props) => {
     billingPeriod: { value: null, matchMode: FilterMatchMode.CONTAINS },
     categories: { value: null, matchMode: FilterMatchMode.CONTAINS },
     billingDate: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    BillingAmount:{ value: null, matchMode: FilterMatchMode.CONTAINS },
+    BillingAmount: { value: null, matchMode: FilterMatchMode.CONTAINS },
     effectedDate: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
 
   useEffect(() => {
     setLoader(props.loading);
     setGridData(props.gridData);
-  }, [props.gridData , props.loading]);
+  }, [props.gridData, props.loading]);
 
 
 
@@ -124,7 +124,7 @@ const CustomDataTable = (props) => {
 
     const response = selectedRows.map((d) => ({
       userName: d.userName,
-      phoneNumber: d.phoneNumber, 
+      phoneNumber: d.phoneNumber,
       email: d.email,
       company: d.company,
       billingPeriod: d.billingPeriod,
@@ -146,13 +146,13 @@ const CustomDataTable = (props) => {
   ) : (
     <div style={{ display: 'flex', alignItems: 'center' }}>
       <Button
-        icon="pi pi-pencil"
+        icon="fa-regular fa-money-check-pen"
         onClick={() => editCategory(rowData)}
         className="p-button-rounded p-button-warning my-2"
         style={{ margin: '0.5rem' }} // Optional: adds spacing between buttons
       />
       <Button
-        icon="pi pi-trash"
+        icon="fa-regular fa-trash-can-xmark"
         onClick={() => confirmDelete(rowData)}
         className="p-button-rounded p-button-warning"
         style={{ margin: '0.5rem' }}
@@ -326,206 +326,227 @@ const CustomDataTable = (props) => {
     return `${year}-${month}-${day} `; // Ensure 'YYYY-MM-DD' format
   }
   const customHeaderTemplate = () => (
-  
+
     <div >
-    <span>Action</span>
-    <i className="pi pi-wrench" style={{ fontSize: '13px' ,marginLeft : "3px" }} ></i>
+      <span>Action</span>
+      <i className="fa-sharp fa-solid fa-wrench" style={{ fontSize: '13px', marginLeft: "3px" }} ></i>
     </div>
   );
-  const customExportTemplate=()=>(
-    <div >
-    <span>Export</span>
-    <i className="pi pi-file-excel" style={{ fontSize: '14px' ,marginLeft : "2px" }} ></i>
+  const customExportTemplate = () => (
+    <div className="d-flex align-items-center">
+      <span>Export</span>
+      <i className="fa-sharp fa-solid fa-file-excel" style={{ fontSize: '16px', marginLeft: "5px", marginTop: "2px" }} ></i>
     </div>
   );
 
-  const handleImport=()=>{
+  const handleImport = () => {
     setIsOpen(true)
     setStateManager(new Date()?.toString());
   }
 
   return (
-  
-      <div className="container-fluid" >
-          <button style={{ position: 'relative', bottom: 36 ,  cursor: selectedRows.length === 0 ? 'not-allowed' : 'pointer'}} className="btn-style" onClick={exportToExcel} disabled={selectedRows.length === 0}>Export</button>
-          
-          <button style={{
-        position: 'relative', bottom: 36, marginLeft: 5
-      }} className="btn-style" onClick={() => handleImport()}>Import
-      </button>
 
-        <DataTable
+    <div className="container-fluid" >
+
+      <div className="d-flex justify-content-end" style={{marginTop:'5px'}}>
+
+        <div>
+        <button style={{ cursor: selectedRows.length === 0 ? 'not-allowed' : 'pointer'  }} className="btn-style p-2 d-flex align-items-center gap-1" onClick={exportToExcel} disabled={selectedRows.length === 0}>
+          <i className="fa-thin fa-file-export" style={{ fontSize: "18px" }}> </i> Export
+        </button>
+        </div>
+        
+        <div>
+        <button style={{ marginLeft: 5 }} className="btn-style p-2 d-flex align-items-center gap-1" onClick={() => handleImport()}>
+          <i className="fa-thin fa-file-import" style={{ fontSize: "18px" }}> </i> Import
+        </button>
+        </div>
+       
+
+      </div>
+
+
+      <DataTable
         header="SUBSCRIPTION RECORDS"
-          value={loader ? Array.from({ length: 5 }) : gridData}
-          paginator
-          responsiveLayout="scroll"
-          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
-          currentPageReportTemplate={`ON PAGE ${Math.floor(first / rows) + 1} : RECORDS {first} to {last}`}
-          rows={rows}
-          first={first}
-          onPage={(e) => {
+        value={loader ? Array.from({ length: 5 }) : gridData}
+        paginator
+        responsiveLayout="scroll"
+        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
+        currentPageReportTemplate={`ON PAGE ${Math.floor(first / rows) + 1} : RECORDS {first} to {last}`}
+        rows={rows}
+        first={first}
+        onPage={(e) => {
           setFirst(e.first);
           setRows(e.rows);
-          }}
+        }}
 
-          dataKey="id"
-          filters={filterArray}
-          filterDisplay="row"
-          removableSort
-          sortField="effectedDate" 
-          sortOrder={-1}
+        dataKey="id"
+        filters={filterArray}
+        filterDisplay="row"
+        removableSort
+        sortField="effectedDate"
+        sortOrder={-1}
 
-          selectionMode={'checkbox'}
-          selection={selectedRows}
-          onSelectionChange={(e) => setSelectedRows(e.value)}
-        >
-           <Column selectionMode="multiple" header={customExportTemplate} headerStyle={{ width: '10%' }}></Column>
-          <Column
-            field="userName"
-            header="Name"
-            sortable
-            filter
-            filterPlaceholder="Search"
-            style={{ width: "15%" }}
-            filterClear={filterClearTemplate}
-            filterApply={filterApplyTemplate}
-            
-            body={NameBodyTemplate}
-          ></Column>
+        selectionMode={'checkbox'}
+        selection={selectedRows}
+        onSelectionChange={(e) => setSelectedRows(e.value)}
+      >
+        <Column selectionMode="multiple" header={customExportTemplate} headerStyle={{ width: '10%' }}></Column>
+        <Column
+          field="userName"
+          header="Name"
+          sortable
+          filter
+          filterPlaceholder="Search"
+          style={{ width: "15%" }}
+          filterClear={filterClearTemplate}
+          filterApply={filterApplyTemplate}
 
-          <Column
-            field="phoneNumber"
-            header="Phone"
-            sortable
-            filter
-            filterPlaceholder="Search"
-           
-            filterClear={filterClearTemplate}
-            filterApply={filterApplyTemplate}
-            
-            body={phoneNumberTemplate}
-          ></Column>
+          body={NameBodyTemplate}
+        ></Column>
 
-          <Column
-            field="email"
-            header="Email"
-            sortable
-            filter
-            filterPlaceholder="Search"
-            
-            filterClear={filterClearTemplate}
-            filterApply={filterApplyTemplate}
-            
-            body={EmailBodyTemplate}
-          ></Column>
+        <Column
+          field="phoneNumber"
+          header="Phone"
+          sortable
+          filter
+          filterPlaceholder="Search"
 
-          <Column
-            field="company"
-            header="Company"
-            sortable
-            body={CompanyBodyTemplate}
-           
+          filterClear={filterClearTemplate}
+          filterApply={filterApplyTemplate}
 
-            filter
-            filterPlaceholder="Search"
-            filterClear={filterClearTemplate}
-            filterApply={filterApplyTemplate}
-            
-          ></Column>
+          body={phoneNumberTemplate}
+        ></Column>
 
-          
+        <Column
+          field="email"
+          header="Email"
+          sortable
+          filter
+          filterPlaceholder="Search"
 
-          <Column
-            field="billingPeriod"
-            header="billing Period"
-            sortable
-           
-            body={BillingPeriodBodyTemplate}
+          filterClear={filterClearTemplate}
+          filterApply={filterApplyTemplate}
 
-            filter
-            filterPlaceholder="Search"
-            filterClear={filterClearTemplate}
-            filterApply={filterApplyTemplate}
-            
-          ></Column>
+          body={EmailBodyTemplate}
+        ></Column>
 
-          <Column
-            field="categories"
-            header="Categories"
-            sortable
-           
-            body={CategoriesBodyTemplate}
-
-            filter
-            filterPlaceholder="Search"
-            filterClear={filterClearTemplate}
-            filterApply={filterApplyTemplate}
-            
-          ></Column>
-          
-          <Column
-            field="BillingAmount"
-            header="Bill   Amount"
-            sortable
-           
-            body={BillingAmountBodyTemplate}
-
-            filter
-            filterPlaceholder="Search"
-            filterClear={filterClearTemplate}
-            filterApply={filterApplyTemplate}
-            
-          ></Column>
-          
-
-          <Column
-            field="status"
-            header="Status"
-            sortable
-            filter
-            filterElement={statusFilterTemplate}
-           
-            body={StatusBodyTemplate}
-          ></Column>
+        <Column
+          field="company"
+          header="Company"
+          sortable
+          body={CompanyBodyTemplate}
 
 
-<Column 
-          field="effectedDate" 
-          header="Submit Date" 
-          sortable 
-          filter 
-          filterPlaceholder="Search"  
+          filter
+          filterPlaceholder="Search"
+          filterClear={filterClearTemplate}
+          filterApply={filterApplyTemplate}
+
+        ></Column>
+
+
+
+        <Column
+          field="billingPeriod"
+          header="billing Period"
+          sortable
+
+          body={BillingPeriodBodyTemplate}
+
+          filter
+          filterPlaceholder="Search"
+          filterClear={filterClearTemplate}
+          filterApply={filterApplyTemplate}
+
+        ></Column>
+
+        <Column
+          field="categories"
+          header="Categories"
+          sortable
+
+          body={CategoriesBodyTemplate}
+
+          filter
+          filterPlaceholder="Search"
+          filterClear={filterClearTemplate}
+          filterApply={filterApplyTemplate}
+
+        ></Column>
+
+        <Column
+          field="BillingAmount"
+          header="Bill   Amount"
+          sortable
+
+          body={BillingAmountBodyTemplate}
+
+          filter
+          filterPlaceholder="Search"
+          filterClear={filterClearTemplate}
+          filterApply={filterApplyTemplate}
+
+        ></Column>
+
+
+        <Column
+          field="status"
+          header="Status"
+          headerStyle={{ width: '5%' }}
+          sortable
+          filter
+          filterElement={statusFilterTemplate}
+          body={StatusBodyTemplate}
+        ></Column>
+
+
+        <Column
+          field="effectedDate"
+          header="Submit Date"
+          sortable
+          filter
+          filterPlaceholder="Search"
           body={SubmissionDateTemplate}
-          
-          ></Column>
-          <Column
-            field="billingDate"
-            header="Billing Date"
-            sortable
-           
-            filter
-            filterPlaceholder="Search"
-            filterClear={filterClearTemplate}
-            filterApply={filterApplyTemplate}
-            
 
-            body={billingDateBodyTemplate}
-          ></Column>
-          <Column field="id" header={customHeaderTemplate}  body={bodyTemplate} />
+        ></Column>
+        <Column
+          field="billingDate"
+          header="Billing Date"
+          sortable
 
-        </DataTable>
-      
+          filter
+          filterPlaceholder="Search"
+          filterClear={filterClearTemplate}
+          filterApply={filterApplyTemplate}
+
+
+          body={billingDateBodyTemplate}
+        ></Column>
+        <Column field="id" header={customHeaderTemplate} body={bodyTemplate} 
+                 filter 
+                 showFilterMenu={false}  
+                 filterElement={
+                   <div className="downloadImg d-flex align-items-center flex-column m-0 p-0">
+                     <span className="downloadImgheading">EDIT</span>
+                     <span className="downloadImgheading"> DELETE</span>
+                   </div>
+                 }  
+        />
+
+      </DataTable>
+
 
       <Toast open={openSnackBar}
         severity={severity}
         handleClose={() => setOpenSnackBar(false)}
         message={responseMsg} />
 
-<ImportFile reloadData={() => reloadData()} 
-onHide={() => setIsOpen(false)} 
-isOpen={isOpen} 
-Type="Subscription" />
-      
+      <ImportFile reloadData={() => reloadData()}
+        onHide={() => setIsOpen(false)}
+        isOpen={isOpen}
+        Type="Subscription" />
+
       <ConfirmDialog
         visible={deleteDialogVisible}
         onHide={() => setDeleteDialogVisible(false)}
@@ -536,7 +557,7 @@ Type="Subscription" />
         reject={() => setDeleteDialogVisible(false)}
       />
 
-      </div>
+    </div>
   );
 };
 export default CustomDataTable;

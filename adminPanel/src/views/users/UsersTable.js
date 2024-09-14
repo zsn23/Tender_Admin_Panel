@@ -258,13 +258,13 @@ const UsersTable = (props) => {
   ) : (
     <div style={{ display: 'flex', alignItems: 'center' , justifyContent:"center " }}>
       <Button
-        icon="pi pi-pencil"
+        icon="fa-regular fa-money-check-pen"
         onClick={() => edituser(rowData)}
         className="p-button-rounded p-button-warning my-2"
         style={{ margin: '0.5rem' }} // Optional: adds spacing between buttons
       />
         <Button
-        icon="pi pi-trash"
+        icon="fa-regular fa-trash-can-xmark"
         onClick={() => confirmDelete(rowData)}
         className="p-button-rounded p-button-warning"
         style={{ margin: '0.5rem' }}
@@ -276,7 +276,7 @@ const UsersTable = (props) => {
   
     <div >
     <span>Action</span>
-    <i className="pi pi-wrench" style={{ fontSize: '13px' ,marginLeft : "3px" }} ></i>
+    < i class="fa-sharp fa-solid fa-wrench" style={{ fontSize: '14px', marginLeft: "3px" ,marginTop:"3px" }}></i>
     </div>
   );
 
@@ -493,9 +493,9 @@ const UsersTable = (props) => {
   };
 
   const customExportTemplate=()=>(
-    <div >
+    <div className="d-flex align-items-center">
     <span>Export</span>
-    <i className="pi pi-file-excel" style={{ fontSize: '14px' ,marginLeft : "2px" }} ></i>
+    <i class="fa-sharp fa-solid fa-file-excel" style={{ fontSize: '16px', marginLeft: "5px", marginTop:"1px" }}></i>
     </div>
   );
 
@@ -523,12 +523,22 @@ const UsersTable = (props) => {
   return (
   
       <div className="container-fluid  ">
-          <button style={{ position: 'relative', bottom: 35 ,  cursor: selectedRows.length === 0 ? 'not-allowed' : 'pointer'}} className="btn-style" onClick={exportToExcel} disabled={selectedRows.length === 0}>Export</button>
-         
-          <button style={{
-        position: 'relative', bottom: 35, marginLeft: 5
-      }} className="btn-style" onClick={() => handleImport()}>Import
-      </button>
+           <div className="d-flex justify-content-end" style={{ position:'relative',bottom:42,marginTop:'5px'}}>
+
+<div>
+<button style={{ cursor: selectedRows.length === 0 ? 'not-allowed' : 'pointer'  }} className="btn-style p-2 d-flex align-items-center gap-1" onClick={exportToExcel} disabled={selectedRows.length === 0}>
+  <i className="fa-thin fa-file-export" style={{ fontSize: "18px" }}> </i> Export
+</button>
+</div>
+
+<div>
+<button style={{ marginLeft: 5 }} className="btn-style p-2 d-flex align-items-center gap-1" onClick={() => handleImport()}>
+  <i className="fa-thin fa-file-import" style={{ fontSize: "18px" }}> </i> Import
+</button>
+</div>
+
+
+</div>
 
         <DataTable
           header="USERS INFORMATION"
@@ -556,7 +566,7 @@ const UsersTable = (props) => {
           onSelectionChange={(e) => setSelectedRows(e.value)} 
         >
 
-<Column selectionMode="multiple" header={customExportTemplate} headerStyle={{ width: '7%' }}></Column>
+<Column selectionMode="multiple" header={customExportTemplate} headerStyle={{ width: '5%' }}></Column>
          <Column
             field="name"
             header="Username"
@@ -611,7 +621,17 @@ const UsersTable = (props) => {
           body={JoinDateTemplate}
           ></Column>
             
-            <Column field="id" header={customHeaderTemplate}  body={bodyTemplate}></Column>
+            <Column field="id" header={customHeaderTemplate}  body={bodyTemplate}
+               filter 
+               showFilterMenu={false}  
+               filterElement={
+                 <div className="downloadImg d-flex align-items-center flex-column m-0 p-0">
+                   <span className="downloadImgheading">EDIT</span>
+                   <span className="downloadImgheading"> DELETE</span>
+                 </div>
+               }  
+               headerStyle={{ width: '5%' }}
+            ></Column>
             </DataTable>
       
 

@@ -11,6 +11,7 @@
 
 .disable-btn{
     background-color:#e3e3e3;
+    pointer-events: none !important;
     cursor: not-allowed !important;
 }
 .section {
@@ -86,3 +87,17 @@
   .p-inputswitch.p-inputswitch-checked:not(.p-disabled):hover .p-inputswitch-slider {
     background: radial-gradient(circle, #0B2B11, #2a6a43);
   }
+  /* subscription.css */
+.loading-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    z-index: 1000;
+    font-size: 18px;
+  }
+  

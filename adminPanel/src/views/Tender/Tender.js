@@ -121,12 +121,15 @@ class TenderDetails extends Component {
   render() {
     return (
       <>
-        <div  style={{ textAlign: "end", marginTop: '5px'  }}>
-          <button id="new-report" className="btn-style  p-2 "
+
+        <div  className="d-flex justify-content-start " style={{  marginTop: "5px"  }}>
+
+          <button id="new-report" className="btn-style position-relative z-1 p-2 d-flex align-items-center gap-1"
             onClick={() => this.setState({ showModal: true, dataForEdit: null, isEditMode: false })} > 
-          <i className="fa-regular fa-circle-plus" style={{fontSize:"15px"}}></i> Add New 
+          <i className="fa-regular fa-circle-plus" style={{fontSize:"22px"}}></i> Add New
           </button>
         </div>
+
         {!this.state.showModal && <TenderTable
           gridData={this.state.gridData}
           loading={this.state.loading}
@@ -159,6 +162,9 @@ class TenderDetails extends Component {
             reloadCategories={() => this.getCategoryDetails()}
           />
         )}
+
+
+        
       </>
     );
   }

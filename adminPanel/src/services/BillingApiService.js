@@ -97,14 +97,19 @@ class BillingApiService {
     }
   };
 
-  sendEmail = async (body) => {
-    try {
-      let res = await axios.post(this.baseUrl + "send-email", body);
-      return res;
-    } catch (e) {
-      return null;
-    }
-  };
+
+
+
+sendEmail= async (body) => {
+  try {
+    let res = await axios.post(this.baseUrl + "send-email/", body);
+    return res;
+  } catch (e) {
+    console.error("API call error:", e);
+    return null;
+  }
+}
+
 
   getOrganizationDetails = async () => {
     try {

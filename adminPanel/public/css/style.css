@@ -33,9 +33,9 @@ td,th{
   font-size: 18px !important;
   color: #000000;
 }
-main{
+/* main{
   padding-left: 0px !important;
-}
+} */
 a{
   text-decoration: none !important;
 }
@@ -213,7 +213,7 @@ button.blue-btn{
 }
 
 .menu-collapsed main {
-  margin-top: 0px !important;
+  /* margin-top: 0px !important; */
   padding: 0px 5px;
 }
 
@@ -1262,9 +1262,9 @@ td.customer-edit .p-link .customer-table .p-datatable-tbody>tr>td .p-dropdown.p-
   height: 50px;
 }
 
-.p-datatable {
+/* .p-datatable {
   margin-top: 5px;
-}
+} */
 
 .p-paginator-last .p-paginator-icon{
   color: #000000 !important;
@@ -3404,40 +3404,52 @@ h5.card-title {
   display: flex;
   align-items: center;
   justify-content: end;
-  margin: 1rem 0;
+
   position: relative;
   top: -40px;
-  left: 14px  !important;
+ left: 10px;
 }
 
-.sorting-container___ .pi-sort-alpha-down{
-  position: relative;
-  bottom: 3px;
-  left: -4px;
-}
+
 
 .sorting-label____ {
   font-size: 1rem !important;
-  margin-right: 1rem !important;
-  color: #333 !important; 
+  margin-right: 5px !important;
+  color: #000000 !important; 
 }
 
 .sorting-select___ {
-  padding: 0.5rem;
+  
   font-size: 0.8rem;
   border: 1px solid #205532;
-  border-radius: 0px;
-  background-color: #fff;
+  border-radius: 30px;
+  color: white ;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  background: radial-gradient(circle, #0B2B11, #2a6a43);
+  background-color: #ffffff;
   cursor: pointer;
   transition: border-color 0.3s, box-shadow 0.3s;
-  width: 9% ;
+  /* width: 6% */
 }
 
-.sorting-select___:focus {
-  border-color: #11361A;
-  box-shadow: 0 0 0 0.2rem #285B3B;
+.sorting-select___ option{
+  color: #000;
 }
+.sorting-select___ option:active{
+  
+  background-color: #000 !important;
+}
+
 .p-datatable-table .p-datatable-thead{
   height: 60px !important;
 }
 
+.downloadImg{
+  position: relative;
+  left:17px;
+ 
+}
+.downloadImgheading{
+  font-weight: 700;
+  font-size: 14px !important;
+}

@@ -83,30 +83,21 @@
     /* position: absolute; */
     /* top: -35px;
     left: 34%; */
-    border: 1px solid #ccc;
-    background-color: #f7c444 !important;
+    border: 1px solid #000000;
+    background-color: #e8bc4b !important;
+}
+.icon_color{
+    color: #000000;
 }
 
-.img-box svg {
-    position: absolute;
-    top: 25%;
-    left: 25%;
-    stroke-width: 1;
-}
-
-.img-box svg {
-    position: absolute;
-    top: 25%;
-    left: 25%;
-    stroke-width: 1;
-}
 
 .img-box i {
   
     display: flex;
     justify-content: center;
-    align-items: center;
-    margin: 17px;
+    align-items: center !important;
+   
+    margin-top: 16px;
 }
 
 

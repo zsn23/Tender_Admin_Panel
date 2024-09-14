@@ -53,9 +53,10 @@ class CityDetails extends Component {
   render() {
     return (
       <>
-        <div style={{ textAlign: "end", marginTop: '5px' }}>
-          <button id="new-report" className="btn-style"
-            onClick={() => this.setState({ showModal: true })} > Add New
+        <div className="d-flex justify-content-start " style={{  marginTop: "5px"  }}>
+          <button id="new-report" className="btn-style position-relative z-1 p-2 d-flex align-items-center gap-1"
+            onClick={() => this.setState({ showModal: true })} > 
+             <i className="fa-regular fa-circle-plus" style={{fontSize:"22px"}}></i> Add New
           </button>
         </div>
         <CityTable

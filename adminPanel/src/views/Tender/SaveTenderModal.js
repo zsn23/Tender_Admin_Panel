@@ -963,7 +963,7 @@ const SaveTenderModal = (props) => {
             <div className="section_____img section col8" ref={gridRef}>
   <div className="content" style={{ overflow: 'auto' }}>
     <Watermark
-       text="Tender786"
+       text="Tender786 Bismillah"
   textColor="rgba(255, 255, 255, 0.3)"
   textSize="10px"
   // style={{

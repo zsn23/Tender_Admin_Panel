@@ -24,10 +24,10 @@
 //   const [responseMsg, setResponseMsg] = useState("");
 //   const [selectedRows, setSelectedRows] = useState([]);
 //   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
-  
+
 //   const [currentPage, setCurrentPage] = useState(1); // Pagination state
 //   const [totalRecord, setTotalRecords] = useState(0); // Total records state
-  
+
 //   const [sortField, setSortField] = useState(null); // For storing current sort field
 //   const [sortOrder, setSortOrder] = useState(null); // For storing current sort order
 
@@ -42,7 +42,7 @@
 //     category: { value: null, matchMode: FilterMatchMode.CONTAINS },
 //     cityName: { value: null, matchMode: FilterMatchMode.CONTAINS },
 //     newPaperName: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    
+
 //   });
 //   const onSort = (event) => {
 //     setSortField(event.sortField);
@@ -63,11 +63,11 @@
 //   //     }
 //   //     setLoader(false);
 //   //   };
-  
+
 //   //   fetchData();
 //   // }, [currentPage]); // Fetch data whenever currentPage changes
 
-  
+
 //   useEffect(() => {
 //     const fetchData = async () => {
 //       setLoader(true);
@@ -86,7 +86,7 @@
 //     fetchData();
 //   }, [currentPage, sortField, sortOrder]); 
 
- 
+
 
 
 //   useEffect(() => {
@@ -102,29 +102,29 @@
 //     setIsModalOpen(!isModalOpen);
 //   };
 
-  
+
 
 // const confirmDelete = (data) => {
 //   setDataForEdit(data);
 //   setDeleteDialogVisible(true);
 // };
-  
+
 
 //   const deleteRecords = () => {
 //   setDeleteDialogVisible(false);
 //     setOpenConfirmation(false);
-  
+
 //     const body = {
 //       id: dataForEdit?.id,
 //     };
-  
+
 //     billingApiServices.deleteTender(body).then((response) => {
 //       console.log('Delete response', response);
 //       if (response == null || response == undefined) {
 //         handleToast("error", "Operation failed, check your internet connection");
 //         return;
 //       }
-  
+
 //       if (response?.data?.status) {
 //         handleToast("success", response?.data?.message);
 //         setDataForEdit(null);
@@ -137,7 +137,7 @@
 //       handleToast("error", "An error occurred while deleting the record.");
 //     });
 //   };
-  
+
 
 //   const handleDownload = (currentRow) => {
 //     const imgURL = currentRow.tenderImage;
@@ -226,7 +226,7 @@
 //   );
 
 //   const customHeaderTemplate = () => (
-  
+
 //     <div >
 //     <span>Action</span>
 //     <i className="pi pi-wrench" style={{ fontSize: '13px' ,marginLeft : "3px" }} ></i>
@@ -240,14 +240,14 @@
 //   const filterApplyTemplate = (options) => (
 //     <Button type="button" icon="pi pi-check" onClick={options.filterApplyCallback} className="p-button-success"></Button>
 //   );
-  
+
 
 //   const fetchTendersWithSorting = () => {
 //     const page = 1; // set your desired page
 //     const limit = 10; // set your desired limit
 //     const sortField = setSortField; // get from your state
 //     const sortOrder = setSortOrder; // get from your state
-  
+
 //     billingApiServices.getAllTenders(page, limit, sortField, sortOrder)
 //       .then((response) => {
 //         // Update your state with the sorted data
@@ -258,25 +258,25 @@
 //         console.error("Error fetching sorted tenders:", error);
 //       });
 //   };
-  
 
-  // const IPLNumberTemplate = (rowData) => loader ? <Skeleton /> : <div>{rowData.IPLNumber}</div>;
-  // const NameTemplate = (rowData) => loader ? <Skeleton /> : <div>{rowData.name}</div>;
-  // const OrganizationBodyTemplate = (rowData) => loader ? <Skeleton /> : <div>{rowData.organizationName}</div>;
-  // const CategoryBodyTemplate = (rowData) => loader ? <Skeleton /> : <div>{rowData.category}</div>;
-  // const CityBodyTemplate = (rowData) => loader ? <Skeleton /> : <div>{rowData.cityName}</div>;
-  // const NewsPaperBodyTemplate = (rowData) => loader ? <Skeleton /> : <div>{rowData.newPaperName}</div>;
-  // const SubmissionDateTemplate = (rowData) => loader ? <Skeleton /> : <div>{convertDateBestFormate(rowData.effectedDate)}</div>;
-  // const PublishDateTemplate = (rowData) => loader ? <Skeleton /> : <div>{convertDateBestFormate(rowData.publishDate)}</div>;
-  // const CreatedByTemplate = (rowData) => loader ? <Skeleton /> : <div>{rowData.userName}</div>;
-  // const TenderImageTemplate = (rowData) => loader ? <Skeleton /> : (
-  //   <div style={{ cursor: "pointer" }} onClick={() => handleDownload(rowData)}>
-  //     <i className="fa-duotone fa-download"></i>
-  //   </div>
-  // );
+
+// const IPLNumberTemplate = (rowData) => loader ? <Skeleton /> : <div>{rowData.IPLNumber}</div>;
+// const NameTemplate = (rowData) => loader ? <Skeleton /> : <div>{rowData.name}</div>;
+// const OrganizationBodyTemplate = (rowData) => loader ? <Skeleton /> : <div>{rowData.organizationName}</div>;
+// const CategoryBodyTemplate = (rowData) => loader ? <Skeleton /> : <div>{rowData.category}</div>;
+// const CityBodyTemplate = (rowData) => loader ? <Skeleton /> : <div>{rowData.cityName}</div>;
+// const NewsPaperBodyTemplate = (rowData) => loader ? <Skeleton /> : <div>{rowData.newPaperName}</div>;
+// const SubmissionDateTemplate = (rowData) => loader ? <Skeleton /> : <div>{convertDateBestFormate(rowData.effectedDate)}</div>;
+// const PublishDateTemplate = (rowData) => loader ? <Skeleton /> : <div>{convertDateBestFormate(rowData.publishDate)}</div>;
+// const CreatedByTemplate = (rowData) => loader ? <Skeleton /> : <div>{rowData.userName}</div>;
+// const TenderImageTemplate = (rowData) => loader ? <Skeleton /> : (
+//   <div style={{ cursor: "pointer" }} onClick={() => handleDownload(rowData)}>
+//     <i className="fa-duotone fa-download"></i>
+//   </div>
+// );
 //   return (
-    
-      
+
+
 //       <div className="container-fluid mb-5" >
 //       <button style={{ position: 'relative', bottom: 42 }} className="btn-style" onClick={exportToExcel}>Export</button>
 
@@ -312,11 +312,11 @@
 //           filters={filterArray}
 //           filterDisplay="row"
 //           removableSort
-          // selectionMode={'checkbox'}
-          // selection={selectedRows}
-          // onSelectionChange={(e) => setSelectedRows(e.value)}
+// selectionMode={'checkbox'}
+// selection={selectedRows}
+// onSelectionChange={(e) => setSelectedRows(e.value)}
 
-          // sortField={sortField}
+// sortField={sortField}
 //           sortOrder={sortOrder}
 //           onSort={onSort}
 //         >
@@ -333,14 +333,14 @@
 //           {/* <Column field="tenderImage" header="Download"    body={TenderImageTemplate}></Column> */}
 //           <Column field="id" header={customHeaderTemplate}  body={bodyTemplate}></Column>
 //         </DataTable> 
-      
-    
+
+
 //                   <Toast open={openSnackBar}
 //                 severity={severity}
 //                 handleClose={() => setOpenSnackBar(false)}
 //                 message={responseMsg} />
 
-            
+
 //             <ConfirmDialog
 //         visible={deleteDialogVisible}
 //         onHide={() => setDeleteDialogVisible(false)}
@@ -351,7 +351,7 @@
 //         reject={() => setDeleteDialogVisible(false)}
 //       />
 // </div>
-   
+
 //   );
 // };
 
@@ -558,13 +558,13 @@ const CustomDataTable = (props) => {
   ) : (
     <div style={{ display: 'flex', alignItems: 'center' }}>
       <Button
-        icon="pi pi-pencil"
+        icon="fa-regular fa-money-check-pen"
         onClick={() => editTender(rowData)}
-        className="p-button-rounded p-button-warning my-2"
+        className=" p-button-rounded p-button-warning my-2"
         style={{ margin: '0.5rem' }}
       />
       <Button
-        icon="pi pi-trash"
+        icon="fa-regular fa-trash-can-xmark"
         onClick={() => confirmDelete(rowData)}
         className="p-button-rounded p-button-warning"
         style={{ margin: '0.5rem' }}
@@ -582,9 +582,9 @@ const CustomDataTable = (props) => {
   const customHeaderTemplate = () => (
     <div className="d-flex align-items-center">
       <span>Action</span>
-      {/* <i className="pi pi-wrench " style={{ fontSize: '13px', marginLeft: "3px" ,marginTop:"3px" }}></i> */}
-      {/* <i class="fa-sharp fa-solid fa-wrench" style={{ fontSize: '15px', marginLeft: "3px" ,marginTop:"3px" }}></i> */}
-      <i class="fa-solid fa-gear" style={{ fontSize: '16px', marginLeft: "5`px" ,marginTop:"2px" }}></i>
+
+      <i class="fa-sharp fa-solid fa-wrench" style={{ fontSize: '14px', marginLeft: "3px", marginTop: "3px" }}></i>
+      {/* <i class="fa-solid fa-gear" style={{ fontSize: '16px', marginLeft: "5px" ,marginTop:"2px" }}></i> */}
     </div>
   );
 
@@ -592,7 +592,7 @@ const CustomDataTable = (props) => {
     <div className="d-flex align-items-center">
       <span>Tender</span>
       {/* <i className="pi pi-image" style={{ fontSize: '13px', marginLeft: "3px", marginTop:"3px" }}></i> */}
-      <i class=" fa-regular fa-image" style={{ fontSize: '15px', marginLeft: "5px", marginTop:"3px" }}></i>
+      <i class=" fa-regular fa-image" style={{ fontSize: '15px', marginLeft: "5px", marginTop: "3px" }}></i>
     </div>
   );
 
@@ -613,14 +613,15 @@ const CustomDataTable = (props) => {
   const SubmissionDateTemplate = (rowData) => loader ? <Skeleton /> : <div>{convertDateBestFormate(rowData.effectedDate)}</div>;
   const PublishDateTemplate = (rowData) => loader ? <Skeleton /> : <div>{convertDateBestFormate(rowData.publishDate)}</div>;
   const CreatedByTemplate = (rowData) => loader ? <Skeleton /> : <div>{rowData.userName}</div>;
+ 
   const TenderImageTemplate = (rowData) => loader ? <Skeleton /> : (
     <Button
-        style={{ cursor: "pointer", margin: '0.5rem' }}
-        icon="pi pi-download"
-        onClick={() => handleDownload(rowData)}
-        className="p-button-rounded p-button-warning"
-        iconStyle={{ color: 'black' }}
-      />
+      style={{ cursor: "pointer", margin: '0.5rem' }}
+      icon="fa-sharp-duotone fa-solid fa-download"
+      onClick={() => handleDownload(rowData)}
+      className="p-button-rounded p-button-warning"
+      iconStyle={{ color: 'black' }}
+    />
   );
 
   const handleFilterChange = (e, field) => {
@@ -628,15 +629,15 @@ const CustomDataTable = (props) => {
     newFilters[field].value = e.value;
     setFilterArray(newFilters);
   };
-  const customExportTemplate=()=>(
-    <div className="d-flex align-items-center ">
-    <span>Export</span>
-    {/* <i className="pi pi-file-excel" style={{ fontSize: '13px' ,marginLeft : "2px" , marginTop:"3px" }} ></i> */}
-    <i class="fa-sharp fa-solid fa-file-excel" style={{ fontSize: '16px', marginLeft: "5px", marginTop:"2px" }}></i>
+  const customExportTemplate = () => (
+    <div className="d-flex align-items-center">
+      <span>Export</span>
+
+      <i class="fa-sharp fa-solid fa-file-excel" style={{ fontSize: '16px', marginLeft: "5px", marginTop: "1px" }}></i>
     </div>
   );
 
-  const handleImport=()=>{
+  const handleImport = () => {
     setIsOpen(true)
     setStateManager(new Date()?.toString());
   }
@@ -644,44 +645,51 @@ const CustomDataTable = (props) => {
 
 
   return (
-    <div className="container-fluid mb-5">
-      <button style={{ position: 'relative', bottom: 36 ,  cursor: selectedRows.length === 0 ? 'not-allowed' : 'pointer'}} className="btn-style p-2" onClick={exportToExcel} disabled={selectedRows.length === 0}>
-      <i className="fa-thin fa-file-export" style={{fontSize:"15px" , marginTop:"1px"}}> </i>  Export
-      </button>
-          
-      <button style={{
-        position: 'relative', bottom: 36, marginLeft: 5
-      }} className="btn-style p-2" onClick={() => handleImport()}>
-       <i className="fa-thin fa-file-import" style={{fontSize:"15px" , marginTop:"3px"}}> </i> Import 
-      </button>
+    <div className="container-fluid">
+      <div className="d-flex justify-content-end" style={{ position: 'relative', bottom: 42, marginTop: '5px' }}>
+
+        <div>
+          <button style={{ cursor: selectedRows.length === 0 ? 'not-allowed' : 'pointer' }} className="btn-style p-2 d-flex align-items-center gap-1" onClick={exportToExcel} disabled={selectedRows.length === 0}>
+            <i className="fa-thin fa-file-export" style={{ fontSize: "18px" }}> </i> Export
+          </button>
+        </div>
+
+        <div>
+          <button style={{ marginLeft: 5 }} className="btn-style p-2 d-flex align-items-center gap-1" onClick={() => handleImport()}>
+            <i className="fa-thin fa-file-import" style={{ fontSize: "18px" }}> </i> Import
+          </button>
+        </div>
+
+
+      </div>
+
+
 
       <div className="sorting-container___">
-     
-  <div >
-    <i className="pi pi-sort-alt text-light_Dark" style={{ fontSize: '13px' ,marginRight:"3px" ,color:"black"}}></i>
-    <label className="sorting-label____">SORT BY</label>
-  </div>
 
-  <select className="sorting-select___" onChange={(e) => setSortField(e.target.value)} value={sortField || ''}>
-    <option value="">By Default Order</option>
-    <option value="IPLNumber">IPL Number</option>
-    <option value="name">Title</option>
-    <option value="organization">Organization</option>
-    <option value="category">Category</option>
-    <option value="city">City</option>
-    <option value="effectedDate">Submit Date</option>
-    <option value="publishDate">Publish Date</option>
-    <option value="newspaper">Newspaper</option>
+        <div >
+          <i className="pi pi-sort-alt text-light_Dark" style={{ fontSize: '13px', marginRight: "3px", color: "black" }}></i>
+          <label className="sorting-label____">SORT BY</label>
+        </div>
 
-  </select>
+        <select className="sorting-select___ p-2" onChange={(e) => setSortField(e.target.value)} value={sortField || ''}>
+          <option value="">Default Order</option>
+          <option value="IPLNumber">IPL Number</option>
+          <option value="name">Title</option>
+          <option value="organization">Organization</option>
+          <option value="category">Category</option>
+          <option value="city">City</option>
+          <option value="effectedDate">Submit Date</option>
+          <option value="publishDate">Publish Date</option>
+          <option value="newspaper">Newspaper</option>
 
-  <button className="btn-style" onClick={toggleSortOrder}>
-    {sortOrder === 1 ? 'Ascending' : 'Descending'}
-  </button>
+        </select>
 
-  {/* Add the toggle button for sorting order */}
- 
-</div>
+        <button className="btn-style p-2" onClick={toggleSortOrder}>
+          {sortOrder === 1 ? 'Descending' : 'Ascending'}
+        </button>
+
+      </div>
 
 
       <DataTable
@@ -732,30 +740,60 @@ const CustomDataTable = (props) => {
           filterPlaceholder="Search"
           onFilterApplyClick={(e) => handleFilterChange(e, 'newPaperName')}
         />
-          <Column 
-          field="effectedDate" 
-          header="Submit Date" 
-          sortable 
-          filter 
-          filterPlaceholder="Y-MM-DD"  
+        <Column
+          field="effectedDate"
+          header="Submit Date"
+          sortable
+          filter
+          filterPlaceholder="Y-MM-DD"
           body={SubmissionDateTemplate}
           onFilterApplyClick={(e) => handleFilterChange(e, 'effectedDate')}
-          ></Column>
-       
+        ></Column>
+
+        <Column
+          field="publishDate"
+          header="End Date"
+          sortable
+          body={PublishDateTemplate}
+          filter
+          filterField="publishDate"
+          // filterMatchMode="contains"
+          filterPlaceholder="Y-MM-DD" // Indicate the format required
+          onFilterApplyClick={(e) => handleFilterChange(e, 'publishDate')}></Column>
+
+
         <Column 
-        field="publishDate" 
-        header="End Date" 
-        sortable  
-        body={PublishDateTemplate}
-        filter
-        filterField="publishDate"
-        // filterMatchMode="contains"
-        filterPlaceholder="Y-MM-DD" // Indicate the format required
-        onFilterApplyClick={(e) => handleFilterChange(e, 'publishDate')}></Column>
+          field="tenderImage" 
+          header={customImagesTemplate} 
 
+          filter 
+          showFilterMenu={false} 
+          filterElement={
+            <div className="downloadImg d-flex align-items-center m-0 p-0">
+              <span className="downloadImgheading">DOWNLOAD IMAGE</span>
+            </div>
+          } 
 
-        <Column field="tenderImage" header={customImagesTemplate} style={{width:"7%"}}  body={TenderImageTemplate}></Column>
-        <Column field="id"  header={customHeaderTemplate}  body={bodyTemplate}></Column>
+          headerStyle={{ width: '5%' }} 
+          body={TenderImageTemplate}
+          ></Column>
+
+        <Column 
+          field="id" 
+          header={customHeaderTemplate} 
+          body={bodyTemplate} 
+
+          filter 
+          showFilterMenu={false}  
+          filterElement={
+            <div className="downloadImg d-flex align-items-center flex-column m-0 p-0">
+              <span className="downloadImgheading">EDIT</span>
+              <span className="downloadImgheading"> DELETE</span>
+            </div>
+          }  
+          headerStyle={{ width: '5%' }}
+        ></Column>
+
       </DataTable>
 
       <Toast open={openSnackBar}
@@ -763,10 +801,10 @@ const CustomDataTable = (props) => {
         handleClose={() => setOpenSnackBar(false)}
         message={responseMsg} />
 
-<ImportFile reloadData={() => reloadData()} 
-onHide={() => setIsOpen(false)} 
-isOpen={isOpen} 
-Type="Tenders" />
+      <ImportFile reloadData={() => reloadData()}
+        onHide={() => setIsOpen(false)}
+        isOpen={isOpen}
+        Type="Tenders" />
 
       <ConfirmDialog
         visible={deleteDialogVisible}

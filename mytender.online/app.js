@@ -1698,8 +1698,13 @@ const app = express();
 const { MESSAGES } = require('./config/messagesFile');
 const pool = require('./config/database'); // Import the database connection
 const multer = require('multer');
-const nodemailer = require('nodemailer');
 const path = require('path');
+
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+
+const nodemailer = require("nodemailer");
+require("dotenv").config();
 
 app.use(express.json()); // To parse JSON bodies
 
@@ -1781,141 +1786,42 @@ const checkCityExists = (data) => {
  
 
 
-// Endpoint to send email
-// app.post('/send-email/', (req, res) => {
-    
-//     try{
-//     const transporter = nodemailer.createTransport({
-//       host: 'smtpout.secureserver.net',
-//     port: 465,
-//     secure: true,
-//     debug: true,
-//     auth: {
-//         user: 'info@tender786.com',
-//         pass: 'P@ssw0rd123///'
-//     },
-//       tls: {
-//         rejectUnauthorized: false
-//     }
-    
-//     });
-
-//     // Compose email
-//     const mailOptions = {
-//         from: 'info@tender786.com',
-//         to: 'asadnoman4@gmail.com',
-//         subject: 'Test Email',
-//         text: 'This is a test email from Node.js using nodemailer.'
-//     };
-
-//     // Send email
-//     transporter.sendMail(mailOptions, (error, info) => {
-//         if (error) {
-//             console.error('Error occurred:', error);
-//               res.status(200).json({ heading: 'email sent'+error.toString() });
-//         } else {
-//              res.status(200).json({ heading: 'email sent' });
-//         }
-//     });
-    
-//     }
-//     catch (err) {
-//           res.status(200).json({ heading: 'email sent'+err.toString() });
-//     }
-// });
-
-//  const transporter = nodemailer.createTransport({
-//     host: 'business200.mypowerfulserver.com',
-//     port: 25,
-//     auth: {
-//         user: 'saadsaleem7452@gmail.com',
-//         pass: 'P@ssw0rd123///'
-//     }
-// });
-
-// Endpoint to send email
-// app.post('/send-email/', (req, res) => {
-//       const { dataForEmail } = req.body;
-
-//     try {
-//         if(dataForEmail.length>0){
-//             dataForEmail.forEach((items)=>{
-         
-//                 var mailOptions = {
-//                 from: 'info@tender786.com',                   // Sender address
-//                 to: items.userInfo.email,       // List of recipients
-//                 subject: 'Today Tender List',              // Subject line
-//                 html:items.tenderInfo              
-//                 };
-//                             // Send email
-//                 transporter.sendMail(mailOptions, (error, info) => {
-//                     if (error) {
-//                         console.error('Error occurred:', error);
-//                         res.status(500).json({ message: 'Error sending email', error: error.toString() });
-//                     } else {
-//                         console.log('Message sent:', info.messageId);
-//                         res.status(200).json({ message: 'Email sent successfully', messageId: info.messageId });
-//                     }
-//                 });
-//             });
-//         }
-       
-      
-//     } catch (err) {
-//         console.error('Error in sending email:', err);
-//         res.status(500).json({ message: 'Failed to send email', error: err.toString() });
-//     }
-// });
 
 
-
-
-
-// const transporter = nodemailer.createTransport({
-//   service: "Gmail",
-//   host: "smtp.gmail.com",
-//   port: 465,
-//   secure: true,
-//   auth: {
-//     user: "awaisijaz686@gmail.com",
-//     pass: "Zsn_230102",
-//   },
-// });
-// transporter.sendMail( (error, info) => {
-//   if (error) {
-//     console.error("Error sending email: ", error);
-//   } else {
-//     console.log("Email sent: ", info.response);
-//   }
-// });
-app.post('/send-email/', (req, res) => {
-  const { dataForEmail } = req.body;
-  console.log("Data for Email:", dataForEmail); // Add this log
-
-  if (dataForEmail.length > 0) {
-    dataForEmail.forEach((items) => {
-      const mailOptions = {
-        from: 'info@tender786.com',
-        to: items.userInfo.email,
-        subject: 'Today Tender List',
-        html: items.tenderInfo,
-      };
-
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.error('Error occurred:', error);
-          res.status(500).json({ message: 'Error sending email', error: error.toString() });
-        } else {
-          console.log('Message sent:', info.messageId);
-          res.status(200).json({ message: 'Email sent successfully', messageId: info.messageId });
-        }
-      });
-    });
-  } else {
-    res.status(400).json({ message: 'No data to send email' });
-  }
+// Configure the transporter for Nodemailer
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false,
+  auth: {
+    user: 'awaisijaz686@gmail.com', // Replace with your email
+    pass: 'iazahztduwugvosr',     // Replace with your app password
+  },
 });
 
+// Endpoint to send emails
+app.post('/send-email', (req, res) => {
+  const { dataForEmail } = req.body;
+
+  if (!dataForEmail || !Array.isArray(dataForEmail) || dataForEmail.length === 0) {
+    return res.status(400).json({ message: 'No email data provided' });
+  }
+
+  const sendEmails = dataForEmail.map(({ userInfo, tenderInfo }) => {
+    const mailOptions = {
+      from: 'awaisijaz686@gmail.com',
+      to: userInfo.email,
+      subject: 'Today\'s Tender List',
+      html: tenderInfo,
+    };
+    return transporter.sendMail(mailOptions);
+  });
+
+  Promise.all(sendEmails)
+    .then(() => res.status(200).json({ message: 'Emails sent successfully' }))
+    .catch(error => res.status(500).json({ message: 'Error sending emails', error: error.toString() }));
+});
 
 
 
