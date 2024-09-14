@@ -121,9 +121,10 @@ class TenderDetails extends Component {
   render() {
     return (
       <>
-        <div style={{ textAlign: "end", marginTop: '5px'  }}>
-          <button id="new-report" className="btn-style  p-1"
-            onClick={() => this.setState({ showModal: true, dataForEdit: null, isEditMode: false })} > Add New
+        <div  style={{ textAlign: "end", marginTop: '5px'  }}>
+          <button id="new-report" className="btn-style  p-2 "
+            onClick={() => this.setState({ showModal: true, dataForEdit: null, isEditMode: false })} > 
+          <i className="fa-regular fa-circle-plus" style={{fontSize:"15px"}}></i> Add New 
           </button>
         </div>
         {!this.state.showModal && <TenderTable

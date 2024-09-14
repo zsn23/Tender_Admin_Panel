@@ -569,20 +569,30 @@ const CustomDataTable = (props) => {
         className="p-button-rounded p-button-warning"
         style={{ margin: '0.5rem' }}
       />
-      <Button
+      {/* <Button
         style={{ cursor: "pointer", margin: '0.5rem' }}
         icon="pi pi-download"
         onClick={() => handleDownload(rowData)}
         className="p-button-rounded p-button-warning"
         iconStyle={{ color: 'black' }}
-      />
+      /> */}
     </div>
   );
 
   const customHeaderTemplate = () => (
-    <div>
+    <div className="d-flex align-items-center">
       <span>Action</span>
-      <i className="pi pi-wrench" style={{ fontSize: '13px', marginLeft: "3px" }}></i>
+      {/* <i className="pi pi-wrench " style={{ fontSize: '13px', marginLeft: "3px" ,marginTop:"3px" }}></i> */}
+      {/* <i class="fa-sharp fa-solid fa-wrench" style={{ fontSize: '15px', marginLeft: "3px" ,marginTop:"3px" }}></i> */}
+      <i class="fa-solid fa-gear" style={{ fontSize: '16px', marginLeft: "5`px" ,marginTop:"2px" }}></i>
+    </div>
+  );
+
+  const customImagesTemplate = () => (
+    <div className="d-flex align-items-center">
+      <span>Tender</span>
+      {/* <i className="pi pi-image" style={{ fontSize: '13px', marginLeft: "3px", marginTop:"3px" }}></i> */}
+      <i class=" fa-regular fa-image" style={{ fontSize: '15px', marginLeft: "5px", marginTop:"3px" }}></i>
     </div>
   );
 
@@ -604,9 +614,13 @@ const CustomDataTable = (props) => {
   const PublishDateTemplate = (rowData) => loader ? <Skeleton /> : <div>{convertDateBestFormate(rowData.publishDate)}</div>;
   const CreatedByTemplate = (rowData) => loader ? <Skeleton /> : <div>{rowData.userName}</div>;
   const TenderImageTemplate = (rowData) => loader ? <Skeleton /> : (
-    <div style={{ cursor: "pointer" }} onClick={() => handleDownload(rowData)}>
-      <i className="fa-duotone fa-download"></i>
-    </div>
+    <Button
+        style={{ cursor: "pointer", margin: '0.5rem' }}
+        icon="pi pi-download"
+        onClick={() => handleDownload(rowData)}
+        className="p-button-rounded p-button-warning"
+        iconStyle={{ color: 'black' }}
+      />
   );
 
   const handleFilterChange = (e, field) => {
@@ -615,9 +629,10 @@ const CustomDataTable = (props) => {
     setFilterArray(newFilters);
   };
   const customExportTemplate=()=>(
-    <div >
+    <div className="d-flex align-items-center ">
     <span>Export</span>
-    <i className="pi pi-file-excel" style={{ fontSize: '14px' ,marginLeft : "2px" }} ></i>
+    {/* <i className="pi pi-file-excel" style={{ fontSize: '13px' ,marginLeft : "2px" , marginTop:"3px" }} ></i> */}
+    <i class="fa-sharp fa-solid fa-file-excel" style={{ fontSize: '16px', marginLeft: "5px", marginTop:"2px" }}></i>
     </div>
   );
 
@@ -630,17 +645,20 @@ const CustomDataTable = (props) => {
 
   return (
     <div className="container-fluid mb-5">
-      <button style={{ position: 'relative', bottom: 36 ,  cursor: selectedRows.length === 0 ? 'not-allowed' : 'pointer'}} className="btn-style" onClick={exportToExcel} disabled={selectedRows.length === 0}>Export</button>
+      <button style={{ position: 'relative', bottom: 36 ,  cursor: selectedRows.length === 0 ? 'not-allowed' : 'pointer'}} className="btn-style p-2" onClick={exportToExcel} disabled={selectedRows.length === 0}>
+      <i className="fa-thin fa-file-export" style={{fontSize:"15px" , marginTop:"1px"}}> </i>  Export
+      </button>
           
       <button style={{
         position: 'relative', bottom: 36, marginLeft: 5
-      }} className="btn-style" onClick={() => handleImport()}>Import
+      }} className="btn-style p-2" onClick={() => handleImport()}>
+       <i className="fa-thin fa-file-import" style={{fontSize:"15px" , marginTop:"3px"}}> </i> Import 
       </button>
 
       <div className="sorting-container___">
      
-  <div className="d-flex align-items-center">
-    <i className="pi pi-sort-alpha-down " style={{ fontSize: '1rem' }}></i>
+  <div >
+    <i className="pi pi-sort-alt text-light_Dark" style={{ fontSize: '13px' ,marginRight:"3px" ,color:"black"}}></i>
     <label className="sorting-label____">SORT BY</label>
   </div>
 
@@ -658,7 +676,7 @@ const CustomDataTable = (props) => {
   </select>
 
   <button className="btn-style" onClick={toggleSortOrder}>
-    {sortOrder === 1 ? 'Sort Ascending' : 'Sort Descending'}
+    {sortOrder === 1 ? 'Ascending' : 'Descending'}
   </button>
 
   {/* Add the toggle button for sorting order */}
@@ -736,7 +754,7 @@ const CustomDataTable = (props) => {
         onFilterApplyClick={(e) => handleFilterChange(e, 'publishDate')}></Column>
 
 
-
+        <Column field="tenderImage" header={customImagesTemplate} style={{width:"7%"}}  body={TenderImageTemplate}></Column>
         <Column field="id"  header={customHeaderTemplate}  body={bodyTemplate}></Column>
       </DataTable>
 
