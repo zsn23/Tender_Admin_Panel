@@ -111,13 +111,13 @@ const CustomDataTable = (props) => {
   ) : (
     <div style={{ display: 'flex', alignItems: 'center' }}>
       <Button
-        icon="pi pi-pencil"
+        icon="fa-regular fa-money-check-pen"
         onClick={() => editCategory(rowData)}
         className="p-button-rounded p-button-warning my-2"
         style={{ margin: '0.5rem' }} // Optional: adds spacing between buttons
       />
       <Button
-        icon="pi pi-trash"
+        icon="fa-regular fa-trash-can-xmark"
         onClick={() => confirmDelete(rowData)}
         className="p-button-rounded p-button-warning"
         style={{ margin: '0.5rem' }}
@@ -132,7 +132,7 @@ const CustomDataTable = (props) => {
   
     <div >
     <span>Action</span>
-    <i className="pi pi-wrench" style={{ fontSize: '13px' ,marginLeft : "3px" }} ></i>
+    < i class="fa-sharp fa-solid fa-wrench" style={{ fontSize: '14px', marginLeft: "3px" ,marginTop:"3px" }}></i>
     </div>
   );
 
@@ -204,7 +204,8 @@ const CustomDataTable = (props) => {
 
     var response = selectedRows.map((d) => (
       {
-        name: d.name,     
+        name: d.name,
+        CreatedDate: d.effectedDate,
       }
     ))
 
@@ -217,9 +218,9 @@ const CustomDataTable = (props) => {
     FileSaver.saveAs(dataToSave, fileName);
   }
   const customExportTemplate=()=>(
-    <div >
+    <div className="d-flex align-items-center" >
     <span>Export</span>
-    <i className="pi pi-file-excel" style={{ fontSize: '14px' ,marginLeft : "2px" }} ></i>
+    <i class="fa-sharp fa-solid fa-file-excel" style={{ fontSize: '16px', marginLeft: "5px", marginTop:"1px" }}></i>
     </div>
   );
 
@@ -231,15 +232,23 @@ const CustomDataTable = (props) => {
    
      
       <div className="container-fluid mb-5" >
-      <button style={{
-        position:'relative',bottom:35 ,  cursor: selectedRows.length === 0 ? 'not-allowed' : 'pointer'
-      }} className="btn-style" onClick={() => exportToExcel()} disabled={selectedRows.length === 0}>Export
-      </button>
+      
+      <div className="d-flex justify-content-end" style={{ position:'relative',bottom:42,marginTop:'5px'}}>
 
-      <button style={{
-        position: 'relative', bottom: 35, marginLeft: 5
-      }} className="btn-style" onClick={() => handleImport()}>Import
-      </button>
+<div>
+<button style={{ cursor: selectedRows.length === 0 ? 'not-allowed' : 'pointer'  }} className="btn-style p-2 d-flex align-items-center gap-1" onClick={exportToExcel} disabled={selectedRows.length === 0}>
+  <i className="fa-thin fa-file-export" style={{ fontSize: "18px" }}> </i> Export
+</button>
+</div>
+
+<div>
+<button style={{ marginLeft: 5 }} className="btn-style p-2 d-flex align-items-center gap-1" onClick={() => handleImport()}>
+  <i className="fa-thin fa-file-import" style={{ fontSize: "18px" }}> </i> Import
+</button>
+</div>
+
+
+</div>
 
         <DataTable
                 header="CATEGORY RECORDS"
@@ -306,7 +315,17 @@ const CustomDataTable = (props) => {
             body={CreatedByTemplate}
           ></Column> */}
 
-          <Column header={customHeaderTemplate} body={bodyTemplate} />
+          <Column header={customHeaderTemplate} body={bodyTemplate} 
+            filter 
+            showFilterMenu={false}  
+            filterElement={
+              <div className="downloadImg d-flex align-items-center flex-column m-0 p-0">
+                <span className="downloadImgheading">EDIT</span>
+                <span className="downloadImgheading"> DELETE</span>
+              </div>
+            }  
+            headerStyle={{ width: '5%' }}
+          />
         </DataTable>
       
 

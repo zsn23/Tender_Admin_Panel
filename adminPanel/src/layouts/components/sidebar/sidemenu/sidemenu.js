@@ -9,15 +9,21 @@ import {
   Trello,
   FilePlus,
   Map ,
-  HelpCircle
+  HelpCircle,
+  Clipboard,
+  BarChart,
+  File,
+  Type
 
 } from "react-feather";
+import { Settings as SettingsIcon } from "react-feather";
 import { NavLink } from "react-router-dom";
 import "../../../../assets/scss/components/sidebar/sidemenu/sidemenu.scss";
 import SideMenu from "../sidemenuHelper";
 import * as _ from "lodash";
 import { localStorageService } from '../../../../services/LocalStorageService';
 import _EventEmitter from "../../../../constants/emitter";
+
 
 const LazyEcommerceDashboard = lazy(() =>
   import("../../../../views/dashboard/ecommerceDashboard")
@@ -39,7 +45,7 @@ export const routes = [
     title: "Dashboard",
     path: "/dashboard",
     image: null,
-    icon: <  Home      size={18} />,
+    icon: <  Home      size={20} />,
     interfaceName: "",
     component: LazyEcommerceDashboard,
     componentProps: {},
@@ -54,7 +60,7 @@ export const routes = [
     title: "Tender",
     path: "/Tender",
     image: null,
-    icon: <FilePlus size={18} />,
+    icon: <Type size={20} />,
     interfaceName: "",
     component: Tender,
     componentProps: {},
@@ -69,7 +75,7 @@ export const routes = [
     title: "Subscription",
     path: "/SubscriptionsDetails",
     image: null,
-    icon: <DollarSign size={18} />,
+    icon: <DollarSign size={20} />,
     interfaceName: "Subscription",
     component: SubscriptionsDetails,
     componentProps: {},
@@ -84,7 +90,7 @@ export const routes = [
     title: "Organization",
     path: "/OrganizationsDetails",
     image: null,
-    icon: <Layers size={18} />,
+    icon: <Server size={20} />,
     interfaceName: "",
     component: OrganizationsDetails,
     componentProps: {},
@@ -99,7 +105,7 @@ export const routes = [
     title: "Categories",
     path: "/Categories",
     image: null,
-    icon: <Trello size={18} />,
+    icon: < Layers size={20} />,
     interfaceName: "",
     component: Categories,
     componentProps: {},
@@ -114,8 +120,8 @@ export const routes = [
     title: "News Paper",
     path: "/NewsPaperDetails",
     image: null,
-    // icon: <i className="fa-light fa-bar-chart" />,
-    icon: <FileText size={18} />,
+     //icon:<i class="fa-sharp fa-thin fa-newspaper"></i>,
+     icon: <FileText size={20} />,
 
     interfaceName: "",
     component: NewsPaperDetails,
@@ -132,7 +138,7 @@ export const routes = [
     path: "/Cities",
     image: null,
     // icon: <i className="fa-light fa-scale-balanced" />,
-    icon: <Map size={18} />,
+    icon: <Map size={20} />,
     interfaceName: "",
     component: Cities,
     componentProps: {},
@@ -148,7 +154,7 @@ export const routes = [
     path: "/FAQs",
     image: null,
     // icon: <i class="fa-light fa-memo-circle-check" />,
-    icon: <HelpCircle size={18} />,
+    icon: <HelpCircle size={20} />,
     interfaceName: "",
     component: FAQs,
     componentProps: {},
@@ -163,7 +169,7 @@ export const routes = [
     title: "Users",
     path: "/users",
     image: null,
-    icon: <UserCheck size={18} />,
+    icon: <UserCheck size={20} />,
     interfaceName: "Users",
     component: LazyUsers,
     componentProps: {},
@@ -179,7 +185,7 @@ export const routes = [
     path: "/Settings",
     image: null,
     // icon: <i className="fa-light fa-memo-circle-check blackOnFocus" />,
-    icon: <Server size={18} />,
+    icon: <SettingsIcon  size={20} />,
     interfaceName: "",
     component: Settings,
     componentProps: {},

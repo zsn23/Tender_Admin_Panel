@@ -114,9 +114,10 @@ class EcommerceDashboard extends Component {
                         <div className="dashboard-chat-box" style={{  cursor: "pointer" }}>
                             <Link className="text-decoration-none"  to={"/SubscriptionsDetails"} >
 
-                              <div className="img-box " style={{border: '2px solid #000' }}>
-                                 <i className="fa-light fa-boxes-stacked" style={{ color: '#000' }}></i>
+                              <div className="img-box " >
+                                 <i className="fa-regular fa-user-plus icon_color" ></i>
                               </div>
+                              
                               <h1>{this.state.Subscriptions?.length}</h1>
                               <p>View all Subscribers</p>
                            </Link>
@@ -126,8 +127,8 @@ class EcommerceDashboard extends Component {
 
                         <div className="dashboard-chat-box" >
                             <Link className="text-decoration-none" to={"/Tender"} >
-                              <div className="img-box" style={{ border: '2px solid #000' }}>
-                                 <i className="fa-light fa-message-bot" style={{ color: '#000' }}></i>
+                              <div className="img-box" >
+                                 <i className="fa-sharp fa-solid fa-t icon_color" ></i>
                               </div>
                               
                               <h1>{this.state.Tenders}</h1>
@@ -137,8 +138,8 @@ class EcommerceDashboard extends Component {
 
                         <div className="dashboard-chat-box second-lastbox" >
                          <Link className="text-decoration-none" to={"/Categories"} >
-                           <div className="img-box" style={{ border: '2px solid #000' }}>
-                              <i className="fa fa-sitemap" style={{  color: '#000' }}></i>
+                           <div className="img-box" >
+                              <i className="fa-sharp fa-light fa-layer-group icon_color" ></i>
                            </div>
                            <h1>{this.state.Catgeories?.length}</h1>
                            <p>View All Categories</p>
@@ -148,8 +149,8 @@ class EcommerceDashboard extends Component {
                         <div className="dashboard-chat-box second-lastbox" >
                          <Link className="text-decoration-none" to={"/OrganizationsDetails"} > 
 
-                           <div className="img-box " style={{ border: '2px solid #000' }}>
-                              <i className="fa fa-building" style={{  color: '#000' }}></i>
+                           <div className="img-box ">
+                              <i className="fa-sharp fa-regular fa-server icon_color" ></i>
                            </div>
                            <h1>{this.state.Organizations?.length}</h1>
                            <p>View All Organizations</p>
