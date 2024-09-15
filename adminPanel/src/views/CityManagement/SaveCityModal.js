@@ -42,9 +42,9 @@ const SaveCityModal = (props) => {
   const toggle = () => {
     setModal(false);
     props.onClose()
-    if (!props.isEditMode) {
-      props.showModal.getShowModal(!modal);
-    }
+    // if (!props.isEditMode) {
+    //   props.showModal.getShowModal(!modal);
+    // }
   };
 
   useEffect(() => {

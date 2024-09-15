@@ -44,9 +44,9 @@ const SaveFAQModal = (props) => {
   const toggle = () => {
     setModal(false);
     props.onClose()
-    if (!props.isEditMode) {
-      props.showModal.getShowModal(!modal);
-    }
+    // if (!props.isEditMode) {
+    //   props.showModal.getShowModal(!modal);
+    // }
   };
 
   useEffect(() => {
@@ -89,8 +89,12 @@ const SaveFAQModal = (props) => {
         setAnswer("")
         setQuestion("")
         props.reloadData()
-        setModal(false);
-        props.onClose()
+
+        setTimeout(() => {
+          setModal(false);
+          props.onClose()
+        }, 1000);
+     
       }
       else {
         handleToast("error", response?.data?.message)
@@ -116,8 +120,11 @@ const SaveFAQModal = (props) => {
         setAnswer("")
         setQuestion("")
         props.reloadData()
-        setModal(false);
-        props.onClose()
+        
+        setTimeout(() => {
+          setModal(false);
+          props.onClose()
+        }, 1000);
       }
       else {
         handleToast("error", response?.data?.message)
