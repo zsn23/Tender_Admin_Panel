@@ -133,7 +133,7 @@ const SaveNewsPaperModal = (props) => {
       billingPeriod: selectedBillingPeriod?.title,
       BillingAmount: amount,
       billingDate: moment(billingDate).format("YYYY-MM-DD HH:mm:ss"),
-      categories: categories?.join(","),
+      categories: categories?.join(":"),
       effectedBy: _userData?.id,
       status: status == true ? 1 : 0
     }
@@ -171,7 +171,7 @@ const SaveNewsPaperModal = (props) => {
       billingPeriod: selectedBillingPeriod?.title,
       BillingAmount: amount,
       billingDate: moment(billingDate).format("YYYY-MM-DD HH:mm:ss"),
-      categories: categories?.join(","),
+      categories: categories?.join(":"),
       effectedBy: _userData?.id
     }
     console.log(body)

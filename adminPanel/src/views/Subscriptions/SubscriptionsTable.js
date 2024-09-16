@@ -279,7 +279,7 @@ const CustomDataTable = (props) => {
     }
     else {
       var names = []
-      let category = rowData?.categories?.split(",")
+      let category = rowData?.categories //.split(",")
       return <div>{category}</div>;
     }
   };

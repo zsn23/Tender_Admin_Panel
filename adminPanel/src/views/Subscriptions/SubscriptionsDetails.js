@@ -402,7 +402,10 @@ class SubscriptionDetails extends Component {
     })) || [];
   };
 
-  //send mail on basis of previous date
+ 
+ 
+ 
+
   SendEmail = async () => {
     this.setState({ sendingEmail: true, emailSendingError: false }); // Start sending email
 
@@ -413,9 +416,10 @@ class SubscriptionDetails extends Component {
     ) {
       const parseCategories = (categories) => {
         if (!categories) return [];
-        return categories.split(",");
+        return categories.split(":");
       };
 
+  //send mail on basis of previous date
       const isPreviousDay = (date) => {
         const today = new Date();
         const yesterday = new Date(today);
@@ -428,6 +432,19 @@ class SubscriptionDetails extends Component {
         );
       };
 
+
+      // Send email on today date basis
+      // const isPreviousDay = (date) => {
+      //   const today = new Date();
+  
+      //   console.log("today Date : " , today);
+    
+      //   return (
+      //     date.getFullYear() === today.getFullYear() &&
+      //     date.getMonth() === today.getMonth() &&
+      //     date.getDate() === today.getDate()
+      //   );
+      // };
 
 
       const generateSubscribeArray = () => {
@@ -608,14 +625,3 @@ class SubscriptionDetails extends Component {
 export default SubscriptionDetails;
 
 
-      // const isPreviousDay = (date) => {
-      //   const today = new Date();
-  
-      //   console.log("today Date : " , today);
-    
-      //   return (
-      //     date.getFullYear() === today.getFullYear() &&
-      //     date.getMonth() === today.getMonth() &&
-      //     date.getDate() === today.getDate()
-      //   );
-      // };
