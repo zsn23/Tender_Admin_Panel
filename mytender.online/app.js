@@ -1787,12 +1787,45 @@ const checkExistsSubscriptions = (data) => {
 };
 
 
+// app.post('/Subscriptions/', (req, res) => {
+//   console.log(req.body);  // Log the incoming request body for debugging
+
+//   const { userName, email, phoneNumber, company, billingPeriod, BillingAmount, categories, billingDate, effectedBy } = req.body;
+
+//   // Set current date if billingDate or effectedBy is missing
+//   const currentBillingDate = billingDate || new Date();  // Use current date if not provided
+//   const currentEffectedDate = new Date();  // Always set effectedDate to current date
+
+//   try {
+//     checkExistsSubscriptions(req.body).then((exists) => {
+//       if (exists) {
+//         res.status(200).json({ status: false, data: {}, message: MESSAGES.ALREADY_EXISTS });
+//       } else {
+//         const sql = 'INSERT INTO subscriptions (userName, email, phoneNumber, company, billingPeriod, BillingAmount, categories, billingDate, effectedBy, effectedDate, status) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
+//         const values = [userName, email, phoneNumber, company, billingPeriod, BillingAmount, categories, currentBillingDate, effectedBy, currentEffectedDate, false];
+
+//         pool.query(sql, values, (error, results) => {
+//           if (error) {
+//             res.status(200).json({ status: false, data: {}, message: MESSAGES.FAILED_MESSAGE });
+//           } else {
+//             res.status(200).json({ status: true, data: results, message: MESSAGES.CREATED });
+//           }
+//         });
+//       }
+//     });
+//   } catch (err) {
+//     res.status(200).json({ status: false, data: [], message: MESSAGES.FAILED_MESSAGE });
+//   }
+// });
+
 app.post('/Subscriptions/', (req, res) => {
   console.log(req.body);  // Log the incoming request body for debugging
 
   const { userName, email, phoneNumber, company, billingPeriod, BillingAmount, categories, billingDate, effectedBy } = req.body;
 
-  // Set current date if billingDate or effectedBy is missing
+  // Convert the categories array to a comma-separated string
+  const categoriesString = Array.isArray(categories) ? categories.join(':') : categories;
+
   const currentBillingDate = billingDate || new Date();  // Use current date if not provided
   const currentEffectedDate = new Date();  // Always set effectedDate to current date
 
@@ -1802,7 +1835,7 @@ app.post('/Subscriptions/', (req, res) => {
         res.status(200).json({ status: false, data: {}, message: MESSAGES.ALREADY_EXISTS });
       } else {
         const sql = 'INSERT INTO subscriptions (userName, email, phoneNumber, company, billingPeriod, BillingAmount, categories, billingDate, effectedBy, effectedDate, status) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
-        const values = [userName, email, phoneNumber, company, billingPeriod, BillingAmount, categories, currentBillingDate, effectedBy, currentEffectedDate, false];
+        const values = [userName, email, phoneNumber, company, billingPeriod, BillingAmount, categoriesString, currentBillingDate, effectedBy, currentEffectedDate, false];
 
         pool.query(sql, values, (error, results) => {
           if (error) {
@@ -1817,7 +1850,6 @@ app.post('/Subscriptions/', (req, res) => {
     res.status(200).json({ status: false, data: [], message: MESSAGES.FAILED_MESSAGE });
   }
 });
-
 
 
 
