@@ -1878,7 +1878,7 @@ app.post('/Subscriptions/updateSubscriptions', (req, res) => {
     return res.status(200).json({ status: false, data: [], message: MESSAGES.FAILED_MESSAGE });
   }
 });
-
+//////
 
 app.post('/Subscriptions/updateSubscriptionsStatus', (req, res) => {
   try {
