@@ -185,8 +185,12 @@ const SaveNewsPaperModal = (props) => {
       if (response?.data?.status) {
         handleToast("success", response?.data?.message)
         props.reloadData()
-        setModal(false);
-        props.onClose()
+        
+        setTimeout(() => {
+          setModal(false);
+          props.onClose()
+        }, 1000);
+
       }
       else {
         handleToast("error", response?.data?.message)

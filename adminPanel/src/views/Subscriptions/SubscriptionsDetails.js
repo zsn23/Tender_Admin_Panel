@@ -54,7 +54,7 @@
 
 //         this.setState({ tenders: sortedArray, loading: false });
 
-       
+
 //       } else {
 //         alert("Tender Data not found");
 //       }
@@ -212,7 +212,7 @@
 //   };
 
 
- 
+
 
 
 
@@ -235,7 +235,7 @@
 //     return (
 //       <>
 // <div className="d-flex justify-content-between " style={{  marginTop: "5px"  }}>
-          
+
 //           <div>
 //           <button
 //             id="new-report"
@@ -246,7 +246,7 @@
 //             <i className="fa-regular fa-circle-plus" style={{fontSize:"22px"}}></i> Add New
 //           </button>
 //           </div>
-          
+
 
 
 //           <div>
@@ -258,9 +258,9 @@
 //           >
 //            <i className="fa-regular fa-circle-envelope" style={{fontSize:"25px"}}></i> Send Email to Active users   
 //           </button>
-          
+
 //           </div>
-        
+
 //         </div>
 //         {!this.state.showModal && (
 //           <SubscriptionsTable
@@ -306,6 +306,7 @@ import SaveSubscriptionsModal from "./SaveSubscriptionsModal";
 import { billingApiServices } from "../../services/BillingApiService";
 import "./subscription.css";
 import moment from 'moment';
+import Toast from "../alert/Toast";
 
 class SubscriptionDetails extends Component {
   constructor(props) {
@@ -375,6 +376,9 @@ class SubscriptionDetails extends Component {
 
   categoryData = (categories_data) => {
     // Code to handle category data
+    // this.setState({
+    //   gridData: categories_data,
+    // });
   };
 
   EditMode = (data) => {
@@ -398,6 +402,7 @@ class SubscriptionDetails extends Component {
     })) || [];
   };
 
+  //send mail on basis of previous date
   SendEmail = async () => {
     this.setState({ sendingEmail: true, emailSendingError: false }); // Start sending email
 
@@ -414,13 +419,16 @@ class SubscriptionDetails extends Component {
       const isPreviousDay = (date) => {
         const today = new Date();
         const yesterday = new Date(today);
-        yesterday.setDate(today.getDate() - 1);
+        yesterday.setDate(today.getDate()-1);
+
         return (
           date.getFullYear() === yesterday.getFullYear() &&
           date.getMonth() === yesterday.getMonth() &&
           date.getDate() === yesterday.getDate()
         );
       };
+
+
 
       const generateSubscribeArray = () => {
         const subscribeArray = [];
@@ -444,21 +452,50 @@ class SubscriptionDetails extends Component {
           );
 
           if (previousDayTenders.length > 0) {
+            // Generate Table and Embed Image directly
             const emailContent = `
               <html>
-              <head></head>
+              <head>
+                <style>
+                  table {
+                    width: 100%;
+                    border-collapse: collapse;
+                  }
+                  table, th, td {
+                    border: 1px solid black;
+                  }
+                  th, td {
+                    padding: 8px;
+                    text-align: left;
+                  }
+                </style>
+              </head>
               <body>
                 <h2>Today's Tender List</h2>
-                <ul>
-                  ${previousDayTenders.map(tender => `
-                    <li>
-                      <p>${tender.newPaperName}</p>
-                      <p>Publish Date: ${moment(tender.publishDate).format("YYYY-MM-DD")}</p>
-                      <p>${tender.name}</p>
-                      <a href="${tender.tenderImage}" target="_blank">View Image</a>
-                    </li>
-                  `).join("")}
-                </ul>
+                <table>
+                  <thead>
+                    <tr>
+                    <th>Tender Title</th>
+                      <th>Newspaper</th>
+                      <th>Publish Date</th>
+                      <th>Tender Image</th>
+                      
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${previousDayTenders.map(tender => `
+                      <tr>
+                       <td>${tender.name}</td>
+                        <td>${tender.newPaperName}</td>
+                        <td>${moment(tender.publishDate).format("YYYY-MM-DD")}</td>
+                        <td>
+                          <a href="${tender.tenderImage}" target="_blank">View or download Image</a>
+                        </td>
+                        
+                      </tr>
+                    `).join("")}
+                  </tbody>
+                </table>
               </body>
               </html>
             `;
@@ -484,7 +521,12 @@ class SubscriptionDetails extends Component {
           alert("Failed to send email.");
         }
       } else {
-        alert("No email data generated.");
+        const activeUsers = this.state.gridData.filter(user => user.status === 1);
+        if (activeUsers.length === 0) {
+          alert("First Activate your required users to send E-Mail.");
+        } else {
+          alert("No email data generated. Maybe there is no yesterday tender exist against subscribed categories.");
+        }
       }
     } else {
       alert("Required data is missing.");
@@ -492,6 +534,9 @@ class SubscriptionDetails extends Component {
 
     this.setState({ sendingEmail: false }); // Stop sending email
   };
+
+
+  
 
   getStyle = () => {
     return (
@@ -561,3 +606,16 @@ class SubscriptionDetails extends Component {
 }
 
 export default SubscriptionDetails;
+
+
+      // const isPreviousDay = (date) => {
+      //   const today = new Date();
+  
+      //   console.log("today Date : " , today);
+    
+      //   return (
+      //     date.getFullYear() === today.getFullYear() &&
+      //     date.getMonth() === today.getMonth() &&
+      //     date.getDate() === today.getDate()
+      //   );
+      // };
