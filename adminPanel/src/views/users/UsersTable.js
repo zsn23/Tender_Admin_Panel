@@ -489,7 +489,9 @@ const UsersTable = (props) => {
     XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
     const dataToSave = new Blob([excelBuffer], { type: "application/octet-stream" });
+  
     FileSaver.saveAs(dataToSave, `${fileName}.xlsx`);
+   
   };
 
   const customExportTemplate=()=>(
