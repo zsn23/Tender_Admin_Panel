@@ -131,38 +131,6 @@ app.post('/send-email', (req, res) => {
 });
 
 
-// app.post('/send-email/', (req, res) => {
-//   const { dataForEmail } = req.body;
-
-// try {
-//     if(dataForEmail.length>0){
-//         dataForEmail.forEach((items)=>{
-     
-//             var mailOptions = {
-//             from: 'awaisijaz686@gmail.com',                   // Sender address
-//             to: items.userInfo.email,       // List of recipients
-//             subject: 'Today Tender List',              // Subject line
-//             html:items.tenderInfo              
-//             };
-//                         // Send email
-//             transporter.sendMail(mailOptions, (error, info) => {
-//                 if (error) {
-//                     console.error('Error occurred:', error);
-//                     res.status(500).json({ message: 'Error sending email', error: error.toString() });
-//                 } else {
-//                     console.log('Message sent:', info.messageId);
-//                     res.status(200).json({ message: 'Email sent successfully', messageId: info.messageId });
-//                 }
-//             });
-//         });
-//     }
-   
-  
-// } catch (err) {
-//     console.error('Error in sending email:', err);
-//     res.status(500).json({ message: 'Failed to send email', error: err.toString() });
-// }
-// });
 
 
 
@@ -726,17 +694,38 @@ app.post('/organizations/saveMultipleOrganizations', (req, res) => {
 });
 
 
+
+
 app.get('/organizations/', (req, res) => {
   try {
-    pool.query('SELECT organizations.*, users.name AS userName FROM organizations INNER JOIN users ON organizations.effectedBy = users.id', (err, results) => {
-      return res.status(200).json({ status: true, data: results, message: MESSAGES.FOUND });
-    });
+    const countQuery = 'SELECT COUNT(*) AS totalRecords FROM organizations';
+    const dataQuery = `
+      SELECT organizations.*, users.name AS userName
+      FROM organizations
+      INNER JOIN users ON organizations.effectedBy = users.id
+    `;
+    pool.query(countQuery, (err, countResults) => {
+      if (err) {
+        return res.status(500).json({ status: false, data: [], message: MESSAGES.ERROR_MESSAGE });
+      }
+      const totalRecords = countResults[0].totalRecords; 
+      pool.query(dataQuery, (err, dataResults) => {
+        if (err) {
+          return res.status(500).json({ status: false, data: [], message: MESSAGES.ERROR_MESSAGE });
+        }
 
+        return res.status(200).json({
+          status: true,
+          totalRecords, 
+          data: dataResults,
+          message: MESSAGES.FOUND
+        });
+      });
+    });
   } catch (err) {
-    res.status(200).json({ status: false, data: [], message: MESSAGES.ERROR_MESSAGE });
+    return res.status(500).json({ status: false, data: [], message: MESSAGES.ERROR_MESSAGE });
   }
 });
-
 
 const checkExistsOrganizations = (data) => {
   return new Promise((resolve, reject) => {
@@ -1007,57 +996,6 @@ app.post('/newspapers/saveMultipleNewspapers', (req, res) => {
 
 
 // ***************tender Api's**************************
-// for tender/id
-// app.get('/tender', (req, res) => {
-//   const page = parseInt(req.query.page) || 1;
-//   const limit = parseInt(req.query.limit) || 25;
-//   const offset = (page - 1) * limit;
-
-//   pool.query(
-//     'SELECT tenders.*, users.name AS userName, cities.name AS cityName, organizations.name AS organizationName, newspapers.name AS newPaperName ' +
-//     'FROM tenders ' +
-//     'INNER JOIN users ON tenders.effectedBy = users.id ' +
-//     'INNER JOIN cities ON tenders.city = cities.id ' +
-//     'INNER JOIN organizations ON tenders.organization = organizations.id ' +
-//     'INNER JOIN newspapers ON tenders.newspaper = newspapers.id ' +
-//     'LIMIT ? OFFSET ?', [limit, offset],
-//     (err, results) => {
-//       if (err) {
-//         return res.status(500).json({ status: false, message: 'An error occurred in fetching tender.' });
-//       }
-
-//       pool.query('SELECT COUNT(*) AS total FROM tenders', (err, countResults) => {
-//         if (err) {
-//           return res.status(500).json({ status: false, message: 'An error occurred while fetching the total count of tenders.' });
-//         }
-
-//         const totalItems = countResults[0].total;
-//         const totalPages = Math.ceil(totalItems / limit);
-
-//         return res.status(200).json({
-//           status: true,
-//           message: 'All Tender',
-//           data: {
-            // current_page: page,
-            // data: results,
-            // first_page_url: `http://localhost:${PORT}/tender?page=1&limit=${limit}`,
-            // from: offset + 1,
-            // last_page: totalPages,
-            // last_page_url: `http://localhost:${PORT}/tender?page=${totalPages}&limit=${limit}`,
-            // next_page_url: page < totalPages ? `http://localhost:${PORT}/tender?page=${page + 1}&limit=${limit}` : null,
-            // path: `http://localhost:${PORT}/tender`,
-            // per_page: limit,
-            // prev_page_url: page > 1 ? `http://localhost:${PORT}/tender?page=${page - 1}&limit=${limit}` : null,
-            // to: offset + results.length,
-            // total: totalItems
-//           },
-//           statusCode: 200
-//         });
-//       });
-//     }
-//   );
-// });
-
 
 app.get('/tender', (req, res) => {
   const page = parseInt(req.query.page) || 1;
@@ -1787,45 +1725,12 @@ const checkExistsSubscriptions = (data) => {
 };
 
 
-// app.post('/Subscriptions/', (req, res) => {
-//   console.log(req.body);  // Log the incoming request body for debugging
-
-//   const { userName, email, phoneNumber, company, billingPeriod, BillingAmount, categories, billingDate, effectedBy } = req.body;
-
-//   // Set current date if billingDate or effectedBy is missing
-//   const currentBillingDate = billingDate || new Date();  // Use current date if not provided
-//   const currentEffectedDate = new Date();  // Always set effectedDate to current date
-
-//   try {
-//     checkExistsSubscriptions(req.body).then((exists) => {
-//       if (exists) {
-//         res.status(200).json({ status: false, data: {}, message: MESSAGES.ALREADY_EXISTS });
-//       } else {
-//         const sql = 'INSERT INTO subscriptions (userName, email, phoneNumber, company, billingPeriod, BillingAmount, categories, billingDate, effectedBy, effectedDate, status) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
-//         const values = [userName, email, phoneNumber, company, billingPeriod, BillingAmount, categories, currentBillingDate, effectedBy, currentEffectedDate, false];
-
-//         pool.query(sql, values, (error, results) => {
-//           if (error) {
-//             res.status(200).json({ status: false, data: {}, message: MESSAGES.FAILED_MESSAGE });
-//           } else {
-//             res.status(200).json({ status: true, data: results, message: MESSAGES.CREATED });
-//           }
-//         });
-//       }
-//     });
-//   } catch (err) {
-//     res.status(200).json({ status: false, data: [], message: MESSAGES.FAILED_MESSAGE });
-//   }
-// });
-
 app.post('/Subscriptions/', (req, res) => {
   console.log(req.body);  // Log the incoming request body for debugging
 
   const { userName, email, phoneNumber, company, billingPeriod, BillingAmount, categories, billingDate, effectedBy } = req.body;
 
-  // Convert the categories array to a comma-separated string
-  const categoriesString = Array.isArray(categories) ? categories.join(':') : categories;
-
+  // Set current date if billingDate or effectedBy is missing
   const currentBillingDate = billingDate || new Date();  // Use current date if not provided
   const currentEffectedDate = new Date();  // Always set effectedDate to current date
 
@@ -1835,7 +1740,7 @@ app.post('/Subscriptions/', (req, res) => {
         res.status(200).json({ status: false, data: {}, message: MESSAGES.ALREADY_EXISTS });
       } else {
         const sql = 'INSERT INTO subscriptions (userName, email, phoneNumber, company, billingPeriod, BillingAmount, categories, billingDate, effectedBy, effectedDate, status) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
-        const values = [userName, email, phoneNumber, company, billingPeriod, BillingAmount, categoriesString, currentBillingDate, effectedBy, currentEffectedDate, false];
+        const values = [userName, email, phoneNumber, company, billingPeriod, BillingAmount, categories, currentBillingDate, effectedBy, currentEffectedDate, false];
 
         pool.query(sql, values, (error, results) => {
           if (error) {
@@ -1850,7 +1755,6 @@ app.post('/Subscriptions/', (req, res) => {
     res.status(200).json({ status: false, data: [], message: MESSAGES.FAILED_MESSAGE });
   }
 });
-
 
 
 

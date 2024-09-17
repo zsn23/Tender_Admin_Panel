@@ -244,7 +244,7 @@ const CustomDataTable = (props) => {
           value={loader ? Array.from({ length: 5 }) : gridData}
           paginator
           responsiveLayout="scroll"
-          paginatorTemplate=" PrevPageLink PageLinks NextPageLink  CurrentPageReport RowsPerPageDropdown"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink  LastPageLink CurrentPageReport"
           currentPageReportTemplate="Showing Records : {first} to {last} "
           rows={25}
        

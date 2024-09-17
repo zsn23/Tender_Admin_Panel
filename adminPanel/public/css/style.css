@@ -1656,7 +1656,7 @@ div#invoice-tbl .p-fluid .p-inputtext {
 }
 
 .p-paginator {
-  padding: 20px 1rem !important;
+  padding: 20px 0rem !important;
  
 }
 
@@ -1703,9 +1703,9 @@ div#invoice-tbl .p-fluid .p-inputtext {
   color: #000;
   font-size: 18px !important;
   height: auto;
-  margin: 0.143rem;
+  margin: 0;
   min-width: 2.357rem;
-  padding: 0 0.5rem;
+  padding: 21px;
   border-radius: 20px;
   font-weight: bolder;
 }
@@ -3417,6 +3417,12 @@ h5.card-title {
   margin-right: 5px !important;
   color: #000000 !important; 
 }
+@media (max-width: 330px) {   
+  .sorting-label____ {     
+    font-size: 13px !important;   
+  } 
+}
+
 
 .sorting-select___ {
   

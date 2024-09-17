@@ -57,3 +57,8 @@
     width: 50px;
   }
  
+@media (max-width: 330px) {
+  .navbarTenderlogo{
+    width: 130px !important;
+  }
+}

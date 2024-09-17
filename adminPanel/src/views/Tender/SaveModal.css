@@ -18,7 +18,7 @@
 }
 
 .footer-img{
-    color: #ef6767 !important;
+    /* color: #ef6767 !important; */
     font-weight: 400;
 }
 .content {
@@ -122,7 +122,7 @@ input.p-inputtext.p-component.ipl-input {
     /* Section 2 occupies 8 columns */
 } 
 .section_____img{
-    width: 100% !important;
+    width: 46% !important;
     /* height: 620px !important; */
 }
 

@@ -88,7 +88,7 @@ const SaveNewsPaperModal = (props) => {
 
 
       var selCategory = []
-      let category = props.dataForEdit?.categories?.split(",")
+      let category = props.dataForEdit?.categories?.split(":")
       category?.forEach(element => {
         let filtered = props.CategoryDetails?.find(x => x.name == element)
         if(filtered!=undefined && filtered!=null){
@@ -250,7 +250,7 @@ const SaveNewsPaperModal = (props) => {
         className={props.className}
         backdrop="static"
       > */}
-      <div className="modal-lg section" role="document">
+      <div className="modal-lg section section1" role="document">
         <div className="modal-content">
           <div className="modal-header">
             <CardTitle >{props.dataForEdit == null ? "INSERT SUBSCRIPTION" : "Update Subscription"}</CardTitle>
