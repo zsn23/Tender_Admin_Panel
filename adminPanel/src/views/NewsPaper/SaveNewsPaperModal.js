@@ -83,6 +83,8 @@ const SaveNewsPaperModal = (props) => {
         handleToast("success", response?.data?.message)
         setNewsPaperName("")
         props.reloadData()
+
+
         setModal(false);
         props.onClose()
       }
@@ -105,9 +107,11 @@ const SaveNewsPaperModal = (props) => {
       }
 
       if (response?.data?.status) {
+        _EventEmitter.emit("reloadNewspapers", response?.data?.data);
         handleToast("success", response?.data?.message)
         setNewsPaperName("")
         props.reloadData()
+        // reloadData();
         setModal(false);
         props.onClose()
       }
@@ -128,6 +132,10 @@ const SaveNewsPaperModal = (props) => {
     }
     return true;
   };
+
+  // const reloadData=()=>{
+  //   props.reloadData();
+  // }
 
 
   const handleNewsPaperName = (e) => {

@@ -1,7 +1,7 @@
 .p-dialog.p-component.p-dialog .p-dialog-header {
     border-bottom: 0 none;
-    background: #d12323;
-    color: #eff1f3;
+    background: radial-gradient(circle, #0B2B11, #2a6a43);   
+     color: #eff1f3;
     padding: 8px;
     border-top-right-radius: 6px;
     border-top-left-radius: 6px;
@@ -28,7 +28,7 @@
 }
 
 .p-button.p-confirm-dialog-accept,.p-button.p-confirm-dialog-reject{
-    background: #ef6767;
+    background: #FAB710;
     text-transform: capitalize;
     color: #fff !important;
     font-size: 12px;
@@ -42,10 +42,10 @@
     margin-bottom: 0px !important;
 }
 .p-button.p-confirm-dialog-accept:hover{
-    background: #d32d2d;
+    background: rgb(136, 136, 136) !important;
 }
 .p-button.p-confirm-dialog-reject{
-    background: #b9b8b8;
+    background: #FAB710;
 }
 .p-button.p-confirm-dialog-reject:hover{
     background: rgb(136, 136, 136) !important;

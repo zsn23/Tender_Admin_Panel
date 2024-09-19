@@ -3471,3 +3471,6 @@ h5.card-title {
   z-index: 1000;
   font-size: 18px;
 }
+.billingDate__{
+  font-size: 15px !important;
+}

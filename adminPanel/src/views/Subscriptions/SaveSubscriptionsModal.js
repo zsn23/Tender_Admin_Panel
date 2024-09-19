@@ -378,8 +378,8 @@ const SaveNewsPaperModal = (props) => {
               </div>
               <div class="col-sm">
                 <FormGroup>
-                  <Label className="subscriptionEditLables"  for="charges">
-                    billing Date
+                  <Label className="subscriptionEditLables mb-0 billingDate__"   for="charges">
+                  Submit/bill end Date
                   </Label>
                   <Calendar className="billing-date" format="DD/MM/YYYY" value={billingDate} onChange={(e) => setBillingDate(e.value)} />
 

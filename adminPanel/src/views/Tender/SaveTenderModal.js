@@ -24,6 +24,10 @@ import { Skeleton } from "primereact/skeleton";
 import { Calendar } from "primereact/calendar";
 import SaveOrganizationModal from "./../organizations/SaveOrganizationModal";
 import SaveCategoryModal from "./../Categories/SaveCategoryModal";
+import SaveNewsPaperModal from "./../NewsPaper/SaveNewsPaperModal";
+import SaveCityModal from "../CityManagement/SaveCityModal";
+
+
 import { MultiSelect } from "primereact/multiselect";
 import moment from "moment";
 import _EventEmitter from "../../constants/emitter";
@@ -77,9 +81,16 @@ const SaveTenderModal = (props) => {
   const [selectedNewsPaper, setSelectedNewsPaper] = useState(null);
   const [CityDetails, setCityDetails] = useState([{}, {}, {}, {}, {}, {}]);
   const [selectedCity, setSelectedCity] = useState(null);
+  
   const [categoryModal, setCategoryModal] = useState(false);
   const [organizationModal, setOrganizationModal] = useState(false);
+  const [newspaperModel , setNewsPaperModel]=useState(false);
+  const [cityModel , setcityModel]=useState(false);
+
   const [organizationLoader, setOrganizationLoader] = useState(false);
+  const [newsPaperLoader, setnewsPaperLoader] = useState(false);
+
+
   const [imgPath, setImgPath] = useState("");
   const [Loader, setLoader] = useState(false);
   const [IPLError, setIPLError] = useState("");
@@ -121,6 +132,7 @@ const SaveTenderModal = (props) => {
     _EventEmitter.on("reloadOrganizations", reloadOrg);
     _EventEmitter.on("reloadCategories", reloadCategory);
     _EventEmitter.on("reloadCities", reloadCities);
+    _EventEmitter.on("reloadNewspapers" , reloadNewspaper);
 
     if (!props.OrganizationLoader) {
       setOrganizationLoader(false);
@@ -136,6 +148,7 @@ const SaveTenderModal = (props) => {
     }
 
     if (!props.newsPaperLoader) {
+      setnewsPaperLoader(false);
       setNewsPaperDetails(props.newsPaperDetails);
     }
 
@@ -157,6 +170,14 @@ const SaveTenderModal = (props) => {
     setCategoryDetails(dt);
   };
 
+  const reloadNewspaper =(data)=>{
+    let dt=props.newsPaperDetails;
+    dt.push(data[0]);
+    setNewsPaperDetails(dt);
+    setnewsPaperLoader(false);
+  }
+
+
   const reloadCities = (data) => {
     let dt = props.cityDetails;
     dt.push(data[0]);
@@ -166,9 +187,9 @@ const SaveTenderModal = (props) => {
   const toggle = () => {
     setModal(false);
     props.onClose();
-    if (!props.isEditMode) {
-      props.showModal.getShowModal(!modal);
-    }
+    // if (!props.isEditMode) {
+    //   props.showModal.getShowModal(!modal);
+    // }
   };
 
   useEffect(() => {
@@ -244,7 +265,7 @@ const SaveTenderModal = (props) => {
   };
 
   const Edit = async () => {
-    var categories = selectedCategory?.map((v) => v.name);
+    var categories = selectedCategory?.map(v => v.name);
 
     if (savedImageName == "") {
       handleToast("error", "Tender not uploaded ,please do it again");
@@ -376,7 +397,7 @@ const SaveTenderModal = (props) => {
     setTitle("");
     setSelectedCategory(null);
     setSelectedCity(null);
-    // setSelectedNewsPaper(props.dataForEdit?.newsPaper)
+    setSelectedNewsPaper(null)
     setSelectedOrganization(null);
     setOpenDate(null);
     setSelectedFile(null);
@@ -575,14 +596,29 @@ const SaveTenderModal = (props) => {
     setOrganizationModal(true);
   };
 
+  const addNewspaper=()=>{
+    setNewsPaperModel(true);
+  }
+  
+
   const addCategory = () => {
     setCategoryModal(true);
+
   };
 
   const reloadOrganizations = () => {
-    // setOrganizationLoader(true)
-    // props.reloadOrganizations()
+     //setOrganizationLoader(true)
+     props.reloadOrganizations()
   };
+
+  const reloadCities= () =>{
+    props.reloadCities();
+  }
+
+  const reloadNewspapers = () => {
+    //setnewsPaperLoader(true);
+    props.reloadNewspapers()
+ };
 
   const getSelectedItems = (items) => {
     setSelectedCategory(items);
@@ -614,7 +650,7 @@ const SaveTenderModal = (props) => {
       />
 
       <div className="modal-lg" role="document">
-        <div className="modal-content">
+        <div className="modal-content modal-content__">
           <div className="grid-container" style={{ alignItems: "start" }}>
             <div
               className="section col4"
@@ -658,17 +694,21 @@ const SaveTenderModal = (props) => {
                 </div>
 
                 <div className="p-col-12">
+                  
                   <span>
+                    
                     Organization:{" "}
                     <span
                       class="add-minus-btn"
                       onClick={() => addOrganization()}
                     >
                       <i className="fa fa-plus-circle"></i>
+
                       {selectedOrganization == null && (
                         <span className="validation-error">* Required</span>
                       )}
                     </span>
+                     
                   </span>
                   <Dropdown
                     id="organization-dropdown"
@@ -707,12 +747,21 @@ const SaveTenderModal = (props) => {
                 </div>
 
                 <div className="p-col-12">
+                  
                   <span>
                     News Paper:{" "}
+
+                    <span
+                      className="add-minus-btn"
+                      onClick={() => addNewspaper()}
+                    > <i className="fa fa-plus-circle"></i></span>
+                    
+
                     {selectedNewsPaper == null && (
                       <span className="validation-error">* Required</span>
                     )}
                   </span>
+                  
                   <Dropdown
                     id="newspaper-dropdown"
                     options={NewsPaperDetails}
@@ -838,9 +887,13 @@ const SaveTenderModal = (props) => {
             </div>
 
 
+          </div>
+        </div>
+      </div>
 
-            <div className="section_____img section col8" ref={gridRef}>
-  <div className="content" style={{ overflow: 'auto' }}>
+
+      <div className="section_____img section col8" ref={gridRef}>
+  <div className="content " style={{ overflow: 'auto' }}>
     <Watermark
        text="Tender786 Bismillah"
   textColor="rgba(255, 255, 255, 0.3)"
@@ -877,7 +930,7 @@ const SaveTenderModal = (props) => {
     </Watermark>
   </div>
 
-  <div className="p-col-12">
+  <div className="p-col-12 mt-5">
     <h2
       style={{
         fontSize: '22px',
@@ -885,18 +938,13 @@ const SaveTenderModal = (props) => {
         color: 'red',
         display: 'flex',
         justifyContent: 'center',
+        alignItems : 'center'
       }}
     >
       {`© ${selectedNewsPaper?.name} ${selectedCity?.name} ${moment(new Date()).format('YYYY-MM-DD')}`}
     </h2>
   </div>
 </div>
-
-            {/* water mark */}
-
-          </div>
-        </div>
-      </div>
 
       {organizationModal && (
         <SaveOrganizationModal
@@ -906,6 +954,18 @@ const SaveTenderModal = (props) => {
           reloadData={() => reloadOrganizations()}
         />
       )}
+
+{newspaperModel && (
+  <SaveNewsPaperModal
+    modalopen={newspaperModel}
+    isEditMode={false}
+    onClose={() => setNewsPaperModel(false)}
+    reloadData={() => reloadNewspapers()} // Fixed here
+  />
+)}
+
+
+
 
       {categoryModal && (
         <SaveCategoryModal
@@ -923,3 +983,130 @@ export default SaveTenderModal;
 
 
 
+
+            //  {/* water mark */}
+            // {/* <div className="section_____img section col8" ref={gridRef}>
+            //   <div className="content" style={{ overflow: 'auto' }}>
+            //     <Watermark text='Tender786 Bismillah' textColor='white' textSize='10'>
+            //       <div style={{ overflow: 'auto', width: '100%', height: '100%', textAlign: 'center' }}>
+            //         <img
+            //           alt=""
+            //           height="700px"
+            //           src={selectedImg}
+            //           style={{ transform: `scale(${zoom})`, transformOrigin: 'top left', cursor: 'zoom-in' }}
+            //           onClick={handleZoomIn}  
+            //           onContextMenu={(e) => {
+            //             e.preventDefault(); // Prevent context menu on right-click
+            //             handleZoomOut();
+            //           }}
+            //         />
+            //       </div>
+            //     </Watermark>
+            //   </div>
+
+            //   <div className="p-col-12">
+            //     <h2 sx={{ fontSize: '22px', fontWeight: 500, color: 'red', display: 'flex', justifyContent: 'center' }}>{`© ${selectedNewsPaper?.name} ${selectedCity?.name} ${moment(new Date()).format("YYYY-MM-DD")}`}</h2>
+            //   </div>
+            // </div> */}
+
+           
+            // {/* <div className=" section col8">
+            //    <span className="imgFile__">IMAGE FILE.</span>
+            //   {selectedFile == null ? (
+            //     <div
+            //       className=" content-four single-box text-center append"
+            //       ref={gridRef}
+            //     >
+            //       {selectedImg != "" && selectedImg != null && (
+            //         <a className="link" href="javascript;">
+            //           <img
+            //             src={selectedImg}
+            //             onClick={handleZoomIn}
+            //             onContextMenu={(e) => {
+            //               e.preventDefault(); // Prevent context menu on right-click
+            //               handleZoomOut();
+            //             }}
+            //             style={{
+            //               transform: `scale(${zoom})`,
+            //               transformOrigin: "top left",
+            //               cursor: "zoom-in",
+            //             }}
+            //             width="100%"
+            //             height="100%"
+            //             className="profile-img zooooom"
+            //             alt="TenderImage"
+            //             data-magnify-src=""
+            //           />
+            //         </a>
+            //       )}
+            //     </div>
+            //   ) : (
+            //     <>
+            //       <div
+            //         className="content-four single-box text-center append"
+            //         style={{ overflow: "visible" }}
+            //         ref={gridRef}
+            //       >
+            //         {selectedImg != "" && selectedImg != null && (
+            //           <Watermark
+            //             // multiline={true}
+            //             // text="Tender786"
+            //             // width="100%"
+            //             // height="100%"
+            //             // textColor="red"
+            //             // textSize="20"
+            //             text='Tender786 Bismillah' 
+            //             textColor='green' 
+            //             textSize='10'
+            //             style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', overflow: 'visible' }}
+                      
+            //           >
+            //           <img
+            //             src={selectedImg}
+            //             onClick={handleZoomIn}
+            //             onContextMenu={(e) => {
+            //               e.preventDefault(); // Prevent context menu on right-click
+            //               handleZoomOut();
+            //             }}
+            //             style={{
+            //               transform: `scale(${zoom})`,
+            //               transformOrigin: "top left",
+            //               cursor: "zoom-in",
+            //               height: "100%",
+            //               width: "100%",
+            //               zIndex:"0"
+            //             }}
+            //             width="100%"
+            //             height="100%"
+            //             className="profile-img zooooom"
+            //             alt="TenderImage"
+            //             data-magnify-src=""
+            //           />
+            //           </Watermark>
+            //         )}
+            //         <div className="p-col-12">
+            //           <h2
+            //             className="footer-img"
+            //             sx={{
+            //               fontSize: "22px",
+            //               fontWeight: 500,
+            //               display: "flex",
+            //               justifyContent: "center",
+            //             }}
+            //           >
+            //             {selectedNewsPaper?.name === undefined
+            //               ? null
+            //               : `© ${selectedNewsPaper?.name} ${moment(
+            //                   new Date()
+            //                 ).format("YYYY-MM-DD")}`}
+            //           </h2>
+            //         </div>
+            //       </div>
+            //     </>
+            //   )}
+            // </div> */}
+
+
+
+
+            // {/* water mark */}

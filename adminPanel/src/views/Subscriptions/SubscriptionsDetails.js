@@ -5,7 +5,7 @@ import SaveSubscriptionsModal from "./SaveSubscriptionsModal";
 import { billingApiServices } from "../../services/BillingApiService";
 import "./subscription.css";
 import moment from 'moment';
-import Toast from "../alert/Toast";
+import Toast from "./EmailToast";
 
 class SubscriptionDetails extends Component {
   constructor(props) {
@@ -22,6 +22,10 @@ class SubscriptionDetails extends Component {
       tenders: [],
       sendingEmail: false, // New state for tracking email sending
       emailSendingError: false, // New state for tracking errors
+
+      toastMessage: "", // For showing toast messages
+      toastType: "success", // Toast type (success, error, etc.)
+      showToast: false, // State to control toast visibility
     };
   }
 
@@ -101,6 +105,31 @@ class SubscriptionDetails extends Component {
     })) || [];
   };
 
+  showToastMessage = (message, type) => {
+    this.setState({ 
+      toastMessage: message, 
+      toastType: type, 
+      showToast: true 
+    });
+
+    if(type=="error")
+    {
+      console.log("if part")
+      setTimeout(() => {
+        this.setState({ showToast: false });
+      }, 3000); // Hide toast after 3 seconds 
+    }
+    else{
+      console.log("else part")
+
+      setTimeout(() => {
+        this.setState({ showToast: false });
+      }, 1000); // Hide toast after 1 seconds
+    }
+
+   
+   
+  };
  
  
  
@@ -119,31 +148,31 @@ class SubscriptionDetails extends Component {
       };
 
   //send mail on basis of previous date
-      const isPreviousDay = (date) => {
-        const today = new Date();
-        const yesterday = new Date(today);
-        yesterday.setDate(today.getDate()-1);
+      // const isPreviousDay = (date) => {
+      //   const today = new Date();
+      //   const yesterday = new Date(today);
+      //   yesterday.setDate(today.getDate()-1);
 
-        return (
-          date.getFullYear() === yesterday.getFullYear() &&
-          date.getMonth() === yesterday.getMonth() &&
-          date.getDate() === yesterday.getDate()
-        );
-      };
+      //   return (
+      //     date.getFullYear() === yesterday.getFullYear() &&
+      //     date.getMonth() === yesterday.getMonth() &&
+      //     date.getDate() === yesterday.getDate()
+      //   );
+      // };
 
 
       // Send email on today date basis
-      // const isPreviousDay = (date) => {
-      //   const today = new Date();
+      const isPreviousDay = (date) => {
+        const today = new Date();
   
-      //   console.log("today Date : " , today);
+      
     
-      //   return (
-      //     date.getFullYear() === today.getFullYear() &&
-      //     date.getMonth() === today.getMonth() &&
-      //     date.getDate() === today.getDate()
-      //   );
-      // };
+        return (
+          date.getFullYear() === today.getFullYear() &&
+          date.getMonth() === today.getMonth() &&
+          date.getDate() === today.getDate()
+        );
+      };
 
 
       const generateSubscribeArray = () => {
@@ -151,7 +180,8 @@ class SubscriptionDetails extends Component {
 
         const activeUsers = this.state.gridData.filter(user => user.status === 1);
         if (activeUsers.length === 0) {
-          alert("No active users available.");
+        
+          //this.showToastMessage("No active users available.", "success");
           return [];
         }
 
@@ -230,22 +260,29 @@ class SubscriptionDetails extends Component {
       if (emailData.length > 0) {
         try {
           const response = await billingApiServices.sendEmail({ dataForEmail: emailData });
-          alert(response?.data?.message || "Email sent successfully!");
+          // alert(response?.data?.message || "Email sent successfully!");
+          this.showToastMessage(response?.data?.message || "Email sent successfully!" , "success");
         } catch (error) {
           console.error("Error sending email:", error);
           this.setState({ emailSendingError: true });
-          alert("Failed to send email.");
+          // alert("Failed to send email.");
+          this.showToastMessage("Failed to send email.", "error");
         }
       } else {
         const activeUsers = this.state.gridData.filter(user => user.status === 1);
         if (activeUsers.length === 0) {
-          alert("First Activate your required users to send E-Mail.");
+          // alert("First Activate your required users to send E-Mail.");
+          this.showToastMessage("No active users available.First activate your required users to send E-Mail.", "error");
         } else {
-          alert("No email data generated. Maybe there is no yesterday tender exist against subscribed categories.");
+          // alert("No email data generated. Maybe there is no Today tender exist against subscribed categories.");
+          this.showToastMessage(
+            "No email data generated. Maybe there is no Today tender exist against subscribed categories.",
+            "error"
+          );
         }
       }
     } else {
-      alert("Required data is missing.");
+      this.showToastMessage("Required data is missing.", "error");
     }
 
     this.setState({ sendingEmail: false }); // Stop sending email
@@ -289,11 +326,25 @@ class SubscriptionDetails extends Component {
           </div>
         </div>
 
+
+
+        <Toast 
+          open={this.state.showToast} 
+          severity={this.state.toastType} 
+          message={this.state.toastMessage} 
+          timeout={1} 
+          handleClose={(val) => this.setState({ showToast: val })}
+        />
+
+
         {this.state.sendingEmail && (
           <div className="loading-message">
             Sending email, please wait...
+          
           </div>
+          
         )}
+        
 
         {!this.state.showModal && (
           <SubscriptionsTable
@@ -316,6 +367,8 @@ class SubscriptionDetails extends Component {
             reloadData={() => this.reloadData()}
           />
         )}
+
+        
       </>
     );
   }
