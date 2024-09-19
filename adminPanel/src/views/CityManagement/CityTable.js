@@ -245,8 +245,7 @@ const CustomDataTable = (props) => {
           paginator
           responsiveLayout="scroll"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink  LastPageLink CurrentPageReport"
-          currentPageReportTemplate="Showing Records : {first} to {last} "
-          rows={25}
+         
        
           dataKey="id"
           filters={filterArray}
