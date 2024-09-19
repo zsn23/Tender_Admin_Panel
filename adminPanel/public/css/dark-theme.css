@@ -436,8 +436,12 @@ body {
 
 .section_____img{
     width: 30% !important;
-    /* height: 620px !important; */
+    height: 635px !important;
+    position: relative;
+    left: -200px;
+    top: 4px;
 }
+
 .text-light_Dark{
     color: white !important;
 }

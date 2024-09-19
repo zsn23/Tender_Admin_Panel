@@ -45,7 +45,7 @@ export default function CustomizedHook(props) {
         <FormControl
           placeholder="Select Category" // Updated placeholder text
           readOnly
-          value={selectedValues.map((val) => val.name || 'Unnamed').join(', ')}
+          value={selectedValues.map((val) => val.name || 'Unnamed').join(':')}
           onClick={handleToggle}
           className="custom-form-control"
         />
@@ -74,7 +74,7 @@ export default function CustomizedHook(props) {
                 >
                   {option.name || 'Unnamed'}
                   {selectedValues.includes(option) && (
-                    <Check color="green" size={16} className="ms-2" />
+                    <Check color="white" size={16} className="ms-2" />
                   )}
                 </Dropdown.Item>
               ))

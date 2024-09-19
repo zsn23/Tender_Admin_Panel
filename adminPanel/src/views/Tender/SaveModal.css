@@ -94,7 +94,7 @@ input.p-inputtext.p-component.ipl-input {
     --bs-modal-margin: 0;
 }
 .modal-content__{
-    width: 83% !important;
+    width: 72% !important;
 }
 .p-fileupload .p-fileupload-content {
     background: #ffffff;
@@ -125,7 +125,10 @@ input.p-inputtext.p-component.ipl-input {
 } 
 .section_____img{
     width: 30% !important;
-    /* height: 620px !important; */
+    height: 635px !important;
+    position: relative;
+    left: -200px;
+    top: 4px;
 }
 
 .watermark {

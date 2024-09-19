@@ -22,10 +22,13 @@ import { InputText } from "primereact/inputtext";
 import { FileUpload } from "primereact/fileupload";
 import { Skeleton } from "primereact/skeleton";
 import { Calendar } from "primereact/calendar";
+
+//for plus buttons
 import SaveOrganizationModal from "./../organizations/SaveOrganizationModal";
 import SaveCategoryModal from "./../Categories/SaveCategoryModal";
 import SaveNewsPaperModal from "./../NewsPaper/SaveNewsPaperModal";
 import SaveCityModal from "../CityManagement/SaveCityModal";
+// for plus buttons
 
 
 import { MultiSelect } from "primereact/multiselect";
@@ -82,10 +85,13 @@ const SaveTenderModal = (props) => {
   const [CityDetails, setCityDetails] = useState([{}, {}, {}, {}, {}, {}]);
   const [selectedCity, setSelectedCity] = useState(null);
   
+  // for plus buttons
   const [categoryModal, setCategoryModal] = useState(false);
   const [organizationModal, setOrganizationModal] = useState(false);
   const [newspaperModel , setNewsPaperModel]=useState(false);
   const [cityModel , setcityModel]=useState(false);
+// for plus buttons
+
 
   const [organizationLoader, setOrganizationLoader] = useState(false);
   const [newsPaperLoader, setnewsPaperLoader] = useState(false);
@@ -128,35 +134,13 @@ const SaveTenderModal = (props) => {
     { label: "Option 3", value: "option3" },
   ];
 
+
+
+
+  // for plus buttons
   useEffect(() => {
-    _EventEmitter.on("reloadOrganizations", reloadOrg);
-    _EventEmitter.on("reloadCategories", reloadCategory);
-    _EventEmitter.on("reloadCities", reloadCities);
-    _EventEmitter.on("reloadNewspapers" , reloadNewspaper);
 
-    if (!props.OrganizationLoader) {
-      setOrganizationLoader(false);
-      setOrganizationDetails(props.OrganizationDetails);
-    }
-
-    if (props.modalopen) {
-      setModal(true);
-    }
-
-    if (!props.CategoryLoader) {
-      setCategoryDetails(props.CategoryDetails);
-    }
-
-    if (!props.newsPaperLoader) {
-      setnewsPaperLoader(false);
-      setNewsPaperDetails(props.newsPaperDetails);
-    }
-
-    if (!props.cityLoader) {
-      setCityDetails(props.cityDetails);
-    }
-  }, [props.modalopen]);
-
+    
   const reloadOrg = (data) => {
     let dt = props.OrganizationDetails;
     dt.push(data[0]);
@@ -178,11 +162,49 @@ const SaveTenderModal = (props) => {
   }
 
 
-  const reloadCities = (data) => {
+  const reloadCitie = (data) => {
     let dt = props.cityDetails;
     dt.push(data[0]);
     setCityDetails(dt);
   };
+    _EventEmitter.on("reloadOrganizations", reloadOrg);
+    _EventEmitter.on("reloadCategories", reloadCategory);
+    _EventEmitter.on("reloadCities", reloadCitie);
+    _EventEmitter.on("reloadNewspapers" , reloadNewspaper);
+
+    if (!props.OrganizationLoader) {
+      setOrganizationLoader(false);
+      setOrganizationDetails(props.OrganizationDetails);
+    }
+
+    if (props.modalopen) {
+      setModal(true);
+    }
+
+    if (!props.CategoryLoader) {
+      setCategoryDetails(props.CategoryDetails);
+    }
+
+    if (!props.newsPaperLoader) {
+      setNewsPaperDetails(props.newsPaperDetails);
+    }
+
+    if (!props.cityLoader) {
+      setCityDetails(props.cityDetails);
+    }
+  }, [props.modalopen,
+    props.OrganizationLoader,
+    props.OrganizationDetails,
+    props.CategoryLoader,
+    props.CategoryDetails,
+    props.newsPaperLoader,
+    props.newsPaperDetails,
+    props.cityLoader,
+    props.cityDetails,
+  ]);
+  // for plus buttons
+
+
 
   const toggle = () => {
     setModal(false);
@@ -592,6 +614,8 @@ const SaveTenderModal = (props) => {
     return <>{row.name}</>;
   };
 
+
+  // for plus buttons
   const addOrganization = () => {
     setOrganizationModal(true);
   };
@@ -605,7 +629,14 @@ const SaveTenderModal = (props) => {
     setCategoryModal(true);
 
   };
+  const addCities = () => {
+    setcityModel(true);
 
+  };
+  // for plus buttons
+
+
+// For plus button reload the data after adding
   const reloadOrganizations = () => {
      //setOrganizationLoader(true)
      props.reloadOrganizations()
@@ -619,6 +650,11 @@ const SaveTenderModal = (props) => {
     //setnewsPaperLoader(true);
     props.reloadNewspapers()
  };
+
+// For plus button reload the data after adding
+
+
+
 
   const getSelectedItems = (items) => {
     setSelectedCategory(items);
@@ -672,13 +708,9 @@ const SaveTenderModal = (props) => {
                   />
                 </div>
 
-                <div
-                  className="p-col-12"
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
+
+                {/* Title */}
+                <div className="p-col-12" style={{ display: "flex", flexDirection: "column",}}>
                   <span>
                     Title :{" "}
                     {title?.trim() == "" && (
@@ -692,6 +724,8 @@ const SaveTenderModal = (props) => {
                     className="ipl-input"
                   />
                 </div>
+                {/* Title */}
+
 
                 <div className="p-col-12">
                   
@@ -732,17 +766,23 @@ const SaveTenderModal = (props) => {
                   <span className=" d-flex mt-2 ">
 
                      Category: 
+
+                      {/* Plus button */}
                     <span
                       className="add-minus-btn"
                       onClick={() => addCategory()}
                     >
                       <i className="fa fa-plus-circle"></i>
-                      <span className="validation-error">* Required</span>
                     </span>
+                     {/* Plus button */}
+
+                    <span className="validation-error">* Required</span>
+
                   </span>
                   <CategorySelection
                     CategoryDetails={CategoryDetails}
                     getSelectedItems={(items) => getSelectedItems(items)}
+                    onChange={()=>handleCategory()}
                   />
                 </div>
 
@@ -751,10 +791,13 @@ const SaveTenderModal = (props) => {
                   <span>
                     News Paper:{" "}
 
+                      {/* Plus button */}
                     <span
                       className="add-minus-btn"
                       onClick={() => addNewspaper()}
                     > <i className="fa fa-plus-circle"></i></span>
+                      {/* Plus button */}
+
                     
 
                     {selectedNewsPaper == null && (
@@ -769,6 +812,7 @@ const SaveTenderModal = (props) => {
                     onChange={(e) => {
                       onNewsPaperClick();
                       setSelectedNewsPaper(e.value);
+                     
                     }}
                     optionLabel="name"
                     filter
@@ -785,7 +829,17 @@ const SaveTenderModal = (props) => {
 
                 <div className="p-col-12">
                   <span>
-                    City:
+                    City:{" "}
+
+                      {/* Plus button */}
+                      <span
+                      className="add-minus-btn"
+                      onClick={() => addCities()}
+                    > <i className="fa fa-plus-circle"></i></span>
+                      {/* Plus button */}
+
+
+
                     {selectedCity == null && (
                       <span className="validation-error">* Required</span>
                     )}
@@ -941,11 +995,13 @@ const SaveTenderModal = (props) => {
         alignItems : 'center'
       }}
     >
-      {`© ${selectedNewsPaper?.name} ${selectedCity?.name} ${moment(new Date()).format('YYYY-MM-DD')}`}
+      {`©  ${selectedNewsPaper?.name} , ${selectedCity?.name} , ${moment(new Date()).format('YYYY-MM-DD')}`}
     </h2>
   </div>
 </div>
 
+
+{/* Models for plus button */}
       {organizationModal && (
         <SaveOrganizationModal
           modalopen={organizationModal}
@@ -963,7 +1019,14 @@ const SaveTenderModal = (props) => {
     reloadData={() => reloadNewspapers()} // Fixed here
   />
 )}
-
+{ cityModel && (
+  <SaveCityModal 
+  modalopen={cityModel}
+  isEditMode={false}
+  onClose={() => setcityModel(false)}
+  reloadData={() => reloadCities()}
+  />
+)}
 
 
 
@@ -975,6 +1038,9 @@ const SaveTenderModal = (props) => {
           reloadData={() => props.reloadCategories()}
         />
       )}
+
+{/* Models for plus button */}
+
     </div>
   );
 };

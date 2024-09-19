@@ -16,6 +16,7 @@ import Toast from "../alert/Toast"
 import { billingApiServices } from '../../services/BillingApiService';
 import { localStorageService } from "../../services/LocalStorageService";
 import _EventEmitter from "../../constants/emitter";
+import SaveTenderModal from "../Tender/SaveTenderModal";
 
 const SaveNewsPaperModal = (props) => {
   const [modal, setModal] = useState(false);
@@ -81,10 +82,8 @@ const SaveNewsPaperModal = (props) => {
 
       if (response?.data?.status) {
         handleToast("success", response?.data?.message)
-        setNewsPaperName("")
-        props.reloadData()
-
-
+        setNewsPaperName("");
+        props.reloadData();
         setModal(false);
         props.onClose()
       }
@@ -106,12 +105,15 @@ const SaveNewsPaperModal = (props) => {
         return
       }
 
-      if (response?.data?.status) {
-        _EventEmitter.emit("reloadNewspapers", response?.data?.data);
+      if (response?.data?.status) { 
         handleToast("success", response?.data?.message)
+        
+        _EventEmitter.emit("reloadNewspapers", response?.data?.data);
+
+       
         setNewsPaperName("")
-        props.reloadData()
-        // reloadData();
+        props.reloadData();
+        console.log("Reloaded Data" ,props.reloadData)
         setModal(false);
         props.onClose()
       }
@@ -133,9 +135,7 @@ const SaveNewsPaperModal = (props) => {
     return true;
   };
 
-  // const reloadData=()=>{
-  //   props.reloadData();
-  // }
+
 
 
   const handleNewsPaperName = (e) => {
