@@ -270,8 +270,7 @@ const CustomDataTable = (props) => {
           setFirst(e.first);
           setRows(e.rows);
           }}
-          sortField="effectedDate" 
-          sortOrder={-1}
+          
          
           dataKey="id"
           filters={filterArray}

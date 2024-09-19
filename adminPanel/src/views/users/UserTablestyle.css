@@ -3,9 +3,9 @@
     padding: 0.5rem 0.5rem;
     color: rgb(255, 255, 255) !important;
 }
-.p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+/* .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
     background: #ef6767;
   }
   .p-inputswitch.p-inputswitch-checked:not(.p-disabled):hover .p-inputswitch-slider {
     background: #0e6667;
-  }
+  } */

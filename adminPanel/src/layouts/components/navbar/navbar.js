@@ -170,8 +170,8 @@ class ThemeNavbar extends Component {
               <img
                 src={imgSrc}
                 alt="logo"
-               
-                style={{ width: "140px", height: "auto" ,marginLeft:"5px" }} // Adjust width and height as needed
+               className="navbarTenderlogo"
+                style={{ width: "135px", height: "auto" ,marginLeft:"5px" }} // Adjust width and height as needed
               />
             </NavLink>
 

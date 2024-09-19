@@ -1,304 +1,3 @@
-// import React, { Component, Fragment } from "react";
-// import Modal from "react-modal";
-// import SubscriptionsTable from "./SubscriptionsTable";
-// import SaveSubscriptionsModal from "./SaveSubscriptionsModal";
-// import { billingApiServices } from "../../services/BillingApiService";
-// import "./subscription.css";
-// import moment from 'moment';
-
-// class SubscriptionDetails extends Component {
-//   constructor(props) {
-//     super(props);
-
-//     this.state = {
-//       categorySearch: "",
-//       showModal: false,
-//       gridData: [],
-//       interface: "",
-//       loading: true,
-//       activeTab: 1,
-//       clearSearch: false,
-//       CategoryDetails: [],
-//       CategoryLoader: false,
-//       DataForEdit: null,
-//       tenders: [],
-//     };
-//   }
-
-//   getSubscriptionDetails() {
-//     billingApiServices.getSubscriptions().then((response) => {
-//       this.setState({ gridData: response?.data?.data, loading: false });
-//     });
-//   }
-
-//   getCategoryDetails = () => {
-//     this.setState({ CategoryLoader: true });
-//     billingApiServices.getCategoriesDetails().then((response) => {
-//       this.setState({
-//         CategoryDetails: response?.data?.data,
-//         CategoryLoader: false,
-//       });
-//     });
-//   };
-
-//   async componentDidMount() {
-//     this.getTenderDetails();
-//     await this.getCategoryDetails();
-//     this.getSubscriptionDetails();
-//   }
-
-//   getTenderDetails() {
-//     billingApiServices.getAllTenders().then((response) => {
-//       if (response?.data?.data?.length > 0) {
-//         var sortedArray = response?.data?.data.sort((a, b) => b.id - a.id);
-
-//         this.setState({ tenders: sortedArray, loading: false });
-
-
-//       } else {
-//         alert("Tender Data not found");
-//       }
-//     });
-//   }
-
-//   reloadData = () => {
-//     this.setState({ loading: true });
-//     this.getSubscriptionDetails();
-//   };
-
-//   getShowModal = (modal) => {
-//     this.setState({ showModal: modal });
-//   };
-
-//   categoryData = (categories_data) => {
-//     this.setState({
-//       gridData: categories_data,
-//     });
-//   };
-
-//   EditMode = (data) => {
-//     this.setState({ dataForEdit: data });
-//     this.setState({ showModal: true });
-//   };
-
-//   getTendeWithCategoryId = () => {
-//     // Create a map of category titles to their IDs
-//     const categoryMap = this.state.CategoryDetails?.reduce((map, category) => {
-//       map[category.title] = category.id;
-//       return map;
-//     }, {});
-
-//     // Function to convert comma-separated category titles to an array of IDs
-//     const getCategoryIds = (categoryTitles) => {
-//       if (categoryTitles == null) {
-//         return [];
-//       }
-
-//       if (categoryTitles.includes(":")) {
-//         return categoryTitles.split(":").map((title) => categoryMap[title]);
-//       } else {
-//         const categoryId = categoryMap[categoryTitles];
-//         return categoryId ? [categoryId] : [];
-//       }
-//     };
-
-//     // Map category titles in businesses array to their corresponding IDs
-//     const businessesWithIds = this.state.tenders?.map((business) => ({
-//       ...business,
-//       categoryIds: getCategoryIds(business.category),
-//     }));
-
-//     return businessesWithIds;
-//   };
-
-//   SendEmail = async () => {
-//     if (
-//       this.state.CategoryDetails?.length > 0 &&
-//       this.state.tenders?.length > 0 &&
-//       this.state.gridData?.length > 0
-//     ) {
-//       const parseCategories = (categories) => {
-//         if (categories == null || categories == "") {
-//           return [];
-//         }
-//         return categories.split(",");
-//       };
-
-//       const isPreviousDay = (date) => {
-//         const today = new Date();
-//         const yesterday = new Date(today);
-//         yesterday.setDate(today.getDate() - 1);
-//         return (
-//           date.getFullYear() === yesterday.getFullYear() &&
-//           date.getMonth() === yesterday.getMonth() &&
-//           date.getDate() === yesterday.getDate()
-//         );
-//       };
-
-//       const generateSubscribeArray = () => {
-//         const subscribeArray = [];
-
-//         let activeUser = this.state.gridData?.filter((c) => c.status == 1);
-//         if (activeUser?.length == 0) {
-//           alert("Active users are not available");
-//           return;
-//         }
-
-//         activeUser?.forEach((userSubscribe) => {
-//           const subscribedCategories = parseCategories(
-//             userSubscribe.categories
-//           );
-//           const filteredBusinesses = this.state.tenders.filter((business) =>
-//             parseCategories(business.category)?.some((category) =>
-//               subscribedCategories.includes(category)
-//             )
-//           );
-
-//           const previousDayTnd = filteredBusinesses.filter((item) => {
-//             const effectedDate = new Date(item.effectedDate);
-//             return isPreviousDay(effectedDate);
-//           });
-
-//           if (previousDayTnd?.length > 0) {
-//             let imgLinks = previousDayTnd?.map((item) => ({
-//               img: item.tenderImage,
-//               categories: item.category,
-//               name: item.name,
-//               newPaperName:item.newPaperName,
-//               publishDate:moment(item.publishDate).format("YYYY-MM-DD")
-//             }));
-//             let emailTemplate = `
-//           <html>
-//           <head></head>
-//           <body>
-//               <h2>Today Tender List</h2>
-//               <ul>
-//                   ${imgLinks
-//                     .map(
-//                       (link) =>
-//                         `<li>
-//                           <p>Newspaper : ${link.newPaperName}</p>
-//                           <p>Publish Date : ${link.publishDate}</p>
-//                           <p>Tender Title : ${link.name} </p> 
-//                           <p> Tender Image : </p>
-//                           <a href="${link.img}" target="_blank"> ${link.img}</a>
-//                         </li>`
-//                     )
-//                     .join("")}
-//               </ul>
-
-//           </body>
-//           </html>
-//       `;
-
-//             subscribeArray.push({
-//               userInfo: userSubscribe,
-//               tenderInfo: emailTemplate,
-//             });
-//           }
-//         });
-//         return subscribeArray;
-//       };
-
-//       const result = await generateSubscribeArray();
-
-//       if (result?.length > 0) {
-//         const body = { dataForEmail: result };
-//         console.log(body);
-//         let response = await billingApiServices.sendEmail(body);
-//         alert(response?.data?.message);
-//       }
-//     }
-//   };
-
-
-
-
-
-
-// getStyle = () => {
-//   if (
-//     this.state.CategoryDetails?.length > 0 &&
-//     this.state.tenders?.length > 0 &&
-//     this.state.gridData?.length > 0
-//   ) {
-//     return "btn-style p-2 d-flex align-items-center gap-1";
-//   }
-//   else{
-//   return "btn-style disable-btn p-2 d-flex align-items-center gap-1" ;
-
-//   }
-
-// };
-
-//   render() {
-//     return (
-//       <>
-// <div className="d-flex justify-content-between " style={{  marginTop: "5px"  }}>
-
-//           <div>
-//           <button
-//             id="new-report"
-//             className="btn-style p-2 d-flex align-items-center gap-1"
-//             onClick={() => this.setState({ showModal: true })}
-//           >
-//             {" "}
-//             <i className="fa-regular fa-circle-plus" style={{fontSize:"22px"}}></i> Add New
-//           </button>
-//           </div>
-
-
-
-//           <div>
-
-//           <button
-//             id="new-report"
-//             className={this.getStyle()}
-//             onClick={() => this.SendEmail()}
-//           >
-//            <i className="fa-regular fa-circle-envelope" style={{fontSize:"25px"}}></i> Send Email to Active users   
-//           </button>
-
-//           </div>
-
-//         </div>
-//         {!this.state.showModal && (
-//           <SubscriptionsTable
-//             gridData={this.state.gridData}
-//             loading={this.state.loading}
-//             reloadData={() => this.reloadData()}
-//             CategoryDetails={this.state.CategoryDetails}
-//             EditMode={(data) => this.EditMode(data)}
-//           />
-//         )}
-
-//         {this.state.showModal && (
-//           <SaveSubscriptionsModal
-//             CategoryDetails={this.state.CategoryDetails}
-//             CategoryLoader={this.state.CategoryLoader}
-//             modalopen={this.state.showModal}
-//             dataForEdit={this.state.dataForEdit}
-//             categoryData={(categories_data) =>
-//               this.categoryData(categories_data)
-//             }
-//             onClose={() =>
-//               this.setState({ showModal: false, dataForEdit: null })
-//             }
-//             reloadData={() => this.reloadData()}
-//           />
-//         )}
-//       </>
-//     );
-//   }
-// }
-
-// export default SubscriptionDetails;
-
-
-
-
-
-
 import React, { Component } from "react";
 import Modal from "react-modal";
 import SubscriptionsTable from "./SubscriptionsTable";
@@ -306,7 +5,7 @@ import SaveSubscriptionsModal from "./SaveSubscriptionsModal";
 import { billingApiServices } from "../../services/BillingApiService";
 import "./subscription.css";
 import moment from 'moment';
-import Toast from "../alert/Toast";
+import Toast from "./EmailToast";
 
 class SubscriptionDetails extends Component {
   constructor(props) {
@@ -323,6 +22,10 @@ class SubscriptionDetails extends Component {
       tenders: [],
       sendingEmail: false, // New state for tracking email sending
       emailSendingError: false, // New state for tracking errors
+
+      toastMessage: "", // For showing toast messages
+      toastType: "success", // Toast type (success, error, etc.)
+      showToast: false, // State to control toast visibility
     };
   }
 
@@ -402,6 +105,31 @@ class SubscriptionDetails extends Component {
     })) || [];
   };
 
+  showToastMessage = (message, type) => {
+    this.setState({ 
+      toastMessage: message, 
+      toastType: type, 
+      showToast: true 
+    });
+
+    if(type=="error")
+    {
+      console.log("if part")
+      setTimeout(() => {
+        this.setState({ showToast: false });
+      }, 3000); // Hide toast after 3 seconds 
+    }
+    else{
+      console.log("else part")
+
+      setTimeout(() => {
+        this.setState({ showToast: false });
+      }, 1000); // Hide toast after 1 seconds
+    }
+
+   
+   
+  };
  
  
  
@@ -420,31 +148,31 @@ class SubscriptionDetails extends Component {
       };
 
   //send mail on basis of previous date
-      const isPreviousDay = (date) => {
-        const today = new Date();
-        const yesterday = new Date(today);
-        yesterday.setDate(today.getDate()-1);
+      // const isPreviousDay = (date) => {
+      //   const today = new Date();
+      //   const yesterday = new Date(today);
+      //   yesterday.setDate(today.getDate()-1);
 
-        return (
-          date.getFullYear() === yesterday.getFullYear() &&
-          date.getMonth() === yesterday.getMonth() &&
-          date.getDate() === yesterday.getDate()
-        );
-      };
+      //   return (
+      //     date.getFullYear() === yesterday.getFullYear() &&
+      //     date.getMonth() === yesterday.getMonth() &&
+      //     date.getDate() === yesterday.getDate()
+      //   );
+      // };
 
 
       // Send email on today date basis
-      // const isPreviousDay = (date) => {
-      //   const today = new Date();
+      const isPreviousDay = (date) => {
+        const today = new Date();
   
-      //   console.log("today Date : " , today);
+      
     
-      //   return (
-      //     date.getFullYear() === today.getFullYear() &&
-      //     date.getMonth() === today.getMonth() &&
-      //     date.getDate() === today.getDate()
-      //   );
-      // };
+        return (
+          date.getFullYear() === today.getFullYear() &&
+          date.getMonth() === today.getMonth() &&
+          date.getDate() === today.getDate()
+        );
+      };
 
 
       const generateSubscribeArray = () => {
@@ -452,7 +180,8 @@ class SubscriptionDetails extends Component {
 
         const activeUsers = this.state.gridData.filter(user => user.status === 1);
         if (activeUsers.length === 0) {
-          alert("No active users available.");
+        
+          //this.showToastMessage("No active users available.", "success");
           return [];
         }
 
@@ -531,22 +260,29 @@ class SubscriptionDetails extends Component {
       if (emailData.length > 0) {
         try {
           const response = await billingApiServices.sendEmail({ dataForEmail: emailData });
-          alert(response?.data?.message || "Email sent successfully!");
+          // alert(response?.data?.message || "Email sent successfully!");
+          this.showToastMessage(response?.data?.message || "Email sent successfully!" , "success");
         } catch (error) {
           console.error("Error sending email:", error);
           this.setState({ emailSendingError: true });
-          alert("Failed to send email.");
+          // alert("Failed to send email.");
+          this.showToastMessage("Failed to send email.", "error");
         }
       } else {
         const activeUsers = this.state.gridData.filter(user => user.status === 1);
         if (activeUsers.length === 0) {
-          alert("First Activate your required users to send E-Mail.");
+          // alert("First Activate your required users to send E-Mail.");
+          this.showToastMessage("No active users available.First activate your required users to send E-Mail.", "error");
         } else {
-          alert("No email data generated. Maybe there is no yesterday tender exist against subscribed categories.");
+          // alert("No email data generated. Maybe there is no Today tender exist against subscribed categories.");
+          this.showToastMessage(
+            "No email data generated. Maybe there is no Today tender exist against subscribed categories.",
+            "error"
+          );
         }
       }
     } else {
-      alert("Required data is missing.");
+      this.showToastMessage("Required data is missing.", "error");
     }
 
     this.setState({ sendingEmail: false }); // Stop sending email
@@ -590,11 +326,25 @@ class SubscriptionDetails extends Component {
           </div>
         </div>
 
+
+
+        <Toast 
+          open={this.state.showToast} 
+          severity={this.state.toastType} 
+          message={this.state.toastMessage} 
+          timeout={1} 
+          handleClose={(val) => this.setState({ showToast: val })}
+        />
+
+
         {this.state.sendingEmail && (
           <div className="loading-message">
             Sending email, please wait...
+          
           </div>
+          
         )}
+        
 
         {!this.state.showModal && (
           <SubscriptionsTable
@@ -617,6 +367,8 @@ class SubscriptionDetails extends Component {
             reloadData={() => this.reloadData()}
           />
         )}
+
+        
       </>
     );
   }

@@ -28,6 +28,9 @@ const CustomDataTable = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [stateManager, setStateManager] = useState(0);
 
+  const [first, setFirst] = useState(0); // Index of the first record to display
+ const [rows, setRows] = useState(25); // Number of rows per page
+
   let [filterArray, setfilterArray] = useState({
     name: { value: null, matchMode: FilterMatchMode.CONTAINS },
     effectedDate: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -244,9 +247,14 @@ const CustomDataTable = (props) => {
           value={loader ? Array.from({ length: 5 }) : gridData}
           paginator
           responsiveLayout="scroll"
-          paginatorTemplate=" PrevPageLink PageLinks NextPageLink  CurrentPageReport RowsPerPageDropdown"
-          currentPageReportTemplate="Showing Records : {first} to {last} "
-          rows={25}
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink  LastPageLink CurrentPageReport"
+          currentPageReportTemplate={`ON PAGE ${Math.floor(first / rows) + 1} : RECORDS {first} to {last}`}
+          rows={rows}
+          first={first}
+          onPage={(e) => {
+          setFirst(e.first);
+          setRows(e.rows);
+          }}
        
           dataKey="id"
           filters={filterArray}

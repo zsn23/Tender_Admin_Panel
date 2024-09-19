@@ -146,7 +146,7 @@ function ImportFile(props) {
                                     <p> 
                                        For Category : Only write those categories or category which are exsisted in tender categories.
                                         <p>
-                                            Write Category in this Format: <span className='text-dark bg-light p-1 m-1 rounded-5'> Category1Name:Category2Name:Category3Name....so on. </span>
+                                            Write Category in this Format:  <span className='text-dark bg-light p-1 m-1 rounded-5'> Category1Name:Category2Name:Category3Name....so on. </span>
                                         </p>
                                     </p>
                                      

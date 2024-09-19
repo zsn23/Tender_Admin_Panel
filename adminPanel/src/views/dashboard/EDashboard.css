@@ -182,7 +182,7 @@ i.fa-light.fa-comment-dots {
 @media (max-width: 575px) {
     .dashboard-chat-box {
         width: 47%;
-        margin-bottom: 60px;
+        margin-bottom: 10px;
         padding: 15px 5px;
     }
     .dashboard-chat-box.last-box,.dashboard-chat-box.second-lastbox{

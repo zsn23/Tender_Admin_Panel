@@ -22,6 +22,11 @@
     width: 200%;
     height: auto;
 }
+
+.section1{
+    width: 100% !important;
+}
+
 .p-multiselect-panel{
     width: 43% !important;
     height: auto !important;
@@ -34,9 +39,10 @@
     margin-top: 17%;
     margin-bottom: 10%;
     display: flex; /* Use flexbox to arrange items in a row */
-    justify-content: end; /* Center the buttons horizontally */
+    justify-content: center; /* Center the buttons horizontally */
     gap: 10px; /* Optional: Adds space between buttons */
     text-align: left;
+    /* margin-left: 100px; */
 }
 
 .p-multiselect .p-multiselect-label {

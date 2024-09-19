@@ -18,7 +18,7 @@
 }
 
 .footer-img{
-    color: #ef6767 !important;
+    /* color: #ef6767 !important; */
     font-weight: 400;
 }
 .content {
@@ -26,7 +26,7 @@
     /* Enable scrolling if the image is larger than the container */
     width: 100%;
     /* Ensure the container takes the full width */
-    height: 523px;
+    height: 450px;
     /* Set the initial height */
     display: flex;
     /* To center the image vertically */
@@ -48,7 +48,7 @@ img {
     background-color: #f0f0f0;
     border: 1px solid #ddd;
     border-radius: 4px;
-    width: 150%;
+    width: 90%;
     height: auto;
 }
 
@@ -93,7 +93,9 @@ input.p-inputtext.p-component.ipl-input {
 .modal {
     --bs-modal-margin: 0;
 }
-
+.modal-content__{
+    width: 83% !important;
+}
 .p-fileupload .p-fileupload-content {
     background: #ffffff;
     padding: 0px !important;
@@ -122,7 +124,7 @@ input.p-inputtext.p-component.ipl-input {
     /* Section 2 occupies 8 columns */
 } 
 .section_____img{
-    width: 100% !important;
+    width: 30% !important;
     /* height: 620px !important; */
 }
 
