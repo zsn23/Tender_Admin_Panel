@@ -160,6 +160,8 @@ class TenderDetails extends Component {
             reloadData={() => this.reloadData()}
             reloadOrganizations={() => this.getOrganizationsDetails()}
             reloadCategories={() => this.getCategoryDetails()}
+            reloadNewspapers={()=>this.getNewsPaperDetails()}
+            reloadCities={()=> this.getCityDetails() }
           />
         )}
 
