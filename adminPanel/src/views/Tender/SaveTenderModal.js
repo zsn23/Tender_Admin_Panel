@@ -112,6 +112,9 @@ const SaveTenderModal = (props) => {
 
   const [zoom, setZoom] = useState(1);
 
+  const [customTitle, setCustomTitle] = useState(""); // New state for user-provided title
+
+
   const handleZoomIn = () => {
     // setZoom(zoom + 0.1);
   };
@@ -215,6 +218,54 @@ const SaveTenderModal = (props) => {
     // }
   };
 
+  // useEffect(() => {
+  //   if (props.dataForEdit != null && props.isEditMode) {
+  //     setIsFooterDisabled(true);
+  //     setIplNumber(props.dataForEdit?.IPLNumber);
+  //     setTitle(props.dataForEdit?.name);
+  //     setSavedImageName(props.dataForEdit?.tenderImage);
+  //     let categories = props.dataForEdit?.category?.split(":");
+  //     var selectedItem = [];
+  //     categories?.forEach((element) => {
+  //       let dt = props.CategoryDetails?.find(
+  //         (c) => c.name?.toLowerCase() == element?.toLowerCase()
+  //       );
+  //       if (dt != null && dt != undefined) {
+  //         selectedItem.push(dt);
+  //       }
+  //     });
+  //     setSelectedCategory(selectedItem);
+
+  //     let _selectedCity = props.cityDetails?.find(
+  //       (c) => c.id == props.dataForEdit?.city
+  //     );
+  //     if (_selectedCity != null && _selectedCity != undefined) {
+  //       setSelectedCity(_selectedCity);
+  //     }
+
+  //     let _selectedNewspaper = props.newsPaperDetails?.find(
+  //       (c) => c.id == props.dataForEdit?.newspaper
+  //     );
+  //     setSelectedNewsPaper(_selectedNewspaper);
+
+  //     let _selectedOrganization = props.OrganizationDetails?.find(
+  //       (c) => c.id == props.dataForEdit?.organization
+  //     );
+  //     setSelectedOrganization(_selectedOrganization);
+
+  //     setOpenDate(props.dataForEdit?.openDate);
+  //     const formattedDate = moment(props.dataForEdit?.publishDate)
+  //       .utcOffset("+05:00")
+  //       .format("ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (z)");
+
+  //     setPublishDate(new Date(props.dataForEdit?.publishDate));
+  //     // setSelectedFile(props.dataForEdit?.tenderImage)
+  //     setSelectedImg(props.dataForEdit?.tenderImage);
+  //   }
+  // }, [props.dataForEdit, props.CategoryDetails, props.cityDetails, props.newsPaperDetails, props.OrganizationDetails]);
+
+
+
   useEffect(() => {
     if (props.dataForEdit != null && props.isEditMode) {
       setIsFooterDisabled(true);
@@ -232,34 +283,38 @@ const SaveTenderModal = (props) => {
         }
       });
       setSelectedCategory(selectedItem);
-
+  
       let _selectedCity = props.cityDetails?.find(
         (c) => c.id == props.dataForEdit?.city
       );
       if (_selectedCity != null && _selectedCity != undefined) {
         setSelectedCity(_selectedCity);
       }
-
+  
       let _selectedNewspaper = props.newsPaperDetails?.find(
         (c) => c.id == props.dataForEdit?.newspaper
       );
       setSelectedNewsPaper(_selectedNewspaper);
-
+  
       let _selectedOrganization = props.OrganizationDetails?.find(
         (c) => c.id == props.dataForEdit?.organization
       );
       setSelectedOrganization(_selectedOrganization);
-
+  
       setOpenDate(props.dataForEdit?.openDate);
       const formattedDate = moment(props.dataForEdit?.publishDate)
         .utcOffset("+05:00")
         .format("ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (z)");
-
+  
       setPublishDate(new Date(props.dataForEdit?.publishDate));
-      // setSelectedFile(props.dataForEdit?.tenderImage)
       setSelectedImg(props.dataForEdit?.tenderImage);
     }
   }, [props.dataForEdit, props.CategoryDetails, props.cityDetails, props.newsPaperDetails, props.OrganizationDetails]);
+  
+
+
+
+
 
   const SubmitForm = () => {
     if (isValid()) {
@@ -534,24 +589,60 @@ const SaveTenderModal = (props) => {
     setIplNumber(e.target.value);
   };
 
-  const handleTitle = (e) => {
-    var value = e.target.value;
-    const regex = /^[a-zA-Z0-9_ -]*$/;
+  // const handleTitle = (e) => {
+  //   var value = e.target.value;
+  //   const regex = /^[a-zA-Z0-9_ -]*$/;
 
-    if (!regex.test(value)) {
-      // Remove the last character if it's not allowed
-      value = value.slice(0, -1);
-    }
+  //   if (!regex.test(value)) {
+  //     // Remove the last character if it's not allowed
+  //     value = value.slice(0, -1);
+  //   }
 
-    setTitle(value);
-  };
+  //   setTitle(value);
+  // };
+
+  // Function to handle user input for the title
+const handleTitle = (e) => {
+  const value = e.target.value;
+  const regex = /^[a-zA-Z0-9_ -]*$/;
+
+  if (!regex.test(value)) {
+    // Remove the last character if it's not allowed
+    return;
+  }
+
+  setCustomTitle(value);
+
+  if (selectedOrganization) {
+    // Combine organization name with custom title
+    setTitle(`${selectedOrganization.name} - ${value}`);
+  } else {
+    setTitle(value); // If no organization is selected, just set the user input as the title
+  }
+};
+
 
   const dropdownRefSpaceBar = useRef(null);
 
+  // const handleOrganization = (e) => {
+  //   onOrganzationClick();
+  //   setSelectedOrganization(e.value);
+  // };
+
   const handleOrganization = (e) => {
-    onOrganzationClick();
-    setSelectedOrganization(e.value);
+    const organization = e.value;
+    setSelectedOrganization(organization);
+  
+    // Combine organization name with custom title
+    if (customTitle) {
+      setTitle(`${organization.name} - ${customTitle}`);
+    } else {
+      setTitle(organization.name); // If no custom title, just use the organization name
+    }
   };
+
+
+
 
   const handleCategory = (e) => {
     onCategoryClick();
@@ -698,7 +789,8 @@ const SaveTenderModal = (props) => {
                   </span>
                   <InputText
                     type="text"
-                    value={title}
+                    //value={title}
+                    value={customTitle} // Bind the input field to customTitle
                     onChange={(e) => handleTitle(e)}
                     className="ipl-input"
                   />
@@ -706,7 +798,8 @@ const SaveTenderModal = (props) => {
                 {/* Title */}
 
 
-                <div className="p-col-12">
+                      {/* Organization dropdown */}
+                {/* <div className="p-col-12">
 
                   <span>
 
@@ -729,9 +822,6 @@ const SaveTenderModal = (props) => {
                     itemTemplate={(e) => organizationTemplate(e)}
                     filter
                     filterBy="name"
-                    // filterInputAutoFocus={false}
-                    // focusInputRef={true}
-                    // showOnFocus={true}
                     filterPlaceholder="Search"
                     onChange={(e) => handleOrganization(e)}
                     optionLabel="name"
@@ -739,7 +829,37 @@ const SaveTenderModal = (props) => {
                     placeholder="Select an Organziation"
                     resetFilterOnHide={true}
                   />
-                </div>
+                </div> */}
+                      {/* Organization dropdown */}
+
+    {/* Organization dropdown */}
+    <div className="p-col-12">
+      <span>
+        Organization:{" "}
+        <span class="add-minus-btn" onClick={() => addOrganization()}>
+          <i className="fa fa-plus-circle"></i>
+          {selectedOrganization == null && (
+            <span className="validation-error">* Required</span>
+          )}
+        </span>
+      </span>
+      <Dropdown
+        id="organization-dropdown"
+        options={OrganizationDetails}
+        itemTemplate={(e) => organizationTemplate(e)}
+        filter
+        filterBy="name"
+        filterPlaceholder="Search"
+        onChange={(e) => handleOrganization(e)}
+        optionLabel="name"
+        value={selectedOrganization}
+        placeholder="Select an Organization"
+        resetFilterOnHide={true}
+      />
+    </div>
+    {/* Organization dropdown */}
+
+
 
                 <div className="p-col-12">
                   <span className=" d-flex mt-2 ">
@@ -891,7 +1011,7 @@ const SaveTenderModal = (props) => {
                       )} */}
 
 {savedImageName != "" ? (
-  <span className="validation-succes">File is selected</span>
+  <span className="validation-succes">File Saved!</span>
 
 ) : (
 <span className="validation-error">* Required</span>
