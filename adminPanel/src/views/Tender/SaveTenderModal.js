@@ -84,13 +84,13 @@ const SaveTenderModal = (props) => {
   const [selectedNewsPaper, setSelectedNewsPaper] = useState(null);
   const [CityDetails, setCityDetails] = useState([{}, {}, {}, {}, {}, {}]);
   const [selectedCity, setSelectedCity] = useState(null);
-  
+
   // for plus buttons
   const [categoryModal, setCategoryModal] = useState(false);
   const [organizationModal, setOrganizationModal] = useState(false);
-  const [newspaperModel , setNewsPaperModel]=useState(false);
-  const [cityModel , setcityModel]=useState(false);
-// for plus buttons
+  const [newspaperModel, setNewsPaperModel] = useState(false);
+  const [cityModel, setcityModel] = useState(false);
+  // for plus buttons
 
 
   const [organizationLoader, setOrganizationLoader] = useState(false);
@@ -140,37 +140,38 @@ const SaveTenderModal = (props) => {
   // for plus buttons
   useEffect(() => {
 
-    
-  const reloadOrg = (data) => {
-    let dt = props.OrganizationDetails;
-    dt.push(data[0]);
-    setOrganizationDetails(dt);
-    setOrganizationLoader(false);
-  };
 
-  const reloadCategory = (data) => {
-    let dt = props.CategoryDetails;
-    dt.push(data[0]);
-    setCategoryDetails(dt);
-  };
+    const reloadOrg = (data) => {
+      let dt = props.OrganizationDetails;
+      dt.push(data[0]);
+      setOrganizationDetails(dt);
+      setOrganizationLoader(false);
+    };
 
-  const reloadNewspaper =(data)=>{
-    let dt=props.newsPaperDetails;
-    dt.push(data[0]);
-    setNewsPaperDetails(dt);
-    setnewsPaperLoader(false);
-  }
+    const reloadCategory = (data) => {
+      let dt = props.CategoryDetails;
+      dt.push(data[0]);
+      setCategoryDetails(dt);
+      
+    };
+
+    const reloadNewspaper = (data) => {
+      let dt = props.newsPaperDetails;
+      dt.push(data[0]);
+      setNewsPaperDetails(dt);
+      setnewsPaperLoader(false);
+    }
 
 
-  const reloadCitie = (data) => {
-    let dt = props.cityDetails;
-    dt.push(data[0]);
-    setCityDetails(dt);
-  };
+    const reloadCitie = (data) => {
+      let dt = props.cityDetails;
+      dt.push(data[0]);
+      setCityDetails(dt);
+    };
     _EventEmitter.on("reloadOrganizations", reloadOrg);
     _EventEmitter.on("reloadCategories", reloadCategory);
     _EventEmitter.on("reloadCities", reloadCitie);
-    _EventEmitter.on("reloadNewspapers" , reloadNewspaper);
+    _EventEmitter.on("reloadNewspapers", reloadNewspaper);
 
     if (!props.OrganizationLoader) {
       setOrganizationLoader(false);
@@ -193,14 +194,14 @@ const SaveTenderModal = (props) => {
       setCityDetails(props.cityDetails);
     }
   }, [props.modalopen,
-    props.OrganizationLoader,
-    props.OrganizationDetails,
-    props.CategoryLoader,
-    props.CategoryDetails,
-    props.newsPaperLoader,
-    props.newsPaperDetails,
-    props.cityLoader,
-    props.cityDetails,
+  props.OrganizationLoader,
+  props.OrganizationDetails,
+  props.CategoryLoader,
+  props.CategoryDetails,
+  props.newsPaperLoader,
+  props.newsPaperDetails,
+  props.cityLoader,
+  props.cityDetails,
   ]);
   // for plus buttons
 
@@ -258,7 +259,7 @@ const SaveTenderModal = (props) => {
       // setSelectedFile(props.dataForEdit?.tenderImage)
       setSelectedImg(props.dataForEdit?.tenderImage);
     }
-  }, [props.dataForEdit]);
+  }, [props.dataForEdit, props.CategoryDetails, props.cityDetails, props.newsPaperDetails, props.OrganizationDetails]);
 
   const SubmitForm = () => {
     if (isValid()) {
@@ -293,23 +294,6 @@ const SaveTenderModal = (props) => {
       handleToast("error", "Tender not uploaded ,please do it again");
       return;
     }
-    // if (selectedFile != null) {
-    //   var id = new Date()?.getSeconds()?.toString();
-    //   img = await handleUpload(id);
-
-    //   const fileExtension = selectedFile?.name?.split(".").pop();
-    //   var imgTitle = title?.trim()?.split(" ").join("-");
-    //   var name = imgTitle + "-" + id + "." + fileExtension?.toLowerCase();
-
-    //   if (img == false) {
-    //     handleToast(
-    //       "error",
-    //       "Operation failed, check your internet connection"
-    //     );
-    //     return;
-    //   }
-    //   img = "https://mytender.online/uploads/" + name;
-    // }
 
     const body = {
       id: props.dataForEdit?.id,
@@ -433,10 +417,10 @@ const SaveTenderModal = (props) => {
       setErrors(true);
       return false;
     }
-    // else if (selectedCategory == null) {
-    //   setErrors(true)
-    //   return false
-    // }
+    else if (selectedCategory == null) {
+      setErrors(true)
+      return false
+    }
     else if (selectedOrganization == null) {
       setErrors(true);
       return false;
@@ -469,16 +453,7 @@ const SaveTenderModal = (props) => {
   const handleFileChange = async (event) => {
     setSavedImageName("");
 
-    // if (title?.trim() == "") {
-    //   event.preventDefault();
-    //   setRefreshFileInput(true);
-    //   setTimeout(() => {
-    //     setRefreshFileInput();
-    //   }, 1000);
-
-    //   alert("Please enter the title before image selection");
-    //   return;
-    // }
+  
 
     try {
       let file = URL.createObjectURL(event.target.files[0]);
@@ -579,6 +554,7 @@ const SaveTenderModal = (props) => {
   };
 
   const handleCategory = (e) => {
+    onCategoryClick();
     setSelectedCategory(e.value);
   };
 
@@ -620,10 +596,10 @@ const SaveTenderModal = (props) => {
     setOrganizationModal(true);
   };
 
-  const addNewspaper=()=>{
+  const addNewspaper = () => {
     setNewsPaperModel(true);
   }
-  
+
 
   const addCategory = () => {
     setCategoryModal(true);
@@ -636,22 +612,22 @@ const SaveTenderModal = (props) => {
   // for plus buttons
 
 
-// For plus button reload the data after adding
+  // For plus button reload the data after adding
   const reloadOrganizations = () => {
-     //setOrganizationLoader(true)
-     props.reloadOrganizations()
+    //setOrganizationLoader(true)
+    props.reloadOrganizations()
   };
 
-  const reloadCities= () =>{
+  const reloadCities = () => {
     props.reloadCities();
   }
 
   const reloadNewspapers = () => {
     //setnewsPaperLoader(true);
     props.reloadNewspapers()
- };
+  };
 
-// For plus button reload the data after adding
+  // For plus button reload the data after adding
 
 
 
@@ -675,9 +651,12 @@ const SaveTenderModal = (props) => {
   const onCityClick = () => {
     document.querySelector("#city-dropdown input").focus();
   };
+  const onCategoryClick =()=>{
+    document.querySelector("#category-dropdown input").focus();
+  };
 
   return (
-    <div className="container-fluid d-flex justify-content-start mt-2" style={{overflow:"auto"}}>
+    <div className="container-fluid d-flex justify-content-start mt-2" style={{ overflow: "auto" }}>
       <Toast
         open={openSnackBar}
         severity={severity}
@@ -710,7 +689,7 @@ const SaveTenderModal = (props) => {
 
 
                 {/* Title */}
-                <div className="p-col-12" style={{ display: "flex", flexDirection: "column",}}>
+                <div className="p-col-12" style={{ display: "flex", flexDirection: "column", }}>
                   <span>
                     Title :{" "}
                     {title?.trim() == "" && (
@@ -728,9 +707,9 @@ const SaveTenderModal = (props) => {
 
 
                 <div className="p-col-12">
-                  
+
                   <span>
-                    
+
                     Organization:{" "}
                     <span
                       class="add-minus-btn"
@@ -742,7 +721,7 @@ const SaveTenderModal = (props) => {
                         <span className="validation-error">* Required</span>
                       )}
                     </span>
-                     
+
                   </span>
                   <Dropdown
                     id="organization-dropdown"
@@ -765,46 +744,64 @@ const SaveTenderModal = (props) => {
                 <div className="p-col-12">
                   <span className=" d-flex mt-2 ">
 
-                     Category: 
+                    Category:
 
-                      {/* Plus button */}
+                    {/* Plus button */}
                     <span
                       className="add-minus-btn"
                       onClick={() => addCategory()}
                     >
                       <i className="fa fa-plus-circle"></i>
                     </span>
-                     {/* Plus button */}
-
-                    <span className="validation-error">* Required</span>
+                    {/* Plus button */}
+                   
+                    {selectedCategory==null &&(
+                      <span className="validation-error">* Required</span>
+                    )}
 
                   </span>
-                  <CategorySelection
+                    <CategorySelection
                     CategoryDetails={CategoryDetails}
                     getSelectedItems={(items) => getSelectedItems(items)}
-                    onChange={()=>handleCategory()}
+                    preSelectedCategories={selectedCategory}  // Pass the pre-selected categories here
                   />
+                  
+                    {/* <Dropdown
+                    id="category-dropdown"
+                    options={CategoryDetails}
+                    itemTemplate={(e) => categoryTemplate(e)}
+                    filter
+                    filterBy="name"
+                    filterPlaceholder="Search"
+                    onChange={(e) => handleCategory(e)}
+                    optionLabel="name"
+                    value={selectedCategory}
+                    placeholder="Select Category"
+                    resetFilterOnHide={true}
+                  /> */}
+
+                 
                 </div>
 
                 <div className="p-col-12">
-                  
+
                   <span>
                     News Paper:{" "}
 
-                      {/* Plus button */}
+                    {/* Plus button */}
                     <span
                       className="add-minus-btn"
                       onClick={() => addNewspaper()}
                     > <i className="fa fa-plus-circle"></i></span>
-                      {/* Plus button */}
+                    {/* Plus button */}
 
-                    
+
 
                     {selectedNewsPaper == null && (
                       <span className="validation-error">* Required</span>
                     )}
                   </span>
-                  
+
                   <Dropdown
                     id="newspaper-dropdown"
                     options={NewsPaperDetails}
@@ -812,14 +809,11 @@ const SaveTenderModal = (props) => {
                     onChange={(e) => {
                       onNewsPaperClick();
                       setSelectedNewsPaper(e.value);
-                     
+
                     }}
                     optionLabel="name"
                     filter
                     filterBy="name"
-                    // filterInputAutoFocus={false}
-                    // focusInputRef={true}
-                    // showOnFocus={true}
                     filterPlaceholder="Search"
                     value={selectedNewsPaper}
                     placeholder="Select News Paper"
@@ -831,12 +825,12 @@ const SaveTenderModal = (props) => {
                   <span>
                     City:{" "}
 
-                      {/* Plus button */}
-                      <span
+                    {/* Plus button */}
+                    <span
                       className="add-minus-btn"
                       onClick={() => addCities()}
                     > <i className="fa fa-plus-circle"></i></span>
-                      {/* Plus button */}
+                    {/* Plus button */}
 
 
 
@@ -855,9 +849,6 @@ const SaveTenderModal = (props) => {
                     optionLabel="name"
                     filter
                     filterBy="name"
-                    // filterInputAutoFocus={false}
-                    // focusInputRef={true}
-                    // showOnFocus={true}
                     filterPlaceholder="Search"
                     value={selectedCity}
                     placeholder="Select City"
@@ -865,16 +856,7 @@ const SaveTenderModal = (props) => {
                   />
                 </div>
 
-                {/* <div className="p-col-12">
-                    <span>Open Date:</span>
-                    <div className="card flex justify-content-center">
-                      <Calendar value={openDate} onChange={(e) => {
-                        console.log(e.value)
-                        setOpenDate(e.value)
-                      }} />
-                      {openDate == null && <span className="validation-error">* Required</span>} 
-                    </div>
-                  </div> */}
+            
 
                 <div className="p-col-12">
                   <span>
@@ -898,18 +880,31 @@ const SaveTenderModal = (props) => {
                   <div className="p-col-12">
                     <span>
                       File:{" "}
-                      {selectedFile == null && (
+                   
+                   
+                      {/* {selectedFile == null &&  (
                         <span className="validation-error">* Required</span>
                       )}
+
                       {savedImageName != "" && (
                         <span className="validation-succes">File Saved!</span>
-                      )}
+                      )} */}
+
+{savedImageName != "" ? (
+  <span className="validation-succes">File is selected</span>
+
+) : (
+<span className="validation-error">* Required</span>
+
+)}
+
+
                     </span>
                     <InputText
                       type="file"
                       onChange={(e) => handleFileChange(e)}
                       className="ipl-input"
-                      // ref={dropdownRef}
+                    // ref={dropdownRef}
                     />
                   </div>
                 )}
@@ -947,61 +942,52 @@ const SaveTenderModal = (props) => {
 
 
       <div className="section_____img section col8" ref={gridRef}>
-  <div className="content " style={{ overflow: 'auto' }}>
-    <Watermark
-       text="Tender786 Bismillah"
-  textColor="rgba(255, 255, 255, 0.3)"
-  textSize="10px"
-  // style={{
-  //   position: 'absolute',
-  //   top: 0,
-  //   left: -100,
-  //   right: 0,
-  //   bottom: 0,
-  //   backgroundRepeat: 'repeat',
-  //   backgroundSize: '100px 100px',
-  //   zIndex: 1,
-  //     }}
-    >
-      <div style={{ overflow: 'auto', width: '100%', height: '100%', position: 'relative' }}>
-        <img
-          alt=""
-          height="700px"
-          src={selectedImg}
-          style={{
-            transform: `scale(${zoom})`,
-            transformOrigin: 'top left',
-            cursor: 'zoom-in',
-            zIndex: 0, // Image stays below the watermark
-          }}
-          onClick={handleZoomIn}
-          onContextMenu={(e) => {
-            e.preventDefault(); // Prevent context menu on right-click
-            handleZoomOut();
-          }}
-        />
+        <div className="content " style={{ overflow: 'auto' }}>
+          <Watermark
+            text="Tender786 Bismillah"
+            textColor="rgba(255, 255, 255, 0.3)"
+            textSize="10px"
+        
+          >
+            <div style={{ overflow: 'auto', width: '100%', height: '100%', position: 'relative' }}>
+              <img
+                alt=""
+                height="700px"
+                src={selectedImg}
+                style={{
+                  transform: `scale(${zoom})`,
+                  transformOrigin: 'top left',
+                  cursor: 'zoom-in',
+                  zIndex: 0, // Image stays below the watermark
+                }}
+                onClick={handleZoomIn}
+                onContextMenu={(e) => {
+                  e.preventDefault(); // Prevent context menu on right-click
+                  handleZoomOut();
+                }}
+              />
+            </div>
+          </Watermark>
+        </div>
+
+        <div className="p-col-12 mt-5">
+          <h2
+            style={{
+              fontSize: '22px',
+              fontWeight: 500,
+              color: 'red',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            {`©  ${selectedNewsPaper?.name} , ${selectedCity?.name} , ${moment(new Date()).format('YYYY-MM-DD')}`}
+          </h2>
+        </div>
       </div>
-    </Watermark>
-  </div>
-
-  <div className="p-col-12 mt-5">
-    <h2
-      style={{
-        fontSize: '22px',
-        fontWeight: 500,
-        color: 'red',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems : 'center'
-      }}
-    >
-      {`©  ${selectedNewsPaper?.name} , ${selectedCity?.name} , ${moment(new Date()).format('YYYY-MM-DD')}`}
-    </h2>
-  </div>
-</div>
 
 
-{/* Models for plus button */}
+      {/* Models for plus button */}
       {organizationModal && (
         <SaveOrganizationModal
           modalopen={organizationModal}
@@ -1011,22 +997,22 @@ const SaveTenderModal = (props) => {
         />
       )}
 
-{newspaperModel && (
-  <SaveNewsPaperModal
-    modalopen={newspaperModel}
-    isEditMode={false}
-    onClose={() => setNewsPaperModel(false)}
-    reloadData={() => reloadNewspapers()} // Fixed here
-  />
-)}
-{ cityModel && (
-  <SaveCityModal 
-  modalopen={cityModel}
-  isEditMode={false}
-  onClose={() => setcityModel(false)}
-  reloadData={() => reloadCities()}
-  />
-)}
+      {newspaperModel && (
+        <SaveNewsPaperModal
+          modalopen={newspaperModel}
+          isEditMode={false}
+          onClose={() => setNewsPaperModel(false)}
+          reloadData={() => reloadNewspapers()} // Fixed here
+        />
+      )}
+      {cityModel && (
+        <SaveCityModal
+          modalopen={cityModel}
+          isEditMode={false}
+          onClose={() => setcityModel(false)}
+          reloadData={() => reloadCities()}
+        />
+      )}
 
 
 
@@ -1039,7 +1025,7 @@ const SaveTenderModal = (props) => {
         />
       )}
 
-{/* Models for plus button */}
+      {/* Models for plus button */}
 
     </div>
   );
@@ -1048,6 +1034,73 @@ const SaveTenderModal = (props) => {
 export default SaveTenderModal;
 
 
+  // if (title?.trim() == "") {
+    //   event.preventDefault();
+    //   setRefreshFileInput(true);
+    //   setTimeout(() => {
+    //     setRefreshFileInput();
+    //   }, 1000);
+
+    //   alert("Please enter the title before image selection");
+    //   return;
+    // }
+
+
+ 
+
+
+   // filterInputAutoFocus={false}
+                    // focusInputRef={true}
+                    // showOnFocus={true}
+
+
+
+    {/* <div className="p-col-12">
+                    <span>Open Date:</span>
+                    <div className="card flex justify-content-center">
+                      <Calendar value={openDate} onChange={(e) => {
+                        console.log(e.value)
+                        setOpenDate(e.value)
+                      }} />
+                      {openDate == null && <span className="validation-error">* Required</span>} 
+                    </div>
+                  </div> */}
+
+
+
+
+  // style={{
+          //   position: 'absolute',
+          //   top: 0,
+          //   left: -100,
+          //   right: 0,
+          //   bottom: 0,
+          //   backgroundRepeat: 'repeat',
+          //   backgroundSize: '100px 100px',
+          //   zIndex: 1,
+          //     }}
+
+
+
+
+
+    // if (selectedFile != null) {
+    //   var id = new Date()?.getSeconds()?.toString();
+    //   img = await handleUpload(id);
+
+    //   const fileExtension = selectedFile?.name?.split(".").pop();
+    //   var imgTitle = title?.trim()?.split(" ").join("-");
+    //   var name = imgTitle + "-" + id + "." + fileExtension?.toLowerCase();
+
+    //   if (img == false) {
+    //     handleToast(
+    //       "error",
+    //       "Operation failed, check your internet connection"
+    //     );
+    //     return;
+    //   }
+    //   img = "https://mytender.online/uploads/" + name;
+    // }
 
 
             //  {/* water mark */}
