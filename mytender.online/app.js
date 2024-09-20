@@ -460,7 +460,7 @@ app.post('/categories/updateCategory', (req, res) => {
         res.status(200).json({ status: true, data: results, message: MESSAGES.UPDATE });
       }
       else {
-        res.status(200).json({ status: false, data: [], message: MESSAGES.FAILED_MESSAGE });
+        res.status(200).json({ status: false, data: error , message: MESSAGES.FAILED_MESSAGE });
 
       }
 
@@ -823,7 +823,7 @@ app.post('/organizations/updateOrganization', (req, res) => {
         res.status(200).json({ status: true, data: results, message: MESSAGES.UPDATE });
       }
       else {
-        res.status(200).json({ status: false, data: [], message: MESSAGES.FAILED_MESSAGE });
+        res.status(200).json({ status: false, data: error, message: MESSAGES.FAILED_MESSAGE });
       }
     });
   } catch (err) {

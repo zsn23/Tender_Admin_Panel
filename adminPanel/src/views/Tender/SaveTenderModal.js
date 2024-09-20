@@ -112,6 +112,9 @@ const SaveTenderModal = (props) => {
 
   const [zoom, setZoom] = useState(1);
 
+  const [customTitle, setCustomTitle] = useState(""); // New state for user-provided title
+
+
   const handleZoomIn = () => {
     // setZoom(zoom + 0.1);
   };
@@ -215,11 +218,59 @@ const SaveTenderModal = (props) => {
     // }
   };
 
+  // useEffect(() => {
+  //   if (props.dataForEdit != null && props.isEditMode) {
+  //     setIsFooterDisabled(true);
+  //     setIplNumber(props.dataForEdit?.IPLNumber);
+  //     setTitle(props.dataForEdit?.name);
+  //     setSavedImageName(props.dataForEdit?.tenderImage);
+  //     let categories = props.dataForEdit?.category?.split(":");
+  //     var selectedItem = [];
+  //     categories?.forEach((element) => {
+  //       let dt = props.CategoryDetails?.find(
+  //         (c) => c.name?.toLowerCase() == element?.toLowerCase()
+  //       );
+  //       if (dt != null && dt != undefined) {
+  //         selectedItem.push(dt);
+  //       }
+  //     });
+  //     setSelectedCategory(selectedItem);
+
+  //     let _selectedCity = props.cityDetails?.find(
+  //       (c) => c.id == props.dataForEdit?.city
+  //     );
+  //     if (_selectedCity != null && _selectedCity != undefined) {
+  //       setSelectedCity(_selectedCity);
+  //     }
+
+  //     let _selectedNewspaper = props.newsPaperDetails?.find(
+  //       (c) => c.id == props.dataForEdit?.newspaper
+  //     );
+  //     setSelectedNewsPaper(_selectedNewspaper);
+
+  //     let _selectedOrganization = props.OrganizationDetails?.find(
+  //       (c) => c.id == props.dataForEdit?.organization
+  //     );
+  //     setSelectedOrganization(_selectedOrganization);
+
+  //     setOpenDate(props.dataForEdit?.openDate);
+  //     const formattedDate = moment(props.dataForEdit?.publishDate)
+  //       .utcOffset("+05:00")
+  //       .format("ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (z)");
+
+  //     setPublishDate(new Date(props.dataForEdit?.publishDate));
+  //     // setSelectedFile(props.dataForEdit?.tenderImage)
+  //     setSelectedImg(props.dataForEdit?.tenderImage);
+  //   }
+  // }, [props.dataForEdit, props.CategoryDetails, props.cityDetails, props.newsPaperDetails, props.OrganizationDetails]);
+
+
+
   useEffect(() => {
     if (props.dataForEdit != null && props.isEditMode) {
       setIsFooterDisabled(true);
       setIplNumber(props.dataForEdit?.IPLNumber);
-      setTitle(props.dataForEdit?.name);
+      setTitle(props.dataForEdit?.name); // This is the full title with organization name
       setSavedImageName(props.dataForEdit?.tenderImage);
       let categories = props.dataForEdit?.category?.split(":");
       var selectedItem = [];
@@ -232,34 +283,48 @@ const SaveTenderModal = (props) => {
         }
       });
       setSelectedCategory(selectedItem);
-
+  
       let _selectedCity = props.cityDetails?.find(
         (c) => c.id == props.dataForEdit?.city
       );
       if (_selectedCity != null && _selectedCity != undefined) {
         setSelectedCity(_selectedCity);
       }
-
+  
       let _selectedNewspaper = props.newsPaperDetails?.find(
         (c) => c.id == props.dataForEdit?.newspaper
       );
       setSelectedNewsPaper(_selectedNewspaper);
-
+  
       let _selectedOrganization = props.OrganizationDetails?.find(
         (c) => c.id == props.dataForEdit?.organization
       );
       setSelectedOrganization(_selectedOrganization);
-
+  
+      // Separate the organization name from the custom title
+      const orgName = _selectedOrganization?.name;
+      const fullName = props.dataForEdit?.name;
+      const cityName = _selectedCity?.name;
+      
+      if (fullName?.includes(" - ") && orgName && cityName) {
+        const [userProvidedTitle] = fullName.split(" - ");
+        setCustomTitle(userProvidedTitle || ""); // Set the user-provided title for editing
+      } else {
+        setCustomTitle(fullName || ""); // Fallback in case there's no separator
+      }
+  
       setOpenDate(props.dataForEdit?.openDate);
       const formattedDate = moment(props.dataForEdit?.publishDate)
         .utcOffset("+05:00")
         .format("ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (z)");
-
+  
       setPublishDate(new Date(props.dataForEdit?.publishDate));
-      // setSelectedFile(props.dataForEdit?.tenderImage)
       setSelectedImg(props.dataForEdit?.tenderImage);
     }
-  }, [props.dataForEdit, props.CategoryDetails, props.cityDetails, props.newsPaperDetails, props.OrganizationDetails]);
+  }, [props.dataForEdit, props.CategoryDetails, props.cityDetails, props.newsPaperDetails, props.OrganizationDetails,props.category]);
+
+
+
 
   const SubmitForm = () => {
     if (isValid()) {
@@ -534,24 +599,122 @@ const SaveTenderModal = (props) => {
     setIplNumber(e.target.value);
   };
 
-  const handleTitle = (e) => {
-    var value = e.target.value;
-    const regex = /^[a-zA-Z0-9_ -]*$/;
+  // const handleTitle = (e) => {
+  //   var value = e.target.value;
+  //   const regex = /^[a-zA-Z0-9_ -]*$/;
 
-    if (!regex.test(value)) {
-      // Remove the last character if it's not allowed
-      value = value.slice(0, -1);
-    }
+  //   if (!regex.test(value)) {
+  //     // Remove the last character if it's not allowed
+  //     value = value.slice(0, -1);
+  //   }
 
-    setTitle(value);
-  };
+  //   setTitle(value);
+  // };
+
+  // Function to handle user input for the title
+// const handleTitle = (e) => {
+//   const value = e.target.value;
+//   const regex = /^[a-zA-Z0-9_ -]*$/;
+
+//   if (!regex.test(value)) {
+//     // Remove the last character if it's not allowed
+//     return;
+//   }
+
+//   setCustomTitle(value);
+
+//   if (selectedOrganization) {
+//     // Combine organization name with custom title
+//     setTitle(`${value} - ${selectedOrganization.name}`);
+
+//     if(selectedOrganization && selectedCity){
+//     setTitle(`${value} - ${selectedOrganization.name} - ${selectedCity.name}`);
+//     }
+
+//   } else {
+//     setTitle(value); // If no organization is selected, just set the user input as the title
+//   }
+// };
+
+const handleTitle = (e) => {
+  const value = e.target.value;
+  const regex = /^[a-zA-Z0-9_ -]*$/;
+
+  if (!regex.test(value)) {
+    // If invalid characters are entered, ignore them
+    return;
+  }
+
+  setCustomTitle(value);
+
+  // Update the combined title with custom title, organization, and city
+  updateCombinedTitle(value, selectedOrganization, selectedCity);
+};
+
 
   const dropdownRefSpaceBar = useRef(null);
 
-  const handleOrganization = (e) => {
-    onOrganzationClick();
-    setSelectedOrganization(e.value);
-  };
+  // const handleOrganization = (e) => {
+  //   onOrganzationClick();
+  //   setSelectedOrganization(e.value);
+  // };
+
+  // const handleOrganization = (e) => {
+  //   const organization = e.value;
+  //   setSelectedOrganization(organization);
+  
+  //   // Combine organization name with custom title
+  //   if (customTitle && selectedCity==null ) {
+  //     setTitle(`${customTitle} - ${organization.name} - ${selectedCity.name}`);
+  //   } else {
+  //     setTitle(`${organization.name}`); // If no custom title, just use the organization name
+  //   }
+  // };
+  
+  // Function to handle organization selection and update the title
+const handleOrganization = (e) => {
+  const organization = e.value;
+  setSelectedOrganization(organization);
+
+  // Update the combined title with custom title, organization, and city
+  updateCombinedTitle(customTitle, organization, selectedCity);
+};
+
+  // const handleCity = (e) => {
+  //   const city = e.value;
+  //   setSelectedCity(city);
+  
+  //   // Combine organization name, city name, and custom title
+  //   if (customTitle && selectedOrganization ) {
+  //     setTitle(`${customTitle} - ${selectedOrganization.name} - ${selectedCity.name}`);
+  //   }else {
+  //     setTitle(`${city.name}`);
+  //   }
+  // };
+
+
+
+  // Function to handle city selection and update the title
+
+
+const handleCity = (e) => {
+  const city = e.value;
+  setSelectedCity(city);
+
+  // Update the combined title with custom title, organization, and city
+  updateCombinedTitle(customTitle, selectedOrganization, city);
+};
+
+// Function to combine and set the title dynamically
+const updateCombinedTitle = (customTitle, organization, city) => {
+  let combinedTitle = "";
+
+  if (customTitle) combinedTitle += customTitle; // Add custom title if present
+  if (organization) combinedTitle += ` - ${organization.name}`; // Add organization name
+  if (city) combinedTitle += ` - ${city.name}`; // Add city name
+
+  setTitle(combinedTitle); // Set the combined title
+};  
 
   const handleCategory = (e) => {
     onCategoryClick();
@@ -698,7 +861,8 @@ const SaveTenderModal = (props) => {
                   </span>
                   <InputText
                     type="text"
-                    value={title}
+                    //value={title}
+                    value={customTitle} // Bind the input field to customTitle
                     onChange={(e) => handleTitle(e)}
                     className="ipl-input"
                   />
@@ -706,7 +870,8 @@ const SaveTenderModal = (props) => {
                 {/* Title */}
 
 
-                <div className="p-col-12">
+                      {/* Organization dropdown */}
+                {/* <div className="p-col-12">
 
                   <span>
 
@@ -729,9 +894,6 @@ const SaveTenderModal = (props) => {
                     itemTemplate={(e) => organizationTemplate(e)}
                     filter
                     filterBy="name"
-                    // filterInputAutoFocus={false}
-                    // focusInputRef={true}
-                    // showOnFocus={true}
                     filterPlaceholder="Search"
                     onChange={(e) => handleOrganization(e)}
                     optionLabel="name"
@@ -739,7 +901,37 @@ const SaveTenderModal = (props) => {
                     placeholder="Select an Organziation"
                     resetFilterOnHide={true}
                   />
-                </div>
+                </div> */}
+                      {/* Organization dropdown */}
+
+    {/* Organization dropdown */}
+    <div className="p-col-12">
+      <span>
+        Organization:{" "}
+        <span class="add-minus-btn" onClick={() => addOrganization()}>
+          <i className="fa fa-plus-circle"></i>
+          {selectedOrganization == null && (
+            <span className="validation-error">* Required</span>
+          )}
+        </span>
+      </span>
+      <Dropdown
+        id="organization-dropdown"
+        options={OrganizationDetails}
+        itemTemplate={(e) => organizationTemplate(e)}
+        filter
+        filterBy="name"
+        filterPlaceholder="Search"
+        onChange={(e) => handleOrganization(e)}
+        optionLabel="name"
+        value={selectedOrganization}
+        placeholder="Select an Organization"
+        resetFilterOnHide={true}
+      />
+    </div>
+    {/* Organization dropdown */}
+
+
 
                 <div className="p-col-12">
                   <span className=" d-flex mt-2 ">
@@ -842,10 +1034,11 @@ const SaveTenderModal = (props) => {
                     id="city-dropdown"
                     options={CityDetails}
                     itemTemplate={(e) => cityTemplate(e)}
-                    onChange={(e) => {
-                      onCityClick();
-                      setSelectedCity(e.value);
-                    }}
+                    // onChange={(e) => {
+                    //   onCityClick();
+                    //   setSelectedCity(e.value);
+                    // }}
+                    onChange={(e) => handleCity (e)}
                     optionLabel="name"
                     filter
                     filterBy="name"
@@ -891,7 +1084,7 @@ const SaveTenderModal = (props) => {
                       )} */}
 
 {savedImageName != "" ? (
-  <span className="validation-succes">File is selected</span>
+  <span className="validation-succes">File Saved!</span>
 
 ) : (
 <span className="validation-error">* Required</span>
