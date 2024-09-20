@@ -270,7 +270,7 @@ const SaveTenderModal = (props) => {
     if (props.dataForEdit != null && props.isEditMode) {
       setIsFooterDisabled(true);
       setIplNumber(props.dataForEdit?.IPLNumber);
-      setTitle(props.dataForEdit?.name);
+      setTitle(props.dataForEdit?.name); // This is the full title with organization name
       setSavedImageName(props.dataForEdit?.tenderImage);
       let categories = props.dataForEdit?.category?.split(":");
       var selectedItem = [];
@@ -301,6 +301,18 @@ const SaveTenderModal = (props) => {
       );
       setSelectedOrganization(_selectedOrganization);
   
+      // Separate the organization name from the custom title
+      const orgName = _selectedOrganization?.name;
+      const fullName = props.dataForEdit?.name;
+      const cityName = _selectedCity?.name;
+      
+      if (fullName?.includes(" - ") && orgName && cityName) {
+        const [userProvidedTitle] = fullName.split(" - ");
+        setCustomTitle(userProvidedTitle || ""); // Set the user-provided title for editing
+      } else {
+        setCustomTitle(fullName || ""); // Fallback in case there's no separator
+      }
+  
       setOpenDate(props.dataForEdit?.openDate);
       const formattedDate = moment(props.dataForEdit?.publishDate)
         .utcOffset("+05:00")
@@ -309,9 +321,7 @@ const SaveTenderModal = (props) => {
       setPublishDate(new Date(props.dataForEdit?.publishDate));
       setSelectedImg(props.dataForEdit?.tenderImage);
     }
-  }, [props.dataForEdit, props.CategoryDetails, props.cityDetails, props.newsPaperDetails, props.OrganizationDetails]);
-  
-
+  }, [props.dataForEdit, props.CategoryDetails, props.cityDetails, props.newsPaperDetails, props.OrganizationDetails,props.category]);
 
 
 
@@ -602,23 +612,43 @@ const SaveTenderModal = (props) => {
   // };
 
   // Function to handle user input for the title
+// const handleTitle = (e) => {
+//   const value = e.target.value;
+//   const regex = /^[a-zA-Z0-9_ -]*$/;
+
+//   if (!regex.test(value)) {
+//     // Remove the last character if it's not allowed
+//     return;
+//   }
+
+//   setCustomTitle(value);
+
+//   if (selectedOrganization) {
+//     // Combine organization name with custom title
+//     setTitle(`${value} - ${selectedOrganization.name}`);
+
+//     if(selectedOrganization && selectedCity){
+//     setTitle(`${value} - ${selectedOrganization.name} - ${selectedCity.name}`);
+//     }
+
+//   } else {
+//     setTitle(value); // If no organization is selected, just set the user input as the title
+//   }
+// };
+
 const handleTitle = (e) => {
   const value = e.target.value;
   const regex = /^[a-zA-Z0-9_ -]*$/;
 
   if (!regex.test(value)) {
-    // Remove the last character if it's not allowed
+    // If invalid characters are entered, ignore them
     return;
   }
 
   setCustomTitle(value);
 
-  if (selectedOrganization) {
-    // Combine organization name with custom title
-    setTitle(`${selectedOrganization.name} - ${value}`);
-  } else {
-    setTitle(value); // If no organization is selected, just set the user input as the title
-  }
+  // Update the combined title with custom title, organization, and city
+  updateCombinedTitle(value, selectedOrganization, selectedCity);
 };
 
 
@@ -629,20 +659,62 @@ const handleTitle = (e) => {
   //   setSelectedOrganization(e.value);
   // };
 
-  const handleOrganization = (e) => {
-    const organization = e.value;
-    setSelectedOrganization(organization);
+  // const handleOrganization = (e) => {
+  //   const organization = e.value;
+  //   setSelectedOrganization(organization);
   
-    // Combine organization name with custom title
-    if (customTitle) {
-      setTitle(`${organization.name} - ${customTitle}`);
-    } else {
-      setTitle(organization.name); // If no custom title, just use the organization name
-    }
-  };
+  //   // Combine organization name with custom title
+  //   if (customTitle && selectedCity==null ) {
+  //     setTitle(`${customTitle} - ${organization.name} - ${selectedCity.name}`);
+  //   } else {
+  //     setTitle(`${organization.name}`); // If no custom title, just use the organization name
+  //   }
+  // };
+  
+  // Function to handle organization selection and update the title
+const handleOrganization = (e) => {
+  const organization = e.value;
+  setSelectedOrganization(organization);
+
+  // Update the combined title with custom title, organization, and city
+  updateCombinedTitle(customTitle, organization, selectedCity);
+};
+
+  // const handleCity = (e) => {
+  //   const city = e.value;
+  //   setSelectedCity(city);
+  
+  //   // Combine organization name, city name, and custom title
+  //   if (customTitle && selectedOrganization ) {
+  //     setTitle(`${customTitle} - ${selectedOrganization.name} - ${selectedCity.name}`);
+  //   }else {
+  //     setTitle(`${city.name}`);
+  //   }
+  // };
 
 
 
+  // Function to handle city selection and update the title
+
+
+const handleCity = (e) => {
+  const city = e.value;
+  setSelectedCity(city);
+
+  // Update the combined title with custom title, organization, and city
+  updateCombinedTitle(customTitle, selectedOrganization, city);
+};
+
+// Function to combine and set the title dynamically
+const updateCombinedTitle = (customTitle, organization, city) => {
+  let combinedTitle = "";
+
+  if (customTitle) combinedTitle += customTitle; // Add custom title if present
+  if (organization) combinedTitle += ` - ${organization.name}`; // Add organization name
+  if (city) combinedTitle += ` - ${city.name}`; // Add city name
+
+  setTitle(combinedTitle); // Set the combined title
+};  
 
   const handleCategory = (e) => {
     onCategoryClick();
@@ -962,10 +1034,11 @@ const handleTitle = (e) => {
                     id="city-dropdown"
                     options={CityDetails}
                     itemTemplate={(e) => cityTemplate(e)}
-                    onChange={(e) => {
-                      onCityClick();
-                      setSelectedCity(e.value);
-                    }}
+                    // onChange={(e) => {
+                    //   onCityClick();
+                    //   setSelectedCity(e.value);
+                    // }}
+                    onChange={(e) => handleCity (e)}
                     optionLabel="name"
                     filter
                     filterBy="name"
