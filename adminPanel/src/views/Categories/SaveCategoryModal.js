@@ -57,7 +57,8 @@ const SaveCategoryModal = (props) => {
   const SubmitForm = () => {
     if (isValid()) {
       if (props.isEditMode) {
-        Edit()
+        Edit();
+        updateTenderCategory();
       }
       else {
         save();
@@ -65,32 +66,93 @@ const SaveCategoryModal = (props) => {
     }
   }
 
+  // const Edit = () => {
+  //   const body = {
+  //     id: props.dataForEdit?.id,
+  //     name: categoryName?.trim(),
+  //     effectedBy: _userData?.id
+  //   }
+
+  //   billingApiServices.updateCategory(body).then((response) => {
+  //     if (response == null || response == undefined) {
+  //       handleToast("error", "Operation failed, check your internet connection")
+  //       return
+  //     }
+
+  //     if (response?.data?.status) {
+
+  //       handleToast("success", response?.data?.message)
+  //       setCategoryName("")
+  //       props.reloadData()
+  //       setModal(false);
+  //       props.onClose()
+  //     }
+  //     else {
+  //       handleToast("error", response?.data?.message)
+  //     }
+  //   });
+  // }
+  
+
+
+
   const Edit = () => {
+    const oldCategoryName = props.dataForEdit?.name; // Save the old category name before editing
+  
     const body = {
       id: props.dataForEdit?.id,
       name: categoryName?.trim(),
-      effectedBy: _userData?.id
-    }
-
+      effectedBy: _userData?.id,
+    };
+  
     billingApiServices.updateCategory(body).then((response) => {
       if (response == null || response == undefined) {
-        handleToast("error", "Operation failed, check your internet connection")
-        return
+        handleToast("error", "Operation failed, check your internet connection");
+        return;
       }
-
+  
       if (response?.data?.status) {
-
-        handleToast("success", response?.data?.message)
-        setCategoryName("")
-        props.reloadData()
+        handleToast("success", response?.data?.message);
+        setCategoryName("");
+        props.reloadData();
         setModal(false);
-        props.onClose()
-      }
-      else {
-        handleToast("error", response?.data?.message)
+        props.onClose();
+  
+        // After updating the category, update tenders with the old category
+        updateTenderCategory(oldCategoryName, categoryName);
+      
+      } else {
+        handleToast("error", response?.data?.message);
       }
     });
-  }
+  };
+  
+  const updateTenderCategory = (oldCategoryName, newCategoryName) => {
+    const body = {
+      oldCategory: oldCategoryName,
+      newCategory: newCategoryName,
+    };
+  
+    billingApiServices.updateTendersWithNewCategory(body).then((response) => {
+      if (response == null || response == undefined) {
+        //handleToast("error", "Operation failed, check your internet connection");
+        console.log("Error updating tenders (NULL):", response);
+        return;
+      }
+  
+      if (response?.data?.status) {
+        handleToast("success", response.data.message);
+        props.reloadData();
+      } else {
+        handleToast("error", response.data.message);
+        console.error("Error updating tenders:", response.data.message);
+      }
+    }).catch((e) => {
+      console.error("Error during API call:", e);
+    });
+  };
+  
+  
 
   const save = () => {
     const body = {

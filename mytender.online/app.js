@@ -999,7 +999,7 @@ app.post('/newspapers/saveMultipleNewspapers', (req, res) => {
 
 app.get('/tender', (req, res) => {
   const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 25;
+  const limit = parseInt(req.query.limit) || 10;
   const offset = (page - 1) * limit;
   const sortField = req.query.sortField || 'publishDate'; // Default sort field
   const sortOrder = req.query.sortOrder === 'desc' ? 'DESC' : 'ASC'; // Ensuring proper order input
@@ -1183,6 +1183,7 @@ app.post('/tender/', (req, res) => {
       city
   } = req.body;
 
+
   try {
       checkExistsTender(req.body)
           .then((exists) => {
@@ -1214,6 +1215,10 @@ app.post('/tender/', (req, res) => {
       res.status(500).json({ status: false, data: {}, message: 'An internal server error occurred.' });
   }
 });
+
+
+
+
 
 
 
@@ -1274,6 +1279,40 @@ app.post('/tender/updateTender', (req, res) => {
   }
 });
 
+
+app.post('/TendersupdateCategory', (req, res) => {
+  try {
+    const { oldCategory, newCategory } = req.body;
+
+    // SQL query to update category using REPLACE
+    const sql = `
+      UPDATE tenders 
+      SET category = REPLACE(category, ?, ?) 
+      WHERE category LIKE ?`;
+    
+    const values = [oldCategory, newCategory, `%${oldCategory}%`];
+
+    // Execute the query
+    pool.query(sql, values, (error, results) => {
+      if (error) {
+        console.error("Error updating tenders:", error);
+        return res.status(500).json({ status: false, message: "Error updating tenders" });
+      }
+
+      if (results.affectedRows > 0) {
+        res.status(200).json({ status: true, message: "Tenders updated successfully", data: results });
+      } else {
+        res.status(404).json({ status: false, message: "No tenders found with the specified old category" });
+      }
+    });
+  } catch (error) {
+    console.error("Error updating tenders (catch block):", error);
+    res.status(500).json({ status: false, message: "Error updating tenders" });
+  }
+});
+
+
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, './uploads');
@@ -1299,16 +1338,46 @@ app.post('/tender/upload', upload.single('file'), (req, res) => {
   }
 });
 
+
+const allowedOrigins  = ['http://localhost:5173', 'http://localhost:5000/#/'];
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
   setHeaders: (res) => {
-    res.set('Access-Control-Allow-Origin', 'http://localhost:5173');
+    const origin = res.req.headers.origin;
+
+    // Check if the origin is in the allowed list
+    if (allowedOrigins.includes(origin)) {
+      res.set('Access-Control-Allow-Origin', origin);
+    }
   }
 }));
 
 app.get('/uploads/:filename', (req, res) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:5173');
+  const origin = req.headers.origin;
+
+  // Check if the origin is in the allowed list
+  if (allowedOrigins.includes(origin)) {
+    res.set('Access-Control-Allow-Origin', origin);
+  }
+
+  // Send the requested file
   res.sendFile(path.join(__dirname, 'uploads', req.params.filename));
 });
+
+
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
+//   setHeaders: (res) => {
+//     res.set('Access-Control-Allow-Origin', 'http://localhost:5173');
+//   }
+// }));
+
+// app.get('/uploads/:filename', (req, res) => {
+//   res.set('Access-Control-Allow-Origin', 'http://localhost:5173');
+//   res.sendFile(path.join(__dirname, 'uploads', req.params.filename));
+// });
+
+
+
+
 const checkOriginal = (origin, callback) => {
   const allowedOrigins = ['http://localhost:5173', 'http://localhost:5000/#/'];
 
@@ -1323,9 +1392,10 @@ const checkOriginal = (origin, callback) => {
 };
 
 
-
 app.post('/tenders/saveMultipleTenders', (req, res) => {
   const { values, effectedBy } = req.body;
+
+  console.log('Request body:', req.body); // Debugging line
 
   if (!values || !effectedBy) {
       return res.status(400).json({ status: false, message: "Missing required fields" });
@@ -1334,17 +1404,19 @@ app.post('/tenders/saveMultipleTenders', (req, res) => {
   try {
       // Insert records into the database
       const insertPromises = values.map(tender => {
-          const sql = 'INSERT INTO tenders (IPLNumber, name, organization, category, city, newspaper, effectedDate, publishDate, openDate, effectedBy) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+          const sql = 'INSERT INTO tenders (IPLNumber, name, organization, category, city, newspaper, effectedDate, publishDate, tenderImage, openDate, effectedBy) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+
           const insertValues = [
               tender.IPLNumber,
               tender.name,
-              tender.organization !== null ? tender.organization : null, // Ensure correct handling of null values
+              tender.organization !== null ? tender.organization : null,
               tender.category,
-              tender.city !== null ? tender.city : null, // Ensure correct handling of null values
-              tender.newspaper !== null ? tender.newspaper : null, // Ensure correct handling of null values
-              new Date(),  // effectedDate (current date)
-              new Date(),  // publishDate (current date)
-              new Date(),  // openDate (current date)
+              tender.city !== null ? tender.city : null,
+              tender.newspaper !== null ? tender.newspaper : null,
+              tender.effectedDate ? new Date(tender.effectedDate) : new Date(),  // Use the effective date from tender
+              tender.publishDate ? new Date(tender.publishDate) : new Date(),      // Use the publish date from tender
+              tender.tenderImage !== null ? tender.tenderImage : null,
+              new Date(),          // Set current date for openDate
               effectedBy
           ];
 
@@ -1380,7 +1452,7 @@ app.post('/tenders/saveMultipleTenders', (req, res) => {
 
               Promise.all(selectPromises)
                   .then(responses => {
-                      res.status(200).json({ status: true, data: responses.flat(), message: "Multiple tenders created successfully" });
+                      res.status(200).json({ status: true, data: responses.flat(), message: "Multiple tenders created successfully." });
                   })
                   .catch(error => {
                       console.error('Error during select promises:', error);
@@ -1398,11 +1470,9 @@ app.post('/tenders/saveMultipleTenders', (req, res) => {
 });
 
 
-// // ***************tender Api's**************************
 
 
 
-// ***************Settings Api's**************************
 app.get('/Settings/', (req, res) => {
   try {
     pool.query('SELECT settings.*, users.name AS userName FROM settings INNER JOIN users ON settings.effectedBy = users.id', (err, results) => {
