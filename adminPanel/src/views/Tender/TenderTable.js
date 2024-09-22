@@ -141,61 +141,30 @@ const CustomDataTable = (props) => {
   };
 
   const handleDownload = async (currentRow) => {
-    if (!currentRow?.tenderImage) return;   
+    if (!currentRow?.tenderImage) return;
+  
     const img = new Image();
     img.crossOrigin = "anonymous"; 
     img.src = currentRow.tenderImage;
+  
     img.onload = () => {
-        // Create a canvas element
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-        canvas.width = img.width;
-        canvas.height = img.height;
-
-        // Draw the main image
-        ctx.drawImage(img, 0, 0);
-
-        // Watermark settings
-        const watermarkText = "tender786";
-        ctx.font = "bold 40px Arial";
-        ctx.textAlign = "center";
-        ctx.rotate(-0.3); // optional: rotate text slightly for aesthetic
-
-        // Function to determine the brightness of the background
-        const getBrightness = (x, y) => {
-            const imageData = ctx.getImageData(x, y, 1, 1).data;
-            const r = imageData[0];
-            const g = imageData[1];
-            const b = imageData[2];
-            // Calculate brightness using the weighted sum
-            return 0.3 * r + 0.59 * g + 0.11 * b;
-        };
-
-        // Add watermark in a repeating pattern
-        const stepX = 330; // horizontal gap between watermarks
-        const stepY = 250; // vertical gap between watermarks
-        for (let x = 0; x < canvas.width; x += stepX) {
-            for (let y = 0; y < canvas.height; y += stepY) {
-                // Check brightness and adjust the fill color
-                const brightness = getBrightness(x, y);
-                if (brightness > 128) {
-                    // If background is light, use black text
-                    ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
-                } else {
-                    // If background is dark, use white text
-                    ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-                }
-                ctx.fillText(watermarkText, x, y);
-            }
-        }
-
-        // Download the canvas image
-        const link = document.createElement("a");
-        link.href = canvas.toDataURL("image/png");
-        link.download = "tender_image_with_watermark.png";
-        link.click();
+      // Create a canvas element
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = img.width;
+      canvas.height = img.height;
+  
+      // Draw the main image
+      ctx.drawImage(img, 0, 0);
+  
+      // Download the canvas image (without watermark)
+      const link = document.createElement("a");
+      link.href = canvas.toDataURL("image/png");
+      link.download = "tender_image.png"; // Updated file name
+      link.click();
     };
-};
+  };
+  
 
   const reloadData = () => {
     props.reloadData();
