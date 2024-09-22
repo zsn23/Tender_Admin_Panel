@@ -12,6 +12,7 @@ import { ConfirmDialog } from "primereact/confirmdialog";
 import XLSX from "xlsx";
 import FileSaver from 'file-saver';
 import ImportFile from "./ImportFile";
+import { title } from "process";
 
 const CustomDataTable = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -72,7 +73,7 @@ const CustomDataTable = (props) => {
     }
 
     try {
-      const response = await billingApiServices.getAllTenders(currentPage, 25, sortField, sortOrder === 1 ? 'desc' : 'asc', filters);
+      const response = await billingApiServices.getAllTenders(currentPage, 10, sortField, sortOrder === 1 ? 'desc' : 'asc', filters);
       if (response && response.status) {
         setGridData(response.data.data);
         setTotalRecords(response.data.total);
@@ -134,10 +135,67 @@ const CustomDataTable = (props) => {
     });
   };
 
-  const handleDownload = (currentRow) => {
+  const handleSeeImg = (currentRow) => {
     const imgURL = currentRow.tenderImage;
     window.open(imgURL, '_blank');
   };
+
+  const handleDownload = async (currentRow) => {
+    if (!currentRow?.tenderImage) return;   
+    const img = new Image();
+    img.crossOrigin = "anonymous"; 
+    img.src = currentRow.tenderImage;
+    img.onload = () => {
+        // Create a canvas element
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        // Draw the main image
+        ctx.drawImage(img, 0, 0);
+
+        // Watermark settings
+        const watermarkText = "tender786";
+        ctx.font = "bold 40px Arial";
+        ctx.textAlign = "center";
+        ctx.rotate(-0.3); // optional: rotate text slightly for aesthetic
+
+        // Function to determine the brightness of the background
+        const getBrightness = (x, y) => {
+            const imageData = ctx.getImageData(x, y, 1, 1).data;
+            const r = imageData[0];
+            const g = imageData[1];
+            const b = imageData[2];
+            // Calculate brightness using the weighted sum
+            return 0.3 * r + 0.59 * g + 0.11 * b;
+        };
+
+        // Add watermark in a repeating pattern
+        const stepX = 330; // horizontal gap between watermarks
+        const stepY = 250; // vertical gap between watermarks
+        for (let x = 0; x < canvas.width; x += stepX) {
+            for (let y = 0; y < canvas.height; y += stepY) {
+                // Check brightness and adjust the fill color
+                const brightness = getBrightness(x, y);
+                if (brightness > 128) {
+                    // If background is light, use black text
+                    ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+                } else {
+                    // If background is dark, use white text
+                    ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+                }
+                ctx.fillText(watermarkText, x, y);
+            }
+        }
+
+        // Download the canvas image
+        const link = document.createElement("a");
+        link.href = canvas.toDataURL("image/png");
+        link.download = "tender_image_with_watermark.png";
+        link.click();
+    };
+};
 
   const reloadData = () => {
     props.reloadData();
@@ -161,14 +219,15 @@ const CustomDataTable = (props) => {
 
     const response = selectedRows.map((d) => ({
       IPLNumber: d.IPLNumber,
-      name: d.name,
-      organizationName: d.organizationName,
+      title: d.name,
+      organizationName_ID: d.organization,
       category: d.category,
-      cityName: d.cityName,
-      SubmitDate: d.effectedDate,
-      endDate: d.publishDate,
-      newPaperName: d.newPaperName,
-      tenderImage: d.tenderImage,
+      cityName_ID: d.city,
+      newPaperName_ID: d.newspaper,
+      SubmitDate: d.effectedDate,//.slice(0,10),
+      endDate: d.publishDate,//.slice(0,10),
+      DownloadtenderImage: d.tenderImage,
+      TenderImage: d.tenderImage
     }));
 
     const ws = XLSX.utils.json_to_sheet(response);
@@ -181,8 +240,8 @@ const CustomDataTable = (props) => {
 
   const convertDateBestFormate = (inputDateTime) => {
     const date = new Date(inputDateTime);
-    // const hours = date.getUTCHours().toString().padStart(2, '0');
-    // const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+    const hours = date.getUTCHours().toString().padStart(2, '0');
+    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
 
     const d = new Date(date);
     if (isNaN(d.getTime())) {
@@ -234,6 +293,12 @@ const CustomDataTable = (props) => {
       <i class=" fa-regular fa-image" style={{ fontSize: '15px', marginLeft: "5px", marginTop: "3px" }}></i>
     </div>
   );
+  const customImagesDownloadTemplate = () => (
+    <div className="d-flex align-items-center">
+      <span>Download</span>
+      <i class=" fa-regular fa-image" style={{ fontSize: '15px', marginLeft: "5px", marginTop: "3px" }}></i>
+    </div>
+  );
 
   const filterClearTemplate = (options) => (
     <Button type="button" icon="pi pi-times" onClick={options.filterClearCallback} className="p-button-secondary"></Button>
@@ -250,18 +315,54 @@ const CustomDataTable = (props) => {
   const CityBodyTemplate = (rowData) => loader ? <Skeleton /> : <div>{rowData.cityName}</div>;
   const NewsPaperBodyTemplate = (rowData) => loader ? <Skeleton /> : <div>{rowData.newPaperName}</div>;
   const SubmissionDateTemplate = (rowData) => loader ? <Skeleton /> : <div>{convertDateBestFormate(rowData.effectedDate)}</div>;
-  const PublishDateTemplate = (rowData) => loader ? <Skeleton /> : <div>{convertDateBestFormate(rowData.publishDate)}</div>;
+   const PublishDateTemplate = (rowData) => loader ? <Skeleton /> : <div>{convertDateBestFormate(rowData.publishDate)}</div>; 
+
   const CreatedByTemplate = (rowData) => loader ? <Skeleton /> : <div>{rowData.userName}</div>;
  
-  const TenderImageTemplate = (rowData) => loader ? <Skeleton /> : (
-    <Button
-      style={{ cursor: "pointer", margin: '0.5rem' }}
-      icon="fa-sharp-duotone fa-solid fa-download"
-      onClick={() => handleDownload(rowData)}
-      className="p-button-rounded p-button-warning"
-      iconStyle={{ color: 'black' }}
-    />
-  );
+ 
+  const TenderImageTemplate = (rowData) => {
+    if (loader) {
+      return <Skeleton />; // Show loader while loading
+    }
+  
+    return (
+      <div style={{ display: 'flex', alignItems: 'center' , justifyContent:'center'  }}>
+        {/* Display the image */}
+        <img 
+          src={rowData.tenderImage} 
+          alt="Tender_Image" 
+          onClick={() => handleSeeImg(rowData)}
+          style={{ 
+            width: '80px', // Set a desired width
+            height: '80px', // Set a desired height
+            objectFit: 'cover', // Ensure the image fits well
+            borderRadius: '10px'
+          }} 
+        />
+      </div>
+    );
+  };
+
+  const TenderImageDownloadTemplate = (rowData) => {
+    if (loader) {
+      return <Skeleton />; // Show loader while loading
+    }
+  
+    return (
+      <div >
+  
+        {/* Download button */}
+        <Button
+          style={{ cursor: "pointer" }}
+          icon="fa-sharp-duotone fa-solid fa-download"
+          onClick={() => handleDownload(rowData)}
+          className="p-button-rounded p-button-warning"
+          iconStyle={{ color: 'black' }}
+        />
+      </div>
+    );
+  };
+  
 
   const handleFilterChange = (e, field) => {
     const newFilters = { ...filterArray };
@@ -338,10 +439,10 @@ const CustomDataTable = (props) => {
         responsiveLayout="scroll"
         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
         currentPageReportTemplate="ON PAGE {currentPage} : RECORDS {first}-{last}"
-        rows={25}
+        rows={10}
         lazy
         totalRecords={totalRecord}
-        first={(currentPage - 1) * 25}
+        first={(currentPage - 1) * 10}
         onPage={(event) => setCurrentPage(event.page + 1)}
         dataKey="id"
         filters={filterArray}
@@ -396,14 +497,15 @@ const CustomDataTable = (props) => {
           body={PublishDateTemplate}
           filter
           filterField="publishDate"
-          // filterMatchMode="contains"
+         
           filterPlaceholder="Y-MM-DD" // Indicate the format required
           onFilterApplyClick={(e) => handleFilterChange(e, 'publishDate')}></Column>
 
 
-        <Column 
+
+<Column 
           field="tenderImage" 
-          header={customImagesTemplate} 
+          header={customImagesDownloadTemplate} 
 
           filter 
           showFilterMenu={false} 
@@ -413,9 +515,29 @@ const CustomDataTable = (props) => {
             </div>
           } 
 
+          headerStyle={{ width: '2%' }} 
+          body={TenderImageDownloadTemplate}
+          ></Column>
+
+
+
+
+<Column 
+          field="tenderImage" 
+          header={customImagesTemplate} 
+
+          filter 
+          showFilterMenu={false} 
+          filterElement={
+            <div className="downloadImg d-flex align-items-center m-0 p-0">
+              <span className="downloadImgheading">SEE IMAGE</span>
+            </div>
+          } 
+
           headerStyle={{ width: '5%' }} 
           body={TenderImageTemplate}
           ></Column>
+     
 
         <Column 
           field="id" 

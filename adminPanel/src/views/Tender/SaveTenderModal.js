@@ -321,7 +321,7 @@ const SaveTenderModal = (props) => {
       setPublishDate(new Date(props.dataForEdit?.publishDate));
       setSelectedImg(props.dataForEdit?.tenderImage);
     }
-  }, [props.dataForEdit, props.CategoryDetails, props.cityDetails, props.newsPaperDetails, props.OrganizationDetails,props.category]);
+  }, [props.dataForEdit, props.CategoryDetails, props.cityDetails, props.newsPaperDetails, props.OrganizationDetails,props.isEditMode]);
 
 
 
@@ -367,7 +367,7 @@ const SaveTenderModal = (props) => {
       openDate: moment(publishDate).format("YYYY-MM-DD HH:mm:ss"),
       pubLishDate: moment(publishDate).format("YYYY-MM-DD HH:mm:ss"),
       tenderImage: savedImageName,
-      organization: selectedOrganization.id,
+      organization: selectedOrganization?.id,
       newsPaper: selectedNewsPaper?.id,
       category: categories?.join(":"),
       city: selectedCity?.id,
@@ -424,7 +424,7 @@ const SaveTenderModal = (props) => {
       openDate: moment(publishDate).format("YYYY-MM-DD HH:mm:ss"),
       pubLishDate: moment(publishDate).format("YYYY-MM-DD HH:mm:ss"),
       tenderImage: savedImageName,
-      organization: selectedOrganization.id,
+      organization: selectedOrganization?.id,
       newsPaper: selectedNewsPaper?.id,
       category: categories?.join(":"),
       city: selectedCity?.id,
@@ -1248,16 +1248,16 @@ export default SaveTenderModal;
 
 
 
-    {/* <div className="p-col-12">
-                    <span>Open Date:</span>
-                    <div className="card flex justify-content-center">
-                      <Calendar value={openDate} onChange={(e) => {
-                        console.log(e.value)
-                        setOpenDate(e.value)
-                      }} />
-                      {openDate == null && <span className="validation-error">* Required</span>} 
-                    </div>
-                  </div> */}
+    // {/* <div className="p-col-12">
+    //                 <span>Open Date:</span>
+    //                 <div className="card flex justify-content-center">
+    //                   <Calendar value={openDate} onChange={(e) => {
+    //                     console.log(e.value)
+    //                     setOpenDate(e.value)
+    //                   }} />
+    //                   {openDate == null && <span className="validation-error">* Required</span>} 
+    //                 </div>
+    //               </div> */}
 
 
 

@@ -57,6 +57,9 @@ function ImportFile(props) {
                 category: e[3],           // category - Assuming fourth column is category
                 city: e[4],           // cityName - Assuming fifth column is cityName
                 newspaper: e[5],       // newPaperName - Assuming sixth column is newPaperName
+                effectedDate: e[6],
+                publishDate: e[7],
+                tenderImage: e[8],
             }));
 
             // Skipping the header row (if necessary)
@@ -74,7 +77,8 @@ function ImportFile(props) {
 
     const importRecords = () => {
         if (tenders.length === 0) {
-            alert("Select a file with records");
+            
+            handleToast("error","Select a file with records");
             return;
         }
 
@@ -100,6 +104,46 @@ function ImportFile(props) {
             });
         }
     };
+
+
+
+
+    // const importRecords = () => {
+    //     if (tenders.length === 0) {
+    //         handleToast("error", "Select a file with records");
+    //         return;
+    //     }
+    
+    //     // Map tenders to include the dates
+    //     const tendersWithDates = tenders.map(tender => ({
+    //         ...tender,
+    //         effectedDate: tender.effectedDate ? new Date(tender.effectedDate).toISOString() : null,
+    //         publishDate: tender.publishDate ? new Date(tender.publishDate).toISOString() : null,
+    //     }));
+    
+    //     const body = {
+    //         values: tendersWithDates,
+    //         effectedBy: _userData?.id
+    //     };
+    
+    //     if (props.Type === "Tenders") {
+    //         billingApiServices.importToExcelTenders(body).then((response) => {
+    //             if (response == null) {
+    //                 handleToast("error", "Error occurred while importing tenders (NULL).");
+    //                 return;
+    //             }
+    
+    //             if (response?.data?.status) {
+    //                 handleToast("success", response?.data?.message);
+    //                 props.reloadData();
+    //                 onHide();
+    //             } else {
+    //                 handleToast("error", "Error occurred while importing tenders.");
+    //             }
+    //         });
+    //     }
+    // };
+    
 
     const onHide = () => {
         setTenders([]);
@@ -127,14 +171,28 @@ function ImportFile(props) {
                                 <li>
                                     <p>
                                         In Excel file write proper column headings and follow same order as you see in table.
-                                        Date is auto generated (Current date will be added to date column.  Change date after data added)
+                                        Date is auto generated or and write manually.
                                     </p>
                                 </li>
+                                
+                                <li>
+                                    <p className='text-dark'>
+                                       End Date Format: YYYY-MM-DD
+                                    </p>
+                                </li>
+
                                 <li>
                                     <p>
                                         Title & IPL number must be unique for every tender.
                                     </p>
                                 </li>
+                                
+                                <li>
+                                    <p className='text-dark'>
+                                        Title Format : Title - Organization_Name - City_Name
+                                    </p>
+                                </li>
+
 
                                 <li>
                                     <p>
@@ -196,6 +254,8 @@ function ImportFile(props) {
                                                                         <th className='textofExcelFileIndarkMode' >Category</th>
                                                                         <th className='textofExcelFileIndarkMode' >City_ID</th>
                                                                         <th className='textofExcelFileIndarkMode' >Newspaper_ID</th>
+                                                                        <th className='textofExcelFileIndarkMode' >End Date</th>
+                                                                        <th className='textofExcelFileIndarkMode' >Download Tender Image</th>
                                                                     </tr>
                                                                 </thead>
                                                                 
@@ -204,7 +264,7 @@ function ImportFile(props) {
                                                                 
                                                                 {tenders.map((ele, index) => (
                                                                     <li className='textofExcelFileIndarkMode' key={index}>
-                                                                        {ele.IPLNumber} - {ele.name} - {ele.organization} - {ele.category} - {ele.city} - {ele.newspaper}
+                                                                        {ele.IPLNumber} - {ele.name} - {ele.organization} - {ele.category} - {ele.city} - {ele.newspaper} - {ele.publishDate} - {ele.tenderImage} 
                                                                     </li>
                                                                 ))}
                                                             </ul>

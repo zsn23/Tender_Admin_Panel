@@ -503,6 +503,18 @@ importToExcelSettings = async (body) => {
     }
   };
 
+  updateTendersWithNewCategory = async (body) => {
+    try {
+      let res = await axios.post(this.baseUrl + "TendersupdateCategory/", body);
+      return res;
+    }catch (error) {
+      
+      return null;
+    }
+  };
+  
+  
+  
   deleteTender = async (body) => {
     try {
       let res = await axios.post(this.baseUrl + "tender/deleteTender/", body);
