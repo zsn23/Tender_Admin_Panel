@@ -39,6 +39,7 @@ import { saveAs } from "file-saver";
 import html2canvas from "html2canvas";
 import CategorySelection from "./CategorySelection";
 import { utils } from "../../utility";
+import imageCompression from 'browser-image-compression';
 
 const SaveTenderModal = (props) => {
   const [modal, setModal] = useState(false);
@@ -398,13 +399,13 @@ const SaveTenderModal = (props) => {
     });
   };
 
-  const testImg = () => {
-    var img = handleUpload("");
-    if (img == false) {
-      handleToast("error", "Operation failed, check your internet connection");
-      return;
-    }
-  };
+  // const testImg = () => {
+  //   var img = handleUpload("");
+  //   if (img == false) {
+  //     handleToast("error", "Operation failed, check your internet connection");
+  //     return;
+  //   }
+  // };
 
   const save = async () => {
     if (savedImageName == "") {
@@ -556,30 +557,135 @@ const SaveTenderModal = (props) => {
     }
   };
 
-  const handleUpload = async (id) => {
-    var result = false;
-    var _blob = null;
-    const canvas = await html2canvas(gridRef.current);
+  // const handleFileChange = async (event) => {
+  //   setSavedImageName("");
+  
+  //   try {
+  //     let file = event.target.files[0];
+  //     const fileExtension = file?.name?.split(".").pop();
+  //     var name = "tender786-" + utils.generateRandomId() + "." + fileExtension?.toLowerCase();
+  
+  //     // Function to add the watermark "Tender 786 Bismillah" to the image
+  //     const addWatermark = async (file) => {
+  //       return new Promise((resolve) => {
+  //         const reader = new FileReader();
+  //         reader.readAsDataURL(file);
+  //         reader.onload = function (e) {
+  //           const img = new Image();
+  //           img.src = e.target.result;
+  //           img.onload = function () {
+  //             // Create a canvas to draw the image and watermark
+  //             const canvas = document.createElement("canvas");
+  //             const ctx = canvas.getContext("2d");
+  
+  //             canvas.width = img.width;
+  //             canvas.height = img.height;
+  
+  //             // Draw the original image on the canvas
+  //             ctx.drawImage(img, 0, 0);
+  
+  //             // Set watermark style
+  //             const fontSize = img.width / 20; // Dynamically set font size based on image width
+  //             ctx.font = `${fontSize}px Arial`;
+  //             ctx.fillStyle = "rgba(255, 0, 0, 0.3)"; // Red color with 30% transparency
+  //             ctx.textAlign = "center";
+  
+  //             const watermarkText = "Tender 786 Bismillah";
+  //             const textWidth = ctx.measureText(watermarkText).width;
+  
+  //             // Repeat watermark across the X-axis and Y-axis
+  //             for (let y = 50; y < canvas.height; y += fontSize * 2) {
+  //               for (let x = 0; x < canvas.width; x += textWidth + 20) {
+  //                 ctx.fillText(watermarkText, x, y);
+  //               }
+  //             }
+  
+  //             // Convert canvas to a blob (to get file format and size)
+  //             canvas.toBlob((blob) => {
+  //               resolve(blob);
+  //             }, file.type);
+  //           };
+  //         };
+  //       });
+  //     };
+  
+  //     // Function to ensure the image is compressed to 500KB or less
+  //     const compressImageTo500KB = async (file) => {
+  //       let compressedFile = file;
+  //       let sizeInMB = file.size / 1024 / 1024; // convert to MB
+  
+  //       // Set a base option to start compression
+  //       let options = {
+  //         maxSizeMB: sizeInMB, // Start with the current size of the image
+  //         useWebWorker: true,
+  //         maxWidthOrHeight: 1920, // Set max resolution (to help with compression)
+  //       };
+  
+  //       // Keep compressing until the file size is <= 500KB
+  //       while (compressedFile.size > 500 * 1024) { // 500KB in bytes
+  //         compressedFile = await imageCompression(compressedFile, options);
+  //         // Reduce maxSizeMB further if still larger than 500KB
+  //         options.maxSizeMB = options.maxSizeMB / 2;
+  //       }
+  
+  //       return compressedFile;
+  //     };
+  
+  //     // First, add the watermark to the image
+  //     const watermarkedFileBlob = await addWatermark(file);
+  
+  //     // Convert the watermarked Blob back to a File object (so it can be compressed)
+  //     const watermarkedFile = new File([watermarkedFileBlob], file.name, { type: file.type });
+  
+  //     // Compress the watermarked image to 500KB or less
+  //     const compressedFile = await compressImageTo500KB(watermarkedFile);
+  
+  //     // Create an object URL for the compressed file
+  //     let compressedFileUrl = URL.createObjectURL(compressedFile);
+  //     setSelectedImg(compressedFileUrl);
+  //     setSelectedFile(compressedFile);
+  
+  //     // Upload the compressed file
+  //     var response = await billingApiServices.uploadFile(compressedFile, name);
+  //     if (response?.status) {
+  //       setSavedImageName("https://mytender.online/uploads/" + name);
+  //       setSavedImageName("http://localhost:5000/uploads/" + name);
+  //     } else {
+  //       setSavedImageName("");
+  //       alert("Error while uploading image, please try again");
+  //     }
+  
+  //     return true;
+  //   } catch (error) {
+  //     setSavedImageName("");
+  //     console.log("image error :" + error);
+  //     alert("Error while uploading image, please try again");
+  //   }
+  // };
+  // const handleUpload = async (id) => {
+  //   var result = false;
+  //   var _blob = null;
+  //   const canvas = await html2canvas(gridRef.current);
 
-    const blob = await new Promise((resolve) => {
-      canvas.toBlob((blob) => {
-        resolve(blob);
-      });
-    });
+  //   const blob = await new Promise((resolve) => {
+  //     canvas.toBlob((blob) => {
+  //       resolve(blob);
+  //     });
+  //   });
 
-    const fileExtension = selectedFile?.name?.split(".").pop();
-    var imgTitle = title?.trim()?.split(" ").join("-");
-    var name = imgTitle + "-" + id + "." + fileExtension?.toLowerCase();
+  //   const fileExtension = selectedFile?.name?.split(".").pop();
+  //   var imgTitle = title?.trim()?.split(" ").join("-");
+  //   var name = imgTitle + "-" + id + "." + fileExtension?.toLowerCase();
 
-    var response = await billingApiServices.uploadFile(blob, name);
-    if (response?.status) {
-      result = name;
-    } else {
-      result = false;
-    }
+  //   var response = await billingApiServices.uploadFile(blob, name);
+  //   if (response?.status) {
+  //     result = name;
+  //   } else {
+  //     result = false;
+  //   }
 
-    return result;
-  };
+  //   return result;
+  // };
 
   const handleIplNumber = (e) => {
     var response = props.gridData?.filter(
@@ -1073,15 +1179,6 @@ const updateCombinedTitle = (customTitle, organization, city) => {
                   <div className="p-col-12">
                     <span>
                       File:{" "}
-                   
-                   
-                      {/* {selectedFile == null &&  (
-                        <span className="validation-error">* Required</span>
-                      )}
-
-                      {savedImageName != "" && (
-                        <span className="validation-succes">File Saved!</span>
-                      )} */}
 
 {savedImageName != "" ? (
   <span className="validation-succes">File Saved!</span>
@@ -1135,6 +1232,7 @@ const updateCombinedTitle = (customTitle, organization, city) => {
 
 
       <div className="section_____img section col8" ref={gridRef}>
+       
         <div className="content " style={{ overflow: 'auto' }}>
           <Watermark
             text="Tender786 Bismillah"
