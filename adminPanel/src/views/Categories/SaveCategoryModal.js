@@ -135,8 +135,6 @@ const SaveCategoryModal = (props) => {
   
     billingApiServices.updateTendersWithNewCategory(body).then((response) => {
       if (response == null || response == undefined) {
-        //handleToast("error", "Operation failed, check your internet connection");
-        console.log("Error updating tenders (NULL):", response);
         return;
       }
   
