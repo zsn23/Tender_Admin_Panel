@@ -105,6 +105,8 @@ const SaveTenderModal = (props) => {
   const [refreshFileInput, setRefreshFileInput] = useState(false);
   const [savedImageName, setSavedImageName] = useState("");
 
+  const [isUploading, setIsUploading] = useState(false);
+
   const gridRef = useRef(null);
 
   const dropdownRef = useRef(null);
@@ -223,7 +225,7 @@ const SaveTenderModal = (props) => {
   //   if (props.dataForEdit != null && props.isEditMode) {
   //     setIsFooterDisabled(true);
   //     setIplNumber(props.dataForEdit?.IPLNumber);
-  //     setTitle(props.dataForEdit?.name);
+  //     setTitle(props.dataForEdit?.name); // This is the full title with organization name
   //     setSavedImageName(props.dataForEdit?.tenderImage);
   //     let categories = props.dataForEdit?.category?.split(":");
   //     var selectedItem = [];
@@ -236,35 +238,45 @@ const SaveTenderModal = (props) => {
   //       }
   //     });
   //     setSelectedCategory(selectedItem);
-
+  
   //     let _selectedCity = props.cityDetails?.find(
   //       (c) => c.id == props.dataForEdit?.city
   //     );
   //     if (_selectedCity != null && _selectedCity != undefined) {
   //       setSelectedCity(_selectedCity);
   //     }
-
+  
   //     let _selectedNewspaper = props.newsPaperDetails?.find(
   //       (c) => c.id == props.dataForEdit?.newspaper
   //     );
   //     setSelectedNewsPaper(_selectedNewspaper);
-
+  
   //     let _selectedOrganization = props.OrganizationDetails?.find(
   //       (c) => c.id == props.dataForEdit?.organization
   //     );
   //     setSelectedOrganization(_selectedOrganization);
-
+  
+  //     // Separate the organization name from the custom title
+  //     const orgName = _selectedOrganization?.name;
+  //     const fullName = props.dataForEdit?.name;
+  //     const cityName = _selectedCity?.name;
+      
+  //     if (fullName?.includes(" - ") && orgName && cityName) {
+  //       const [userProvidedTitle] = fullName.split(" - ");
+  //       setCustomTitle(userProvidedTitle || ""); // Set the user-provided title for editing
+  //     } else {
+  //       setCustomTitle(fullName || ""); // Fallback in case there's no separator
+  //     }
+  
   //     setOpenDate(props.dataForEdit?.openDate);
   //     const formattedDate = moment(props.dataForEdit?.publishDate)
   //       .utcOffset("+05:00")
   //       .format("ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (z)");
-
+  
   //     setPublishDate(new Date(props.dataForEdit?.publishDate));
-  //     // setSelectedFile(props.dataForEdit?.tenderImage)
   //     setSelectedImg(props.dataForEdit?.tenderImage);
   //   }
-  // }, [props.dataForEdit, props.CategoryDetails, props.cityDetails, props.newsPaperDetails, props.OrganizationDetails]);
-
+  // }, [props.dataForEdit, props.CategoryDetails, props.cityDetails, props.newsPaperDetails, props.OrganizationDetails,props.isEditMode]);
 
 
   useEffect(() => {
@@ -273,6 +285,7 @@ const SaveTenderModal = (props) => {
       setIplNumber(props.dataForEdit?.IPLNumber);
       setTitle(props.dataForEdit?.name); // This is the full title with organization name
       setSavedImageName(props.dataForEdit?.tenderImage);
+      
       let categories = props.dataForEdit?.category?.split(":");
       var selectedItem = [];
       categories?.forEach((element) => {
@@ -284,49 +297,47 @@ const SaveTenderModal = (props) => {
         }
       });
       setSelectedCategory(selectedItem);
-  
+    
       let _selectedCity = props.cityDetails?.find(
         (c) => c.id == props.dataForEdit?.city
       );
       if (_selectedCity != null && _selectedCity != undefined) {
         setSelectedCity(_selectedCity);
       }
-  
+    
       let _selectedNewspaper = props.newsPaperDetails?.find(
         (c) => c.id == props.dataForEdit?.newspaper
       );
       setSelectedNewsPaper(_selectedNewspaper);
-  
+    
       let _selectedOrganization = props.OrganizationDetails?.find(
         (c) => c.id == props.dataForEdit?.organization
       );
       setSelectedOrganization(_selectedOrganization);
-  
-      // Separate the organization name from the custom title
-      const orgName = _selectedOrganization?.name;
-      const fullName = props.dataForEdit?.name;
-      const cityName = _selectedCity?.name;
-      
-      if (fullName?.includes(" - ") && orgName && cityName) {
-        const [userProvidedTitle] = fullName.split(" - ");
-        setCustomTitle(userProvidedTitle || ""); // Set the user-provided title for editing
-      } else {
-        setCustomTitle(fullName || ""); // Fallback in case there's no separator
-      }
-  
+    
+      // Update the title for the first time
+      //updateCombinedTitle(customTitle, _selectedOrganization, _selectedCity); // NEW LINE
+            // Separate the organization name from the custom title
+            const orgName = _selectedOrganization?.name;
+            const fullName = props.dataForEdit?.name;
+            const cityName = _selectedCity?.name;
+            
+            if (fullName?.includes(" - ") && orgName && cityName) {
+              const [userProvidedTitle] = fullName.split(" - ");
+              setCustomTitle(userProvidedTitle || ""); // Set the user-provided title for editing
+            } else {
+              setCustomTitle(fullName || ""); // Fallback in case there's no separator
+            }
+    
       setOpenDate(props.dataForEdit?.openDate);
       const formattedDate = moment(props.dataForEdit?.publishDate)
         .utcOffset("+05:00")
         .format("ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (z)");
-  
+    
       setPublishDate(new Date(props.dataForEdit?.publishDate));
       setSelectedImg(props.dataForEdit?.tenderImage);
     }
   }, [props.dataForEdit, props.CategoryDetails, props.cityDetails, props.newsPaperDetails, props.OrganizationDetails,props.isEditMode]);
-
-
-
-
   const SubmitForm = () => {
     if (isValid()) {
       if (props.isEditMode) {
@@ -518,174 +529,152 @@ const SaveTenderModal = (props) => {
 
   const handleFileChange = async (event) => {
     setSavedImageName("");
-
+    setIsUploading(true); // Start uploading message
   
-
     try {
-      let file = URL.createObjectURL(event.target.files[0]);
-      setSelectedImg(file);
-      setSelectedFile(event.target.files[0]);
-
-      var result = false;
-
-      const fileExtension = event.target.files[0]?.name?.split(".").pop();
-      var name =
-        "tender786-" +
-        utils.generateRandomId() +
-        "." +
-        fileExtension?.toLowerCase();
-
-      var response = await billingApiServices.uploadFile(
-        event.target.files[0],
-        name
-      );
+      let file = event.target.files[0];
+      const fileExtension = file?.name?.split(".").pop();
+      var name = "tender786-" + utils.generateRandomId() + "." + fileExtension?.toLowerCase();
+  
+      // Function to ensure the image is compressed to 500KB or less
+      const compressImageTo500KB = async (file) => {
+        let compressedFile = file;
+        let sizeInMB = file.size / 1024 / 1024; // Convert to MB
+  
+        // Set a base option to start compression
+        let options = {
+          maxSizeMB: sizeInMB, // Start with the current size of the image
+          useWebWorker: true,
+          maxWidthOrHeight: 1920, // Set max resolution (to help with compression)
+        };
+  
+        // Keep compressing until the file size is <= 500KB
+        while (compressedFile.size > 500 * 1024) { // 500KB in bytes
+          compressedFile = await imageCompression(compressedFile, options);
+          options.maxSizeMB = options.maxSizeMB / 2;
+        }
+  
+        return compressedFile;
+      };
+  
+      // Add watermark with oblique lines to the image
+      const addWatermark = async (file) => {
+        return new Promise((resolve, reject) => {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          const img = new Image();
+      
+          img.src = URL.createObjectURL(file);
+          img.onload = () => {
+            // Set canvas dimensions to image dimensions
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const fontSize = img.width / 35; // Set font size relative to image width
+            // Draw the original image on the canvas
+            ctx.drawImage(img, 0, 0);
+      
+            // Define the watermark text and styles
+            const watermarkText = "Tender_786_Bismillah   ";
+            ctx.font = "40px sans-serif"; // Adjust font size and style
+            // ctx.fillStyle = "rgba(0, 0, 0, 0.5)"; // White with transparency
+            ctx.fillStyle = "rgba(169,169, 169, 0.9)"; 
+            ctx.textAlign = "center";
+      
+            // Function to draw diagonal watermark text
+            const drawWatermark = () => {
+              // Set the spacing and angles for diagonal watermark lines
+             
+              const angle = -30 * (Math.PI / 270); // Adjust angle for better alignment
+      
+              // Rotate canvas and apply watermarks at an angle
+              ctx.rotate(angle);
+      
+             
+              const textWidth = ctx.measureText(watermarkText).width;
+                    for (let y = 100; y < canvas.height; y += fontSize*8) {
+        for (let x = 0; x < canvas.width; x += textWidth) {
+          ctx.fillText(watermarkText, x, y);
+        }
+      }
+      
+              // Reset the rotation
+              ctx.rotate(-angle);
+            };
+      
+            drawWatermark(); // Draw the watermarks
+      
+            // Convert the canvas back to a Blob or File object
+            canvas.toBlob((blob) => {
+              resolve(new File([blob], file.name, { type: file.type }));
+            }, file.type);
+          };
+      
+          img.onerror = (err) => {
+            reject(err);
+          };
+        });
+      };
+      
+  
+      // First, add watermark with oblique lines to the image
+      const watermarkedFile = await addWatermark(file);
+  
+      // Then, compress the image to 500KB or less
+      const compressedFile = await compressImageTo500KB(watermarkedFile);
+  
+      // Create an object URL for the compressed file
+      let compressedFileUrl = URL.createObjectURL(compressedFile);
+      setSelectedImg(compressedFileUrl);
+      setSelectedFile(compressedFile);
+  
+      // Upload the compressed file
+      var response = await billingApiServices.uploadFile(compressedFile, name);
       if (response?.status) {
         setSavedImageName("https://mytender.online/uploads/" + name);
-        setSavedImageName("http://localhost:5000/uploads/" + name);
-
+        setSavedImageName("http://localhost:5000/uploads/" + name); // Replace with your live or local link
       } else {
         setSavedImageName("");
-        alert("Error while uploading image , please try again");
+        alert("Error while uploading image, please try again");
       }
-
-      console.log("****", result);
-      return result;
+  
+      return true;
     } catch (error) {
       setSavedImageName("");
       console.log("image error :" + error);
-      alert("Error while uploading image , please try again");
+      alert("Error while uploading image, please try again");
+    } finally {
+      setIsUploading(false); // Hide uploading message after completion
     }
   };
+  
+  
 
-  // const handleFileChange = async (event) => {
-  //   setSavedImageName("");
   
-  //   try {
-  //     let file = event.target.files[0];
-  //     const fileExtension = file?.name?.split(".").pop();
-  //     var name = "tender786-" + utils.generateRandomId() + "." + fileExtension?.toLowerCase();
-  
-  //     // Function to add the watermark "Tender 786 Bismillah" to the image
-  //     const addWatermark = async (file) => {
-  //       return new Promise((resolve) => {
-  //         const reader = new FileReader();
-  //         reader.readAsDataURL(file);
-  //         reader.onload = function (e) {
-  //           const img = new Image();
-  //           img.src = e.target.result;
-  //           img.onload = function () {
-  //             // Create a canvas to draw the image and watermark
-  //             const canvas = document.createElement("canvas");
-  //             const ctx = canvas.getContext("2d");
-  
-  //             canvas.width = img.width;
-  //             canvas.height = img.height;
-  
-  //             // Draw the original image on the canvas
-  //             ctx.drawImage(img, 0, 0);
-  
-  //             // Set watermark style
-  //             const fontSize = img.width / 20; // Dynamically set font size based on image width
-  //             ctx.font = `${fontSize}px Arial`;
-  //             ctx.fillStyle = "rgba(255, 0, 0, 0.3)"; // Red color with 30% transparency
-  //             ctx.textAlign = "center";
-  
-  //             const watermarkText = "Tender 786 Bismillah";
-  //             const textWidth = ctx.measureText(watermarkText).width;
-  
-  //             // Repeat watermark across the X-axis and Y-axis
-  //             for (let y = 50; y < canvas.height; y += fontSize * 2) {
-  //               for (let x = 0; x < canvas.width; x += textWidth + 20) {
-  //                 ctx.fillText(watermarkText, x, y);
-  //               }
-  //             }
-  
-  //             // Convert canvas to a blob (to get file format and size)
-  //             canvas.toBlob((blob) => {
-  //               resolve(blob);
-  //             }, file.type);
-  //           };
-  //         };
-  //       });
-  //     };
-  
-  //     // Function to ensure the image is compressed to 500KB or less
-  //     const compressImageTo500KB = async (file) => {
-  //       let compressedFile = file;
-  //       let sizeInMB = file.size / 1024 / 1024; // convert to MB
-  
-  //       // Set a base option to start compression
-  //       let options = {
-  //         maxSizeMB: sizeInMB, // Start with the current size of the image
-  //         useWebWorker: true,
-  //         maxWidthOrHeight: 1920, // Set max resolution (to help with compression)
-  //       };
-  
-  //       // Keep compressing until the file size is <= 500KB
-  //       while (compressedFile.size > 500 * 1024) { // 500KB in bytes
-  //         compressedFile = await imageCompression(compressedFile, options);
-  //         // Reduce maxSizeMB further if still larger than 500KB
-  //         options.maxSizeMB = options.maxSizeMB / 2;
-  //       }
-  
-  //       return compressedFile;
-  //     };
-  
-  //     // First, add the watermark to the image
-  //     const watermarkedFileBlob = await addWatermark(file);
-  
-  //     // Convert the watermarked Blob back to a File object (so it can be compressed)
-  //     const watermarkedFile = new File([watermarkedFileBlob], file.name, { type: file.type });
-  
-  //     // Compress the watermarked image to 500KB or less
-  //     const compressedFile = await compressImageTo500KB(watermarkedFile);
-  
-  //     // Create an object URL for the compressed file
-  //     let compressedFileUrl = URL.createObjectURL(compressedFile);
-  //     setSelectedImg(compressedFileUrl);
-  //     setSelectedFile(compressedFile);
-  
-  //     // Upload the compressed file
-  //     var response = await billingApiServices.uploadFile(compressedFile, name);
-  //     if (response?.status) {
-  //       setSavedImageName("https://mytender.online/uploads/" + name);
-  //       setSavedImageName("http://localhost:5000/uploads/" + name);
-  //     } else {
-  //       setSavedImageName("");
-  //       alert("Error while uploading image, please try again");
-  //     }
-  
-  //     return true;
-  //   } catch (error) {
-  //     setSavedImageName("");
-  //     console.log("image error :" + error);
-  //     alert("Error while uploading image, please try again");
-  //   }
-  // };
-  // const handleUpload = async (id) => {
-  //   var result = false;
-  //   var _blob = null;
-  //   const canvas = await html2canvas(gridRef.current);
+ 
+  const handleUpload = async (id) => {
+    var result = false;
+    var _blob = null;
+    const canvas = await html2canvas(gridRef.current);
 
-  //   const blob = await new Promise((resolve) => {
-  //     canvas.toBlob((blob) => {
-  //       resolve(blob);
-  //     });
-  //   });
+    const blob = await new Promise((resolve) => {
+      canvas.toBlob((blob) => {
+        resolve(blob);
+      });
+    });
 
-  //   const fileExtension = selectedFile?.name?.split(".").pop();
-  //   var imgTitle = title?.trim()?.split(" ").join("-");
-  //   var name = imgTitle + "-" + id + "." + fileExtension?.toLowerCase();
+    const fileExtension = selectedFile?.name?.split(".").pop();
+    var imgTitle = title?.trim()?.split(" ").join("-");
+    var name = imgTitle + "-" + id + "." + fileExtension?.toLowerCase();
 
-  //   var response = await billingApiServices.uploadFile(blob, name);
-  //   if (response?.status) {
-  //     result = name;
-  //   } else {
-  //     result = false;
-  //   }
+    var response = await billingApiServices.uploadFile(blob, name);
+    if (response?.status) {
+      result = name;
+    } else {
+      result = false;
+    }
 
-  //   return result;
-  // };
+    return result;
+  };
 
   const handleIplNumber = (e) => {
     var response = props.gridData?.filter(
@@ -742,20 +731,7 @@ const SaveTenderModal = (props) => {
 //   }
 // };
 
-const handleTitle = (e) => {
-  const value = e.target.value;
-  const regex = /^[a-zA-Z0-9_ -]*$/;
 
-  if (!regex.test(value)) {
-    // If invalid characters are entered, ignore them
-    return;
-  }
-
-  setCustomTitle(value);
-
-  // Update the combined title with custom title, organization, and city
-  updateCombinedTitle(value, selectedOrganization, selectedCity);
-};
 
 
   const dropdownRefSpaceBar = useRef(null);
@@ -765,18 +741,22 @@ const handleTitle = (e) => {
   //   setSelectedOrganization(e.value);
   // };
 
-  // const handleOrganization = (e) => {
-  //   const organization = e.value;
-  //   setSelectedOrganization(organization);
+ 
+  const handleTitle = (e) => {
+    const value = e.target.value;
+    const regex = /^[a-zA-Z0-9_ -]*$/;
   
-  //   // Combine organization name with custom title
-  //   if (customTitle && selectedCity==null ) {
-  //     setTitle(`${customTitle} - ${organization.name} - ${selectedCity.name}`);
-  //   } else {
-  //     setTitle(`${organization.name}`); // If no custom title, just use the organization name
-  //   }
-  // };
+    if (!regex.test(value)) {
+      // If invalid characters are entered, ignore them
+      return;
+    }
   
+    setCustomTitle(value);
+  
+    // Update the combined title with custom title, organization, and city
+    updateCombinedTitle(value, selectedOrganization, selectedCity);
+  };
+
   // Function to handle organization selection and update the title
 const handleOrganization = (e) => {
   const organization = e.value;
@@ -786,41 +766,41 @@ const handleOrganization = (e) => {
   updateCombinedTitle(customTitle, organization, selectedCity);
 };
 
-  // const handleCity = (e) => {
-  //   const city = e.value;
-  //   setSelectedCity(city);
-  
-  //   // Combine organization name, city name, and custom title
-  //   if (customTitle && selectedOrganization ) {
-  //     setTitle(`${customTitle} - ${selectedOrganization.name} - ${selectedCity.name}`);
-  //   }else {
-  //     setTitle(`${city.name}`);
-  //   }
-  // };
-
-
-
   // Function to handle city selection and update the title
 
 
-const handleCity = (e) => {
-  const city = e.value;
-  setSelectedCity(city);
+  const handleCity = (e) => {
+    const city = e.value;
+    setSelectedCity(city);
+  
+    // // Update the combined title with custom title, organization, and city
+    // updateCombinedTitle(customTitle, selectedOrganization, city);
+  };
+  
+  //Function to combine and set the title dynamically
+  const updateCombinedTitle = (customTitle, organization, city) => {
+    let combinedTitle = "";
+  
+    if (customTitle) combinedTitle += customTitle; // Add custom title if present
+    if (organization) combinedTitle += ` - ${organization.name}`; // Add organization name
+    if (city) combinedTitle += ` - ${city.name}`; // Add city name
+  
+    setTitle(combinedTitle); // Set the combined title
+  };  
 
-  // Update the combined title with custom title, organization, and city
-  updateCombinedTitle(customTitle, selectedOrganization, city);
-};
+  // const updateCombinedTitle = (customTitle, organization, city) => {
+  //   let combinedTitle = "";
+  
+  //   if (customTitle) combinedTitle += customTitle.trim(); // Add custom title if present
+  //   if (organization) combinedTitle += ` - ${organization.name.trim()}`; // Add organization name
+  //   if (city) combinedTitle += ` - ${city.name.trim()}`; // Add city name
+  
+  //   setTitle(combinedTitle); // Set the combined title
+  // };
+  
 
-// Function to combine and set the title dynamically
-const updateCombinedTitle = (customTitle, organization, city) => {
-  let combinedTitle = "";
 
-  if (customTitle) combinedTitle += customTitle; // Add custom title if present
-  if (organization) combinedTitle += ` - ${organization.name}`; // Add organization name
-  if (city) combinedTitle += ` - ${city.name}`; // Add city name
 
-  setTitle(combinedTitle); // Set the combined title
-};  
 
   const handleCategory = (e) => {
     onCategoryClick();
@@ -968,6 +948,7 @@ const updateCombinedTitle = (customTitle, organization, city) => {
                   <InputText
                     type="text"
                     //value={title}
+                    // value={selectedOrganization.name}
                     value={customTitle} // Bind the input field to customTitle
                     onChange={(e) => handleTitle(e)}
                     className="ipl-input"
@@ -975,40 +956,6 @@ const updateCombinedTitle = (customTitle, organization, city) => {
                 </div>
                 {/* Title */}
 
-
-                      {/* Organization dropdown */}
-                {/* <div className="p-col-12">
-
-                  <span>
-
-                    Organization:{" "}
-                    <span
-                      class="add-minus-btn"
-                      onClick={() => addOrganization()}
-                    >
-                      <i className="fa fa-plus-circle"></i>
-
-                      {selectedOrganization == null && (
-                        <span className="validation-error">* Required</span>
-                      )}
-                    </span>
-
-                  </span>
-                  <Dropdown
-                    id="organization-dropdown"
-                    options={OrganizationDetails}
-                    itemTemplate={(e) => organizationTemplate(e)}
-                    filter
-                    filterBy="name"
-                    filterPlaceholder="Search"
-                    onChange={(e) => handleOrganization(e)}
-                    optionLabel="name"
-                    value={selectedOrganization}
-                    placeholder="Select an Organziation"
-                    resetFilterOnHide={true}
-                  />
-                </div> */}
-                      {/* Organization dropdown */}
 
     {/* Organization dropdown */}
     <div className="p-col-12">
@@ -1064,21 +1011,6 @@ const updateCombinedTitle = (customTitle, organization, city) => {
                     preSelectedCategories={selectedCategory}  // Pass the pre-selected categories here
                   />
                   
-                    {/* <Dropdown
-                    id="category-dropdown"
-                    options={CategoryDetails}
-                    itemTemplate={(e) => categoryTemplate(e)}
-                    filter
-                    filterBy="name"
-                    filterPlaceholder="Search"
-                    onChange={(e) => handleCategory(e)}
-                    optionLabel="name"
-                    value={selectedCategory}
-                    placeholder="Select Category"
-                    resetFilterOnHide={true}
-                  /> */}
-
-                 
                 </div>
 
                 <div className="p-col-12">
@@ -1173,31 +1105,35 @@ const updateCombinedTitle = (customTitle, organization, city) => {
                   </div>
                 </div>
 
-                {refreshFileInput ? (
-                  ""
-                ) : (
-                  <div className="p-col-12">
-                    <span>
-                      File:{" "}
-
-{savedImageName != "" ? (
-  <span className="validation-succes">File Saved!</span>
-
+               
+{refreshFileInput ? (
+  ""
 ) : (
-<span className="validation-error">* Required</span>
+  <div className="p-col-12">
+    <span>
+      File:{" "}
+      {isUploading ? ( // If uploading is in progress
+        <span className="validation-info text-dark uploading_heding">Uploading... Please wait</span>
+      ) : savedImageName !== "" ? ( // After successful upload
+        <span className="validation-success text-success">File Saved!</span>
+      ) : (
+        <span className="validation-error text-danger">* Required</span> // If no file has been uploaded yet
+      )}
+    </span>
 
+    {/* Input field for file upload */}
+    <InputText
+      type="file"
+      onChange={(e) => handleFileChange(e)}
+      className="ipl-input"
+      disabled={isUploading} // Disable input during upload
+    />
+  </div>
 )}
 
 
-                    </span>
-                    <InputText
-                      type="file"
-                      onChange={(e) => handleFileChange(e)}
-                      className="ipl-input"
-                    // ref={dropdownRef}
-                    />
-                  </div>
-                )}
+
+
 
                 <br />
                 <div className="p-col-12">
@@ -1234,13 +1170,8 @@ const updateCombinedTitle = (customTitle, organization, city) => {
       <div className="section_____img section col8" ref={gridRef}>
        
         <div className="content " style={{ overflow: 'auto' }}>
-          <Watermark
-            text="Tender786 Bismillah"
-            textColor="rgba(255, 255, 255, 0.3)"
-            textSize="10px"
-        
-          >
-            <div style={{ overflow: 'auto', width: '100%', height: '100%', position: 'relative' }}>
+      
+             <div > {/*style={{ overflow: 'auto', width: '100%', height: '100%', position: 'relative' }} */}
               <img
                 alt=""
                 height="700px"
@@ -1258,7 +1189,7 @@ const updateCombinedTitle = (customTitle, organization, city) => {
                 }}
               />
             </div>
-          </Watermark>
+       
         </div>
 
         <div className="p-col-12 mt-5">
