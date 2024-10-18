@@ -141,11 +141,32 @@ const SaveTenderModal = (props) => {
   ];
 
 
+  // const fetchAllOrganizations = async () => {
+  //   setOrganizationLoader(true); // Start the loader
+  
+      
+  
+  //   try {
+  //     const response = await billingApiServices.fetchAllOrganizations(); // Call the API
+  //     console.log('API Response:', response); // Log the response
+  //     if (response && response.data && response.data.status) {
+  //       setOrganizationDetails(response.data.data); // Access the organizations array correctly
+  //     } else {
+  //       console.warn("No organizations found or invalid response.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching organizations:", error);
+  //   } finally {
+  //     setOrganizationLoader(false); // Stop the loader regardless of success or failure
+  //   }
+  // };
+
 
 
   // for plus buttons
   useEffect(() => {
 
+   
 
     const reloadOrg = (data) => {
       let dt = props.OrganizationDetails;
@@ -363,6 +384,9 @@ const SaveTenderModal = (props) => {
       callback(null); // Handle the case where no file is provided
     }
   };
+
+
+  
 
   const Edit = async () => {
     var categories = selectedCategory?.map(v => v.name);
@@ -774,7 +798,7 @@ const handleOrganization = (e) => {
     setSelectedCity(city);
   
     // // Update the combined title with custom title, organization, and city
-    // updateCombinedTitle(customTitle, selectedOrganization, city);
+     updateCombinedTitle(customTitle, selectedOrganization, city);
   };
   
   //Function to combine and set the title dynamically

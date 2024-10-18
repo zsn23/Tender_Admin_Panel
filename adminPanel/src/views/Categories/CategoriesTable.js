@@ -28,7 +28,7 @@ const CustomDataTable = (props) => {
   const [stateManager, setStateManager] = useState(0);
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
   const [first, setFirst] = useState(0); // Index of the first record to display
- const [rows, setRows] = useState(25); // Number of rows per page
+ const [rows, setRows] = useState(10); // Number of rows per page
 
   let [filterArray, setfilterArray] = useState({
     name: { value: null, matchMode: FilterMatchMode.CONTAINS },

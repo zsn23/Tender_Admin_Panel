@@ -111,14 +111,6 @@ sendEmail= async (body) => {
 }
 
 
-  getOrganizationDetails = async () => {
-    try {
-      let res = await axios.get(this.baseUrl + "organizations/");
-      return res;
-    } catch (e) {
-      return null;
-    }
-  };
 
   getCategoriesDetails = async () => {
     try {
@@ -162,12 +154,81 @@ sendEmail= async (body) => {
     }
   };
 
-  getOrganizationsDetails = async () => {
+
+  getOrganizationDetails = async () => {
     try {
       let res = await axios.get(this.baseUrl + "organizations/");
       return res;
     } catch (e) {
       return null;
+    }
+  };
+
+  // getOrganizationsDetails = async () => {
+  //   try {
+  //     let res = await axios.get(this.baseUrl + "organizations/");
+  //     return res;
+  //   } catch (e) {
+  //     return null;
+  //   }
+  // };
+  getOrganizationsDetails = async (page, limit, sortField, sortOrder, filters = {}) => {
+    try {
+      const sortParams = sortField && sortOrder ? `&sortField=${encodeURIComponent(sortField)}&sortOrder=${encodeURIComponent(sortOrder)}` : '';
+      const filterParams = Object.keys(filters)
+        .map(key => filters[key] ? `&${encodeURIComponent(key)}=${encodeURIComponent(filters[key])}` : '')
+        .join('');
+      
+      const url = `${this.baseUrl}organizations?page=${encodeURIComponent(page)}&limit=${encodeURIComponent(limit)}${sortParams}${filterParams}`;
+      const res = await axios.get(url);
+      
+      if (res && res.data) {
+        if (res.data.status) {
+          if (res.data.data && Array.isArray(res.data.data.data)) {
+            return res.data;
+          } else {
+            console.warn("No organizations found.");
+            return {
+              status: false,
+              message: "No organizations found.",
+              data: []
+            };
+          }
+        } else {
+          console.error("Invalid response status:", res.data.message);
+          return {
+            status: false,
+            message: res.data.message || "Invalid response status.",
+            data: []
+          };
+        }
+      } else {
+        console.error("Invalid response structure or empty response.");
+        return {
+          status: false,
+          message: "Invalid response structure or empty response.",
+          data: []
+        };
+      }
+    } catch (e) {
+      console.error("Error occurred while fetching organizations:", e.message);
+      return {
+        status: false,
+        message: "Error occurred while fetching organizations.",
+        data: []
+      };
+    }
+  };
+
+
+  fetchAllOrganizations = async () => {
+    try {
+      // Call the API to get all organizations without pagination
+      const res = await axios.get(this.baseUrl + 'organizations/all/'); // Use the new endpoint
+      return res // Update state with all organizations
+    } catch (e) {
+      return null;
+      console.error("Error fetching organizations:", e);
     }
   };
 

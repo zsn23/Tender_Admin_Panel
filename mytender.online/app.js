@@ -696,8 +696,131 @@ app.post('/organizations/saveMultipleOrganizations', (req, res) => {
 
 
 
+// app.get('/organizations/', (req, res) => {
+//   try {
+//     const countQuery = 'SELECT COUNT(*) AS totalRecords FROM organizations';
+//     const dataQuery = `
+//       SELECT organizations.*, users.name AS userName
+//       FROM organizations
+//       INNER JOIN users ON organizations.effectedBy = users.id
+//     `;
+//     pool.query(countQuery, (err, countResults) => {
+//       if (err) {
+//         return res.status(500).json({ status: false, data: [], message: MESSAGES.ERROR_MESSAGE });
+//       }
+//       const totalRecords = countResults[0].totalRecords; 
+//       pool.query(dataQuery, (err, dataResults) => {
+//         if (err) {
+//           return res.status(500).json({ status: false, data: [], message: MESSAGES.ERROR_MESSAGE });
+//         }
+
+//         return res.status(200).json({
+//           status: true,
+//           totalRecords, 
+//           data: dataResults,
+//           message: MESSAGES.FOUND
+//         });
+//       });
+//     });
+//   } catch (err) {
+//     return res.status(500).json({ status: false, data: [], message: MESSAGES.ERROR_MESSAGE });
+//   }
+// });
+
+
 app.get('/organizations/', (req, res) => {
-  try {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const offset = (page - 1) * limit;
+  const sortField = req.query.sortField || 'effectedDate'; 
+  const sortOrder = req.query.sortOrder === 'desc' ? 'DESC' : 'ASC';
+
+  const filters = [];
+  const values = [];
+
+  // Filter for organization name
+  if (req.query.name) {
+    filters.push('organizations.name LIKE ?');
+    values.push(`%${req.query.name}%`);
+  }
+
+  // Filter for user name
+  if (req.query.userName) {
+    filters.push('users.name LIKE ?');
+    values.push(`%${req.query.userName}%`);
+  }
+
+  // Filter for creation date
+  if (req.query.effectedDate) {
+    filters.push('DATE_FORMAT(organizations.effectedDate, "%Y-%m-%d") LIKE ?');
+    values.push(`${req.query.effectedDate}%`);
+  }
+
+  const whereClause = filters.length ? `WHERE ${filters.join(' AND ')}` : '';
+
+  // Main Query
+  const dataQuery = `
+    SELECT organizations.*, users.name AS userName
+    FROM organizations
+    INNER JOIN users ON organizations.effectedBy = users.id
+    ${whereClause}
+    ORDER BY ${sortField} ${sortOrder}
+    LIMIT ? OFFSET ?
+  `;
+
+  // Count Query for pagination
+  const countQuery = `
+    SELECT COUNT(*) AS totalRecords
+    FROM organizations
+    INNER JOIN users ON organizations.effectedBy = users.id
+    ${whereClause}
+  `;
+
+  console.log('Request Params:', req.query);
+
+  pool.query(countQuery, values, (err, countResults) => {
+    if (err) {
+      console.error('Error fetching organization count:', err);
+      return res.status(500).json({ status: false, data: [], message: 'Error fetching organization count.' });
+    }
+
+    const totalRecords = countResults[0].totalRecords;
+
+    pool.query(dataQuery, [...values, limit, offset], (err, dataResults) => {
+      if (err) {
+        console.error('Error fetching organizations:', err);
+        return res.status(500).json({ status: false, data: [], message: 'Error fetching organizations.' });
+      }
+
+      const totalPages = Math.ceil(totalRecords / limit);
+
+      return res.status(200).json({
+        status: true,
+        message: 'All Organizations',
+        data: {
+          current_page: page,
+          data: dataResults,
+          first_page_url: `http://localhost:${PORT}/organizations?page=1&limit=${limit}`,
+          from: offset + 1,
+          last_page: totalPages,
+          last_page_url: `http://localhost:${PORT}/organizations?page=${totalPages}&limit=${limit}`,
+          next_page_url: page < totalPages ? `http://localhost:${PORT}/organizations?page=${page + 1}&limit=${limit}` : null,
+          path: `http://localhost:${PORT}/organizations`,
+          per_page: limit,
+          prev_page_url: page > 1 ? `http://localhost:${PORT}/organizations?page=${page - 1}&limit=${limit}` : null,
+          to: offset + dataResults.length,
+          total: totalRecords
+        },
+        statusCode: 200
+      });
+    });
+  });
+});
+
+
+
+app.get('/organizations/all/', (req, res) => {
+   try {
     const countQuery = 'SELECT COUNT(*) AS totalRecords FROM organizations';
     const dataQuery = `
       SELECT organizations.*, users.name AS userName
@@ -726,6 +849,7 @@ app.get('/organizations/', (req, res) => {
     return res.status(500).json({ status: false, data: [], message: MESSAGES.ERROR_MESSAGE });
   }
 });
+
 
 const checkExistsOrganizations = (data) => {
   return new Promise((resolve, reject) => {
