@@ -57,7 +57,7 @@
 }
 .p-datatable .p-paginator .p-paginator-current,.p-paginator .p-paginator-first, .p-paginator .p-paginator-prev, .p-paginator .p-paginator-next, .p-paginator .p-paginator-last
 {
-    color: #000 !important;
+    color: #ffffff !important;
     padding: 1%;
 }
 .p-inputtext{
@@ -83,7 +83,9 @@ i.pi.pi-pencil{
     border-width: 0 0 3px 0 !important;
     position: relative;
 }
-
+.uploading_heding{
+    color: whitesmoke !important;
+}
 .section{
     background-color: #000 !important;
     border: 1px solid #ddd;
@@ -135,6 +137,7 @@ button.cross-btn {
 h5.card-title,.p-input-icon-right > i:last-of-type, .p-input-icon-right > svg:last-of-type, .p-input-icon-right > .p-input-suffix{
     color: #fff !important;
 }
+
 /* .p-datatable-responsive-scroll>.p-datatable-wrapper>table, .p-datatable-auto-layout>.p-datatable-wrapper>table{
     border: 1px solid #fff !important;
 } */
@@ -237,15 +240,11 @@ h5.card-title,.p-input-icon-right > i:last-of-type, .p-input-icon-right > svg:la
     color: #fff !important;
     border: 1px solid #fff !important;
 }
-.stage-2 .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
-    background: #ef6767 !important;
-}
+
 .p-overlaypanel .p-overlaypanel-content{
     background-color: #000;
 }
-.fiter-role .form-group:hover {
-    background: #ef6767 !important;
-}
+
 .form-actions .btn-warning {
     background-color: rgb(136, 136, 136) !important;
 }
@@ -444,4 +443,7 @@ body {
 
 .text-light_Dark{
     color: white !important;
+}
+.modal-header{
+    background:black ;
 }

@@ -140,31 +140,36 @@ const CustomDataTable = (props) => {
     window.open(imgURL, '_blank');
   };
 
-  const handleDownload = async (currentRow) => {
-    if (!currentRow?.tenderImage) return;
-  
-    const img = new Image();
-    img.crossOrigin = "anonymous"; 
-    img.src = currentRow.tenderImage;
-  
-    img.onload = () => {
-      // Create a canvas element
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      canvas.width = img.width;
-      canvas.height = img.height;
-  
-      // Draw the main image
-      ctx.drawImage(img, 0, 0);
-  
-      // Download the canvas image (without watermark)
+const handleDownload = async (currentRow) => {
+  if (!currentRow?.tenderImage) return;
+
+  const img = new Image();
+  img.crossOrigin = "anonymous"; 
+  img.src = currentRow.tenderImage;
+
+  img.onload = () => {
+    // Create a canvas element
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = img.width;
+    canvas.height = img.height;
+
+    // Draw the main image
+    ctx.drawImage(img, 0, 0);
+
+    // Compress the image and download it
+    canvas.toBlob((blob) => {
       const link = document.createElement("a");
-      link.href = canvas.toDataURL("image/png");
-      link.download = "tender_image.png"; // Updated file name
+      link.href = URL.createObjectURL(blob);
+      link.download = "tender_image.jpg"; // Updated file name without watermark
       link.click();
-    };
+    }, "image/jpeg", 0.9); // 0.9 is the quality factor for compression (higher for better quality)
   };
+};
+
   
+  
+
 
   const reloadData = () => {
     props.reloadData();

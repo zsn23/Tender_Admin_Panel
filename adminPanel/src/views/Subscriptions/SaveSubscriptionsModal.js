@@ -33,7 +33,7 @@ const SaveNewsPaperModal = (props) => {
   const [company, setCompany] = useState("");
   const [selectedCategories, setSelectedCategories] = useState("");
   const [selectedBillingPeriod, setSelectedBillingPeriod] = useState(null);
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState("");
   const [billingDate, setBillingDate] = useState("");
   const [status, setStatus] = useState(0);
 
