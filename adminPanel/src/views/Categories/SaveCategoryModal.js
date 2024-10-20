@@ -41,9 +41,6 @@ const SaveCategoryModal = (props) => {
   const toggle = () => {
     setModal(false);
     props.onClose()
-    // if (!props.isEditMode) {
-    //   props.showModal.getShowModal(!modal);
-    // }
   };
 
   useEffect(() => {
@@ -65,36 +62,6 @@ const SaveCategoryModal = (props) => {
       }
     }
   }
-
-  // const Edit = () => {
-  //   const body = {
-  //     id: props.dataForEdit?.id,
-  //     name: categoryName?.trim(),
-  //     effectedBy: _userData?.id
-  //   }
-
-  //   billingApiServices.updateCategory(body).then((response) => {
-  //     if (response == null || response == undefined) {
-  //       handleToast("error", "Operation failed, check your internet connection")
-  //       return
-  //     }
-
-  //     if (response?.data?.status) {
-
-  //       handleToast("success", response?.data?.message)
-  //       setCategoryName("")
-  //       props.reloadData()
-  //       setModal(false);
-  //       props.onClose()
-  //     }
-  //     else {
-  //       handleToast("error", response?.data?.message)
-  //     }
-  //   });
-  // }
-  
-
-
 
   const Edit = () => {
     const oldCategoryName = props.dataForEdit?.name; // Save the old category name before editing
@@ -118,7 +85,7 @@ const SaveCategoryModal = (props) => {
         setModal(false);
         props.onClose();
   
-        // After updating the category, update tenders with the old category
+        // After updating the category, update tenders with the new category
         updateTenderCategory(oldCategoryName, categoryName);
       
       } else {

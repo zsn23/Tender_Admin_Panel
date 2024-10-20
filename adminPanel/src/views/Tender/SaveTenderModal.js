@@ -140,33 +140,10 @@ const SaveTenderModal = (props) => {
     { label: "Option 3", value: "option3" },
   ];
 
-
-  // const fetchAllOrganizations = async () => {
-  //   setOrganizationLoader(true); // Start the loader
-  
-      
-  
-  //   try {
-  //     const response = await billingApiServices.fetchAllOrganizations(); // Call the API
-  //     console.log('API Response:', response); // Log the response
-  //     if (response && response.data && response.data.status) {
-  //       setOrganizationDetails(response.data.data); // Access the organizations array correctly
-  //     } else {
-  //       console.warn("No organizations found or invalid response.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching organizations:", error);
-  //   } finally {
-  //     setOrganizationLoader(false); // Stop the loader regardless of success or failure
-  //   }
-  // };
-
-
-
   // for plus buttons
   useEffect(() => {
 
-   
+
 
     const reloadOrg = (data) => {
       let dt = props.OrganizationDetails;
@@ -179,7 +156,7 @@ const SaveTenderModal = (props) => {
       let dt = props.CategoryDetails;
       dt.push(data[0]);
       setCategoryDetails(dt);
-      
+
     };
 
     const reloadNewspaper = (data) => {
@@ -259,41 +236,41 @@ const SaveTenderModal = (props) => {
   //       }
   //     });
   //     setSelectedCategory(selectedItem);
-  
+
   //     let _selectedCity = props.cityDetails?.find(
   //       (c) => c.id == props.dataForEdit?.city
   //     );
   //     if (_selectedCity != null && _selectedCity != undefined) {
   //       setSelectedCity(_selectedCity);
   //     }
-  
+
   //     let _selectedNewspaper = props.newsPaperDetails?.find(
   //       (c) => c.id == props.dataForEdit?.newspaper
   //     );
   //     setSelectedNewsPaper(_selectedNewspaper);
-  
+
   //     let _selectedOrganization = props.OrganizationDetails?.find(
   //       (c) => c.id == props.dataForEdit?.organization
   //     );
   //     setSelectedOrganization(_selectedOrganization);
-  
+
   //     // Separate the organization name from the custom title
   //     const orgName = _selectedOrganization?.name;
   //     const fullName = props.dataForEdit?.name;
   //     const cityName = _selectedCity?.name;
-      
+
   //     if (fullName?.includes(" - ") && orgName && cityName) {
   //       const [userProvidedTitle] = fullName.split(" - ");
   //       setCustomTitle(userProvidedTitle || ""); // Set the user-provided title for editing
   //     } else {
   //       setCustomTitle(fullName || ""); // Fallback in case there's no separator
   //     }
-  
+
   //     setOpenDate(props.dataForEdit?.openDate);
   //     const formattedDate = moment(props.dataForEdit?.publishDate)
   //       .utcOffset("+05:00")
   //       .format("ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (z)");
-  
+
   //     setPublishDate(new Date(props.dataForEdit?.publishDate));
   //     setSelectedImg(props.dataForEdit?.tenderImage);
   //   }
@@ -306,7 +283,7 @@ const SaveTenderModal = (props) => {
       setIplNumber(props.dataForEdit?.IPLNumber);
       setTitle(props.dataForEdit?.name); // This is the full title with organization name
       setSavedImageName(props.dataForEdit?.tenderImage);
-      
+
       let categories = props.dataForEdit?.category?.split(":");
       var selectedItem = [];
       categories?.forEach((element) => {
@@ -318,47 +295,50 @@ const SaveTenderModal = (props) => {
         }
       });
       setSelectedCategory(selectedItem);
-    
+
       let _selectedCity = props.cityDetails?.find(
         (c) => c.id == props.dataForEdit?.city
       );
       if (_selectedCity != null && _selectedCity != undefined) {
         setSelectedCity(_selectedCity);
       }
-    
+
       let _selectedNewspaper = props.newsPaperDetails?.find(
         (c) => c.id == props.dataForEdit?.newspaper
       );
       setSelectedNewsPaper(_selectedNewspaper);
-    
+
       let _selectedOrganization = props.OrganizationDetails?.find(
         (c) => c.id == props.dataForEdit?.organization
       );
       setSelectedOrganization(_selectedOrganization);
-    
+
       // Update the title for the first time
       //updateCombinedTitle(customTitle, _selectedOrganization, _selectedCity); // NEW LINE
-            // Separate the organization name from the custom title
-            const orgName = _selectedOrganization?.name;
-            const fullName = props.dataForEdit?.name;
-            const cityName = _selectedCity?.name;
-            
-            if (fullName?.includes(" - ") && orgName && cityName) {
-              const [userProvidedTitle] = fullName.split(" - ");
-              setCustomTitle(userProvidedTitle || ""); // Set the user-provided title for editing
-            } else {
-              setCustomTitle(fullName || ""); // Fallback in case there's no separator
-            }
-    
+      // Separate the organization name from the custom title
+      const orgName = _selectedOrganization?.name;
+      const fullName = props.dataForEdit?.name;
+      const cityName = _selectedCity?.name;
+
+      if (fullName?.includes("-") && orgName && cityName) {
+        const [userProvidedTitle] = fullName.split("-");
+        setCustomTitle(userProvidedTitle || ""); // Set the user-provided title for editing
+      } else {
+        setCustomTitle(fullName || ""); // Fallback in case there's no separator
+      }
+
       setOpenDate(props.dataForEdit?.openDate);
       const formattedDate = moment(props.dataForEdit?.publishDate)
         .utcOffset("+05:00")
         .format("ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (z)");
-    
+
       setPublishDate(new Date(props.dataForEdit?.publishDate));
       setSelectedImg(props.dataForEdit?.tenderImage);
     }
-  }, [props.dataForEdit, props.CategoryDetails, props.cityDetails, props.newsPaperDetails, props.OrganizationDetails,props.isEditMode]);
+  }, [props.dataForEdit, props.CategoryDetails, props.cityDetails, props.newsPaperDetails, props.OrganizationDetails, props.isEditMode]);
+
+
+
   const SubmitForm = () => {
     if (isValid()) {
       if (props.isEditMode) {
@@ -386,7 +366,7 @@ const SaveTenderModal = (props) => {
   };
 
 
-  
+
 
   const Edit = async () => {
     var categories = selectedCategory?.map(v => v.name);
@@ -434,13 +414,6 @@ const SaveTenderModal = (props) => {
     });
   };
 
-  // const testImg = () => {
-  //   var img = handleUpload("");
-  //   if (img == false) {
-  //     handleToast("error", "Operation failed, check your internet connection");
-  //     return;
-  //   }
-  // };
 
   const save = async () => {
     if (savedImageName == "") {
@@ -554,40 +527,40 @@ const SaveTenderModal = (props) => {
   const handleFileChange = async (event) => {
     setSavedImageName("");
     setIsUploading(true); // Start uploading message
-  
+
     try {
       let file = event.target.files[0];
       const fileExtension = file?.name?.split(".").pop();
       var name = "tender786-" + utils.generateRandomId() + "." + fileExtension?.toLowerCase();
-  
+
       // Function to ensure the image is compressed to 500KB or less
       const compressImageTo500KB = async (file) => {
         let compressedFile = file;
         let sizeInMB = file.size / 1024 / 1024; // Convert to MB
-  
+
         // Set a base option to start compression
         let options = {
           maxSizeMB: sizeInMB, // Start with the current size of the image
           useWebWorker: true,
           maxWidthOrHeight: 1920, // Set max resolution (to help with compression)
         };
-  
+
         // Keep compressing until the file size is <= 500KB
         while (compressedFile.size > 500 * 1024) { // 500KB in bytes
           compressedFile = await imageCompression(compressedFile, options);
           options.maxSizeMB = options.maxSizeMB / 2;
         }
-  
+
         return compressedFile;
       };
-  
+
       // Add watermark with oblique lines to the image
       const addWatermark = async (file) => {
         return new Promise((resolve, reject) => {
           const canvas = document.createElement("canvas");
           const ctx = canvas.getContext("2d");
           const img = new Image();
-      
+
           img.src = URL.createObjectURL(file);
           img.onload = () => {
             // Set canvas dimensions to image dimensions
@@ -596,61 +569,61 @@ const SaveTenderModal = (props) => {
             const fontSize = img.width / 35; // Set font size relative to image width
             // Draw the original image on the canvas
             ctx.drawImage(img, 0, 0);
-      
+
             // Define the watermark text and styles
             const watermarkText = "Tender_786_Bismillah   ";
             ctx.font = "40px sans-serif"; // Adjust font size and style
             // ctx.fillStyle = "rgba(0, 0, 0, 0.5)"; // White with transparency
-            ctx.fillStyle = "rgba(169,169, 169, 0.9)"; 
+            ctx.fillStyle = "rgba(169,169, 169, 0.9)";
             ctx.textAlign = "center";
-      
+
             // Function to draw diagonal watermark text
             const drawWatermark = () => {
               // Set the spacing and angles for diagonal watermark lines
-             
+
               const angle = -30 * (Math.PI / 270); // Adjust angle for better alignment
-      
+
               // Rotate canvas and apply watermarks at an angle
               ctx.rotate(angle);
-      
-             
+
+
               const textWidth = ctx.measureText(watermarkText).width;
-                    for (let y = 100; y < canvas.height; y += fontSize*8) {
-        for (let x = 0; x < canvas.width; x += textWidth) {
-          ctx.fillText(watermarkText, x, y);
-        }
-      }
-      
+              for (let y = 100; y < canvas.height; y += fontSize * 8) {
+                for (let x = 0; x < canvas.width; x += textWidth) {
+                  ctx.fillText(watermarkText, x, y);
+                }
+              }
+
               // Reset the rotation
               ctx.rotate(-angle);
             };
-      
+
             drawWatermark(); // Draw the watermarks
-      
+
             // Convert the canvas back to a Blob or File object
             canvas.toBlob((blob) => {
               resolve(new File([blob], file.name, { type: file.type }));
             }, file.type);
           };
-      
+
           img.onerror = (err) => {
             reject(err);
           };
         });
       };
-      
-  
+
+
       // First, add watermark with oblique lines to the image
       const watermarkedFile = await addWatermark(file);
-  
+
       // Then, compress the image to 500KB or less
       const compressedFile = await compressImageTo500KB(watermarkedFile);
-  
+
       // Create an object URL for the compressed file
       let compressedFileUrl = URL.createObjectURL(compressedFile);
       setSelectedImg(compressedFileUrl);
       setSelectedFile(compressedFile);
-  
+
       // Upload the compressed file
       var response = await billingApiServices.uploadFile(compressedFile, name);
       if (response?.status) {
@@ -660,7 +633,7 @@ const SaveTenderModal = (props) => {
         setSavedImageName("");
         alert("Error while uploading image, please try again");
       }
-  
+
       return true;
     } catch (error) {
       setSavedImageName("");
@@ -670,11 +643,11 @@ const SaveTenderModal = (props) => {
       setIsUploading(false); // Hide uploading message after completion
     }
   };
-  
-  
 
-  
- 
+
+
+
+
   const handleUpload = async (id) => {
     var result = false;
     var _blob = null;
@@ -718,77 +691,36 @@ const SaveTenderModal = (props) => {
     setIplNumber(e.target.value);
   };
 
-  // const handleTitle = (e) => {
-  //   var value = e.target.value;
-  //   const regex = /^[a-zA-Z0-9_ -]*$/;
-
-  //   if (!regex.test(value)) {
-  //     // Remove the last character if it's not allowed
-  //     value = value.slice(0, -1);
-  //   }
-
-  //   setTitle(value);
-  // };
-
-  // Function to handle user input for the title
-// const handleTitle = (e) => {
-//   const value = e.target.value;
-//   const regex = /^[a-zA-Z0-9_ -]*$/;
-
-//   if (!regex.test(value)) {
-//     // Remove the last character if it's not allowed
-//     return;
-//   }
-
-//   setCustomTitle(value);
-
-//   if (selectedOrganization) {
-//     // Combine organization name with custom title
-//     setTitle(`${value} - ${selectedOrganization.name}`);
-
-//     if(selectedOrganization && selectedCity){
-//     setTitle(`${value} - ${selectedOrganization.name} - ${selectedCity.name}`);
-//     }
-
-//   } else {
-//     setTitle(value); // If no organization is selected, just set the user input as the title
-//   }
-// };
 
 
 
 
   const dropdownRefSpaceBar = useRef(null);
 
-  // const handleOrganization = (e) => {
-  //   onOrganzationClick();
-  //   setSelectedOrganization(e.value);
-  // };
 
- 
   const handleTitle = (e) => {
     const value = e.target.value;
     const regex = /^[a-zA-Z0-9_ -]*$/;
-  
+
     if (!regex.test(value)) {
       // If invalid characters are entered, ignore them
       return;
     }
-  
+
     setCustomTitle(value);
-  
+
     // Update the combined title with custom title, organization, and city
     updateCombinedTitle(value, selectedOrganization, selectedCity);
   };
 
   // Function to handle organization selection and update the title
-const handleOrganization = (e) => {
-  const organization = e.value;
-  setSelectedOrganization(organization);
+  const handleOrganization = (e) => {
+    const organization = e.value;
+    setSelectedOrganization(organization);
 
-  // Update the combined title with custom title, organization, and city
-  updateCombinedTitle(customTitle, organization, selectedCity);
-};
+    // Update the combined title with custom title, organization, and city
+    updateCombinedTitle(customTitle, organization, selectedCity);
+  };
 
   // Function to handle city selection and update the title
 
@@ -796,34 +728,21 @@ const handleOrganization = (e) => {
   const handleCity = (e) => {
     const city = e.value;
     setSelectedCity(city);
-  
+
     // // Update the combined title with custom title, organization, and city
-     updateCombinedTitle(customTitle, selectedOrganization, city);
+    updateCombinedTitle(customTitle, selectedOrganization, city);
   };
-  
+
   //Function to combine and set the title dynamically
   const updateCombinedTitle = (customTitle, organization, city) => {
     let combinedTitle = "";
-  
-    if (customTitle) combinedTitle += customTitle; // Add custom title if present
-    if (organization) combinedTitle += ` - ${organization.name}`; // Add organization name
-    if (city) combinedTitle += ` - ${city.name}`; // Add city name
-  
+
+    if (customTitle) combinedTitle +=customTitle; // Add custom title if present
+    if (organization) combinedTitle += `-${organization.name}`; // Add organization name
+    if (city) combinedTitle += `-${city.name}`; // Add city name
+
     setTitle(combinedTitle); // Set the combined title
-  };  
-
-  // const updateCombinedTitle = (customTitle, organization, city) => {
-  //   let combinedTitle = "";
-  
-  //   if (customTitle) combinedTitle += customTitle.trim(); // Add custom title if present
-  //   if (organization) combinedTitle += ` - ${organization.name.trim()}`; // Add organization name
-  //   if (city) combinedTitle += ` - ${city.name.trim()}`; // Add city name
-  
-  //   setTitle(combinedTitle); // Set the combined title
-  // };
-  
-
-
+  };
 
 
   const handleCategory = (e) => {
@@ -924,7 +843,7 @@ const handleOrganization = (e) => {
   const onCityClick = () => {
     document.querySelector("#city-dropdown input").focus();
   };
-  const onCategoryClick =()=>{
+  const onCategoryClick = () => {
     document.querySelector("#category-dropdown input").focus();
   };
 
@@ -981,32 +900,32 @@ const handleOrganization = (e) => {
                 {/* Title */}
 
 
-    {/* Organization dropdown */}
-    <div className="p-col-12">
-      <span>
-        Organization:{" "}
-        <span class="add-minus-btn" onClick={() => addOrganization()}>
-          <i className="fa fa-plus-circle"></i>
-          {selectedOrganization == null && (
-            <span className="validation-error">* Required</span>
-          )}
-        </span>
-      </span>
-      <Dropdown
-        id="organization-dropdown"
-        options={OrganizationDetails}
-        itemTemplate={(e) => organizationTemplate(e)}
-        filter
-        filterBy="name"
-        filterPlaceholder="Search"
-        onChange={(e) => handleOrganization(e)}
-        optionLabel="name"
-        value={selectedOrganization}
-        placeholder="Select an Organization"
-        resetFilterOnHide={true}
-      />
-    </div>
-    {/* Organization dropdown */}
+                {/* Organization dropdown */}
+                <div className="p-col-12">
+                  <span>
+                    Organization:{" "}
+                    <span class="add-minus-btn" onClick={() => addOrganization()}>
+                      <i className="fa fa-plus-circle"></i>
+                      {selectedOrganization == null && (
+                        <span className="validation-error">* Required</span>
+                      )}
+                    </span>
+                  </span>
+                  <Dropdown
+                    id="organization-dropdown"
+                    options={OrganizationDetails}
+                    itemTemplate={(e) => organizationTemplate(e)}
+                    filter
+                    filterBy="name"
+                    filterPlaceholder="Search"
+                    onChange={(e) => handleOrganization(e)}
+                    optionLabel="name"
+                    value={selectedOrganization}
+                    placeholder="Select an Organization"
+                    resetFilterOnHide={true}
+                  />
+                </div>
+                {/* Organization dropdown */}
 
 
 
@@ -1023,18 +942,18 @@ const handleOrganization = (e) => {
                       <i className="fa fa-plus-circle"></i>
                     </span>
                     {/* Plus button */}
-                   
-                    {selectedCategory==null &&(
+
+                    {selectedCategory == null && (
                       <span className="validation-error">* Required</span>
                     )}
 
                   </span>
-                    <CategorySelection
+                  <CategorySelection
                     CategoryDetails={CategoryDetails}
                     getSelectedItems={(items) => getSelectedItems(items)}
                     preSelectedCategories={selectedCategory}  // Pass the pre-selected categories here
                   />
-                  
+
                 </div>
 
                 <div className="p-col-12">
@@ -1100,7 +1019,7 @@ const handleOrganization = (e) => {
                     //   onCityClick();
                     //   setSelectedCity(e.value);
                     // }}
-                    onChange={(e) => handleCity (e)}
+                    onChange={(e) => handleCity(e)}
                     optionLabel="name"
                     filter
                     filterBy="name"
@@ -1111,7 +1030,7 @@ const handleOrganization = (e) => {
                   />
                 </div>
 
-            
+
 
                 <div className="p-col-12">
                   <span>
@@ -1129,31 +1048,31 @@ const handleOrganization = (e) => {
                   </div>
                 </div>
 
-               
-{refreshFileInput ? (
-  ""
-) : (
-  <div className="p-col-12">
-    <span>
-      File:{" "}
-      {isUploading ? ( // If uploading is in progress
-        <span className="validation-info text-dark uploading_heding">Uploading... Please wait</span>
-      ) : savedImageName !== "" ? ( // After successful upload
-        <span className="validation-success text-success">File Saved!</span>
-      ) : (
-        <span className="validation-error text-danger">* Required</span> // If no file has been uploaded yet
-      )}
-    </span>
 
-    {/* Input field for file upload */}
-    <InputText
-      type="file"
-      onChange={(e) => handleFileChange(e)}
-      className="ipl-input"
-      disabled={isUploading} // Disable input during upload
-    />
-  </div>
-)}
+                {refreshFileInput ? (
+                  ""
+                ) : (
+                  <div className="p-col-12">
+                    <span>
+                      File:{" "}
+                      {isUploading ? ( // If uploading is in progress
+                        <span className="validation-info text-dark uploading_heding">Uploading... Please wait</span>
+                      ) : savedImageName !== "" ? ( // After successful upload
+                        <span className="validation-success text-success">File Saved!</span>
+                      ) : (
+                        <span className="validation-error " style={{ color: 'red' }}>* Required</span> // If no file has been uploaded yet
+                      )}
+                    </span>
+
+                    {/* Input field for file upload */}
+                    <InputText
+                      type="file"
+                      onChange={(e) => handleFileChange(e)}
+                      className="ipl-input"
+                      disabled={isUploading} // Disable input during upload
+                    />
+                  </div>
+                )}
 
 
 
@@ -1192,28 +1111,28 @@ const handleOrganization = (e) => {
 
 
       <div className="section_____img section col8" ref={gridRef}>
-       
+
         <div className="content " style={{ overflow: 'auto' }}>
-      
-             <div > {/*style={{ overflow: 'auto', width: '100%', height: '100%', position: 'relative' }} */}
-              <img
-                alt=""
-                height="700px"
-                src={selectedImg}
-                style={{
-                  transform: `scale(${zoom})`,
-                  transformOrigin: 'top left',
-                  cursor: 'zoom-in',
-                  zIndex: 0, // Image stays below the watermark
-                }}
-                onClick={handleZoomIn}
-                onContextMenu={(e) => {
-                  e.preventDefault(); // Prevent context menu on right-click
-                  handleZoomOut();
-                }}
-              />
-            </div>
-       
+
+          <div > {/*style={{ overflow: 'auto', width: '100%', height: '100%', position: 'relative' }} */}
+            <img
+              alt=""
+              height="700px"
+              src={selectedImg}
+              style={{
+                transform: `scale(${zoom})`,
+                transformOrigin: 'top left',
+                cursor: 'zoom-in',
+                zIndex: 0, // Image stays below the watermark
+              }}
+              onClick={handleZoomIn}
+              onContextMenu={(e) => {
+                e.preventDefault(); // Prevent context menu on right-click
+                handleZoomOut();
+              }}
+            />
+          </div>
+
         </div>
 
         <div className="p-col-12 mt-5">

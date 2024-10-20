@@ -67,33 +67,105 @@ const SaveCityModal = (props) => {
     }
   }
 
+  // const Edit = () => {
+  //   const body = {
+  //     id: props.dataForEdit?.id,
+  //     name: CityName?.trim(),
+  //     effectedBy: _userData?.id
+  //   }
+
+  //   billingApiServices.updateCity(body).then((response) => {
+  //     if (response == null || response == undefined) {
+  //       handleToast("error", "Operation failed, check your internet connection")
+  //       return
+  //     }
+
+  //     if (response?.data?.status) {
+  //       handleToast("success", response?.data?.message)
+  //       setCityName("")
+  //       props.reloadData()
+  //       setTimeout(() => {
+  //         setModal(false);
+  //         props.onClose();
+  //       }, 1000); // 1000 ms = 1 second
+  //     }
+  //     else {
+  //       handleToast("error", response?.data?.message)
+  //     }
+  //   });
+  // }
+
+
+
   const Edit = () => {
+   
+    // Get the old city name from props
+    const oldCityName = props.dataForEdit?.name;
+   
+    // Prepare the body for the update city request
     const body = {
       id: props.dataForEdit?.id,
       name: CityName?.trim(),
-      effectedBy: _userData?.id
-    }
-
+      effectedBy: _userData?.id,
+    };
+  
+    // Update the city
     billingApiServices.updateCity(body).then((response) => {
-      if (response == null || response == undefined) {
-        handleToast("error", "Operation failed, check your internet connection")
-        return
+      if (!response) {
+        handleToast("error", "Operation failed, check your internet connection");
+        return;
       }
-
+  
       if (response?.data?.status) {
-        handleToast("success", response?.data?.message)
-        setCityName("")
-        props.reloadData()
+        handleToast("success", response?.data?.message);
+        setCityName("");
+        props.reloadData();
         setTimeout(() => {
           setModal(false);
           props.onClose();
         }, 1000); // 1000 ms = 1 second
-      }
-      else {
-        handleToast("error", response?.data?.message)
+  
+        // Validate old and new city names before updating tenders
+        const newCityName = CityName?.trim();
+
+        // Update tenders with the new city name
+        updateTenderCity(oldCityName, newCityName);
+  
+      } else {
+        handleToast("error", response?.data?.message);
       }
     });
-  }
+  };
+
+
+  const updateTenderCity = (oldCityName, newCityName) => {
+    // Prepare the body for the tender update request
+    const body = {
+      oldCity: oldCityName,
+      newCity: newCityName,
+    };
+  
+    // Update the tenders with the new city name
+    billingApiServices.updateTendersWithNewCityInName(body).then((response) => {
+      if (!response) {
+        console.log("Response is null or undefined in updateTendersWithNewCityInName :", response);
+        return;
+      }
+  
+      if (response?.data?.status) {
+        handleToast("success", response.data.message);
+        props.reloadData();
+      } else {
+        handleToast("error", response.data.message);
+        console.error("Error updating tenders:", response.data.message);
+      }
+    }).catch((error) => {
+      console.error("Error during API call:", error);
+      handleToast("error", "An error occurred while updating tenders.");
+    });
+  };
+
+
 
   const save = () => {
     const body = {

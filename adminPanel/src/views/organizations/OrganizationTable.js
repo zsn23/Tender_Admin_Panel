@@ -503,7 +503,7 @@ const CustomDataTable = (props) => {
       }
   
       try {
-        const response = await billingApiServices.getOrganizationsDetails(currentPage, 10, sortField, sortOrder === 1 ? 'desc' : 'asc', filters);
+        const response = await billingApiServices.getOrganizationsData(currentPage, 10, sortField, sortOrder === 1 ? 'desc' : 'asc', filters);
         if (response && response.status) {
           setGridData(response.data.data);
           setTotalRecords(response.data.total);

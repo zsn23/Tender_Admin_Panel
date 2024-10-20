@@ -63,31 +63,74 @@ const SaveOrganizationModal = (props) => {
     }
   }
 
+ 
   const Edit = () => {
+   
+    // Get the old organization name from props
+    const oldOrganizationName = props.dataForEdit?.name;
+   
+    // Prepare the body for the update organization request
     const body = {
       id: props.dataForEdit?.id,
       name: OrganizationName?.trim(),
-      effectedBy: _userData?.id
-    }
-
+      effectedBy: _userData?.id,
+    };
+  
+    // Update the organization
     billingApiServices.updateOrganization(body).then((response) => {
-      if (response == null || response == undefined) {
-        handleToast("error", "Operation failed, check your internet connection")
-        return
+      if (!response) {
+        handleToast("error", "Operation failed, check your internet connection");
+        return;
       }
-
-      if (response?.data?.status) {       
-        handleToast("success", response?.data?.message)
-        setOrganizationName("")
-        props.reloadData()
+  
+      if (response?.data?.status) {
+        handleToast("success", response?.data?.message);
+        setOrganizationName("");
+        props.reloadData();
         setModal(false);
-        props.onClose()
-      }
-      else {
-        handleToast("error", response?.data?.message)
+        props.onClose();
+  
+        // Validate old and new organization names before updating tenders
+        const newOrganizationName = OrganizationName?.trim();
+
+        // Update tenders with the new organization name
+        updateTenderOrganization(oldOrganizationName, newOrganizationName);
+  
+      } else {
+        handleToast("error", response?.data?.message);
       }
     });
-  }
+  };
+  
+  
+  const updateTenderOrganization = (oldOrganizationName, newOrganizationName) => {
+    // Prepare the body for the tender update request
+    const body = {
+      oldOrganization: oldOrganizationName,
+      newOrganization: newOrganizationName,
+    };
+  
+    // Update the tenders with the new organization name
+    billingApiServices.updateTendersWithNewOrganizationInName(body).then((response) => {
+      if (!response) {
+        console.log("Response is null or undefined in updateTendersWithNewOrganizationInName :", response);
+        return;
+      }
+  
+      if (response?.data?.status) {
+        handleToast("success", response.data.message);
+        props.reloadData();
+      } else {
+        handleToast("error", response.data.message);
+        console.error("Error updating tenders:", response.data.message);
+      }
+    }).catch((error) => {
+      console.error("Error during API call:", error);
+      handleToast("error", "An error occurred while updating tenders.");
+    });
+  };
+  
+  
 
   const save = () => {
     const body = {

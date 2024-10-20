@@ -155,16 +155,7 @@ sendEmail= async (body) => {
   };
 
 
-  getOrganizationDetails = async () => {
-    try {
-      let res = await axios.get(this.baseUrl + "organizations/");
-      return res;
-    } catch (e) {
-      return null;
-    }
-  };
-
-  // getOrganizationsDetails = async () => {
+  // getOrganizationDetails = async () => {
   //   try {
   //     let res = await axios.get(this.baseUrl + "organizations/");
   //     return res;
@@ -172,14 +163,23 @@ sendEmail= async (body) => {
   //     return null;
   //   }
   // };
-  getOrganizationsDetails = async (page, limit, sortField, sortOrder, filters = {}) => {
+
+  getOrganizationsDetails = async () => {
+    try {
+      let res = await axios.get(this.baseUrl + "organizations/");
+      return res;
+    } catch (e) {
+      return null;
+    }
+  };
+  getOrganizationsData = async (page, limit, sortField, sortOrder, filters = {}) => {
     try {
       const sortParams = sortField && sortOrder ? `&sortField=${encodeURIComponent(sortField)}&sortOrder=${encodeURIComponent(sortOrder)}` : '';
       const filterParams = Object.keys(filters)
         .map(key => filters[key] ? `&${encodeURIComponent(key)}=${encodeURIComponent(filters[key])}` : '')
         .join('');
       
-      const url = `${this.baseUrl}organizations?page=${encodeURIComponent(page)}&limit=${encodeURIComponent(limit)}${sortParams}${filterParams}`;
+      const url = `${this.baseUrl}organizations__?page=${encodeURIComponent(page)}&limit=${encodeURIComponent(limit)}${sortParams}${filterParams}`;
       const res = await axios.get(url);
       
       if (res && res.data) {
@@ -217,18 +217,6 @@ sendEmail= async (body) => {
         message: "Error occurred while fetching organizations.",
         data: []
       };
-    }
-  };
-
-
-  fetchAllOrganizations = async () => {
-    try {
-      // Call the API to get all organizations without pagination
-      const res = await axios.get(this.baseUrl + 'organizations/all/'); // Use the new endpoint
-      return res // Update state with all organizations
-    } catch (e) {
-      return null;
-      console.error("Error fetching organizations:", e);
     }
   };
 
@@ -573,6 +561,27 @@ importToExcelSettings = async (body) => {
       return null;
     }
   };
+
+  updateTendersWithNewOrganizationInName = async (body) => {
+    try {
+      let res = await axios.post(this.baseUrl + "TendersupdateOrganizationInName/", body);
+      return res;
+    } catch (error) {
+      return null;
+    }
+  };
+
+
+  updateTendersWithNewCityInName = async (body) => {
+    try {
+      let res = await axios.post(this.baseUrl + "TendersupdateCityInName/", body);
+      return res;
+    } catch (error) {
+      return null;
+    }
+  };
+  
+  
   
   
   
