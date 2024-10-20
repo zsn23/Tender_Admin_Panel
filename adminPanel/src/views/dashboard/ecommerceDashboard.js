@@ -60,7 +60,7 @@ class EcommerceDashboard extends Component {
          .getOrganizationsDetails()
          .then((response) => {
 
-            this.setState({ Organizations: response?.data?.total });
+            this.setState({ Organizations: response?.data?.data });
          });
    }
 
@@ -152,7 +152,7 @@ class EcommerceDashboard extends Component {
                            <div className="img-box ">
                               <i className="fa-sharp fa-regular fa-server icon_color" ></i>
                            </div>
-                           <h1>{this.state.Organizations}</h1>
+                           <h1>{this.state.Organizations?.length}</h1>
                            <p>View All Organizations</p>
                            </Link>
                         </div>

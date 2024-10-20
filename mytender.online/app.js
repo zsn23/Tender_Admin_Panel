@@ -696,39 +696,39 @@ app.post('/organizations/saveMultipleOrganizations', (req, res) => {
 
 
 
-// app.get('/organizations/', (req, res) => {
-//   try {
-//     const countQuery = 'SELECT COUNT(*) AS totalRecords FROM organizations';
-//     const dataQuery = `
-//       SELECT organizations.*, users.name AS userName
-//       FROM organizations
-//       INNER JOIN users ON organizations.effectedBy = users.id
-//     `;
-//     pool.query(countQuery, (err, countResults) => {
-//       if (err) {
-//         return res.status(500).json({ status: false, data: [], message: MESSAGES.ERROR_MESSAGE });
-//       }
-//       const totalRecords = countResults[0].totalRecords; 
-//       pool.query(dataQuery, (err, dataResults) => {
-//         if (err) {
-//           return res.status(500).json({ status: false, data: [], message: MESSAGES.ERROR_MESSAGE });
-//         }
-
-//         return res.status(200).json({
-//           status: true,
-//           totalRecords, 
-//           data: dataResults,
-//           message: MESSAGES.FOUND
-//         });
-//       });
-//     });
-//   } catch (err) {
-//     return res.status(500).json({ status: false, data: [], message: MESSAGES.ERROR_MESSAGE });
-//   }
-// });
-
-
 app.get('/organizations/', (req, res) => {
+  try {
+    const countQuery = 'SELECT COUNT(*) AS totalRecords FROM organizations';
+    const dataQuery = `
+      SELECT organizations.*, users.name AS userName
+      FROM organizations
+      INNER JOIN users ON organizations.effectedBy = users.id
+    `;
+    pool.query(countQuery, (err, countResults) => {
+      if (err) {
+        return res.status(500).json({ status: false, data: [], message: MESSAGES.ERROR_MESSAGE });
+      }
+      const totalRecords = countResults[0].totalRecords; 
+      pool.query(dataQuery, (err, dataResults) => {
+        if (err) {
+          return res.status(500).json({ status: false, data: [], message: MESSAGES.ERROR_MESSAGE });
+        }
+
+        return res.status(200).json({
+          status: true,
+          totalRecords, 
+          data: dataResults,
+          message: MESSAGES.FOUND
+        });
+      });
+    });
+  } catch (err) {
+    return res.status(500).json({ status: false, data: [], message: MESSAGES.ERROR_MESSAGE });
+  }
+});
+
+
+app.get('/organizations__/', (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const offset = (page - 1) * limit;
@@ -776,7 +776,7 @@ app.get('/organizations/', (req, res) => {
     ${whereClause}
   `;
 
-  console.log('Request Params:', req.query);
+
 
   pool.query(countQuery, values, (err, countResults) => {
     if (err) {
@@ -817,38 +817,6 @@ app.get('/organizations/', (req, res) => {
   });
 });
 
-
-
-app.get('/organizations/all/', (req, res) => {
-   try {
-    const countQuery = 'SELECT COUNT(*) AS totalRecords FROM organizations';
-    const dataQuery = `
-      SELECT organizations.*, users.name AS userName
-      FROM organizations
-      INNER JOIN users ON organizations.effectedBy = users.id
-    `;
-    pool.query(countQuery, (err, countResults) => {
-      if (err) {
-        return res.status(500).json({ status: false, data: [], message: MESSAGES.ERROR_MESSAGE });
-      }
-      const totalRecords = countResults[0].totalRecords; 
-      pool.query(dataQuery, (err, dataResults) => {
-        if (err) {
-          return res.status(500).json({ status: false, data: [], message: MESSAGES.ERROR_MESSAGE });
-        }
-
-        return res.status(200).json({
-          status: true,
-          totalRecords, 
-          data: dataResults,
-          message: MESSAGES.FOUND
-        });
-      });
-    });
-  } catch (err) {
-    return res.status(500).json({ status: false, data: [], message: MESSAGES.ERROR_MESSAGE });
-  }
-});
 
 
 const checkExistsOrganizations = (data) => {
@@ -1434,6 +1402,70 @@ app.post('/TendersupdateCategory', (req, res) => {
     res.status(500).json({ status: false, message: "Error updating tenders" });
   }
 });
+
+app.post('/TendersupdateOrganizationInName', (req, res) => {
+  try {
+    const { oldOrganization, newOrganization } = req.body;
+
+    // SQL query to update organization name in the 'name' column using REPLACE
+    const sql = `
+      UPDATE tenders 
+      SET name = REPLACE(name, ?, ?) 
+      WHERE name LIKE ?`;
+    
+    const values = [oldOrganization, newOrganization, `%${oldOrganization}%`];
+
+    // Execute the query
+    pool.query(sql, values, (error, results) => {
+      if (error) {
+        console.error("Error updating tenders:", error);
+        return res.status(500).json({ status: false, message: "Error updating tenders" });
+      }
+
+      if (results.affectedRows > 0) {
+        res.status(200).json({ status: true, message: "Tenders updated successfully", data: results });
+      } else {
+        res.status(404).json({ status: false, message: "No tenders found with the specified old organization" });
+      }
+    });
+  } catch (error) {
+    console.error("Error updating tenders (catch block):", error);
+    res.status(500).json({ status: false, message: "Error updating tenders" });
+  }
+});
+
+
+app.post('/TendersupdateCityInName', (req, res) => {
+  try {
+    const { oldCity, newCity } = req.body;
+
+    // SQL query to update city name in the 'name' column using REPLACE
+    const sql = `
+      UPDATE tenders 
+      SET name = REPLACE(name, ?, ?) 
+      WHERE name LIKE ?`;
+    
+    const values = [oldCity, newCity, `%${oldCity}%`];
+
+    // Execute the query
+    pool.query(sql, values, (error, results) => {
+      if (error) {
+        console.error("Error updating tenders:", error);
+        return res.status(500).json({ status: false, message: "Error updating tenders" });
+      }
+
+      if (results.affectedRows > 0) {
+        res.status(200).json({ status: true, message: "Tenders updated successfully", data: results });
+      } else {
+        res.status(404).json({ status: false, message: "No tenders found with the specified old city" });
+      }
+    });
+  } catch (error) {
+    console.error("Error updating tenders (catch block):", error);
+    res.status(500).json({ status: false, message: "Error updating tenders" });
+  }
+});
+
 
 
 
