@@ -818,6 +818,82 @@ app.get('/organizations__/', (req, res) => {
 });
 
 
+app.get('/FrontEndorganizations/', (req, res) => {
+  console.log('Received request with params:', req.query);
+  try {
+      const page = parseInt(req.query.page) || 1;
+      const pageSize = parseInt(req.query.pageSize) || 10;
+      const offset = (page - 1) * pageSize;
+      const sortField = req.query.sortField || 'effectedDate';
+      const sortOrder = req.query.sortOrder === 'desc' ? 'DESC' : 'ASC';
+      const baseUrl = `${req.protocol}://${req.get('host')}${req.originalUrl.split('?').shift()}`;
+
+      // Ensure sortField is valid
+      const allowedFields = ['effectedDate', 'pageSize', 'name'];
+      if (!allowedFields.includes(sortField)) {
+          return res.status(400).json({ message: "Invalid sort field" });
+      }
+
+      const filters = [];
+      const values = [];
+      if (req.query.name) {
+          filters.push('organizations.name LIKE ?');
+          values.push(`%${req.query.name}%`);
+      }
+      const whereClause = filters.length ? `WHERE ${filters.join(' AND ')}` : '';
+
+      const countQuery =`SELECT COUNT(*) AS totalRecords FROM organizations ${whereClause}`;
+      const dataQuery = `
+        SELECT organizations.*, users.name AS userName
+        FROM organizations
+        INNER JOIN users ON organizations.effectedBy = users.id
+        ${whereClause}
+        ORDER BY ${sortField} ${sortOrder}
+        LIMIT ? OFFSET ?
+      `;
+
+      pool.query(countQuery, values, (err, countResults) => {
+          if (err) {
+              return res.status(500).json({ status: false, data: [], message: "Internal Server Error" });
+          }
+
+          const totalRecords = countResults[0].totalRecords;
+          const totalPages = Math.ceil(totalRecords / pageSize);
+
+          pool.query(dataQuery, [...values, pageSize, offset], (err, dataResults) => {
+              if (err) {
+                  return res.status(500).json({ status: false, data: [], message: "Internal Server Error" });
+              }
+
+              const getPageUrl = (page) => `${baseUrl}?page=${page}&pageSize=${pageSize}`;
+
+              return res.status(200).json({
+                  status: true,
+                  message: "All Organizations",
+                  data: {
+                      current_page: page,
+                      data: dataResults,
+                      first_page_url: getPageUrl(1),
+                      from: offset + 1,
+                      last_page: totalPages,
+                      last_page_url: getPageUrl(totalPages),
+                      next_page_url: page < totalPages ? getPageUrl(page + 1) : null,
+                      path: baseUrl,
+                      per_page: pageSize,
+                      prev_page_url: page > 1 ? getPageUrl(page - 1) : null,
+                      to: Math.min(offset + pageSize, totalRecords),
+                      total: totalRecords
+                  },
+                  statusCode: 200
+              });
+          });
+      });
+  } catch (err) {
+      return res.status(500).json({ status: false, data: [], message: "Internal Server Error" });
+  }
+});
+
+
 
 const checkExistsOrganizations = (data) => {
   return new Promise((resolve, reject) => {
