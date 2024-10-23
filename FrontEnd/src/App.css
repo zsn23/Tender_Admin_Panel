@@ -1,0 +1,585 @@
+/* For All buttons */
+
+.btn:hover{
+  border: 1px solid #082b0e !important;
+}
+
+/* -----------------header main container---------- */
+:root{
+  --primary-color:#082b0e;
+}
+
+
+.customButton{
+  background-color: var(--primary-color);
+  color: white;
+}
+.customColorForm{
+  color : #082b0e;
+}
+.container-fluid_{  
+    /* background-color: #0B2B11;  */
+  background: linear-gradient(90deg, #0B2B11 20%, #0d5723 100%);
+
+    height: 80% !important;
+    position:sticky;
+    top:0;
+    z-index: 10;
+}
+.container-fluid_:hover {
+  background: linear-gradient(109.6deg, rgb(5, 84, 94) 16%, rgb(89, 89, 89) 91.1%);
+} 
+
+
+
+
+/* -----------------tender logo---------------- */
+.HeaderFooterlogo{
+
+  display:flex;
+  justify-content: flex-start;
+  width: 230px;
+  height: 50px;
+}
+@media (max-width:536px) {
+  .HeaderFooterlogo{
+    width: 139px !important;
+    height: 36px !important;
+    padding-top: 3px;
+    margin-top: 3.5px;
+  }
+}
+
+/* ----------------nav menue items-------------------*/
+.nav-link {
+  display: flex;
+  align-items: center !important;
+  justify-content: center;
+  color: whitesmoke; 
+  font-weight: lighter;
+  font-family:Arial, Helvetica, sans-serif ;
+  letter-spacing: 1px;
+  transition: color 0.3s ease, background-color 0.3s ease, border-radius 0.3s ease, font-size 0.3s ease;
+}
+.nav-link:hover {
+  color: white ; 
+  background: linear-gradient(to top, #c1dfc4 0%, #deecdd 100%);
+  border-radius: 50px;
+  font-size: 20px;
+  font-weight: lighter;
+}
+.nav-link:hover .about_circle {
+  border: 2px solid black !important; 
+}
+
+/*nav item icons */
+.icons {
+    margin-left: -10px;
+    color:  whitesmoke !important;
+}
+.icons:hover{
+    color : black !important;
+}
+.hamburg_CloseIcon:focus{
+  border: 0px !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.hamburg_CloseIcon{
+  color: whitesmoke !important;
+}
+.btn-close{
+  background-color: white !important;
+  color: white !important;
+}
+.theme-color{
+  /* background-color: var(--primary-color); */
+  color: #deecdd;
+}
+/* -------------nav menue items in offcanvas--------------------- */
+
+.offcanvas{
+  
+  background: linear-gradient(90deg, #0B2B11 20%, #0d5723 100%);
+}
+.offcanvas:hover{
+  background: linear-gradient(109.6deg, rgb(5, 84, 94) 16%, rgb(89, 89, 89) 91.1%) !important;
+}
+.logo_in_offcanvas{
+  height: auto ;
+  width: 100%;
+  padding: 9px;
+}
+.iconsInoffcanvas{
+  color: #ffffff !important;
+}
+
+.tenderLogoRow{
+  border-bottom: 1px solid grey !important;
+  border-top: 1px solid grey !important;
+
+}
+.subcribe-transparent{
+  text-decoration : none !important;
+  background-color: transparent; 
+  color: white; 
+  border: 2px solid white; 
+  width: 200px !important;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  height: auto !important;
+}
+.subcribe-transparent:hover{
+  background: black !important;
+  color: whitesmoke !important;
+}
+
+@media (max-width:992px) {
+  .nav-link{
+    justify-content: space-between !important;
+    flex-direction: row-reverse !important;
+    padding: 9px;
+  }
+  .nav-link:hover{
+    border-radius: 0px !important;
+  }
+  .nav-link:hover .about_circle {
+    border: 2px solid rgb(255, 255, 255) !important; 
+  }
+
+  .nav-link:hover {
+    background: linear-gradient(90deg, #0B2B11 20%, #0d5723 100%);
+  }
+  
+}
+@media (max-width:559px) {
+
+  .subcribe-transparent{
+    width: 110px !important;
+  }
+}
+
+/* -----------------------whatsapp button------------------------ */
+.whatsapp_inquirey  {
+   display:flex;
+   justify-content: end;
+   align-items: center;
+   gap: 10px;
+}
+.whatsapp_inquirey .btn_{
+  display: flex;
+  justify-content: center ;
+  align-items: center;
+  width: 150px;
+}
+.btn-outline-success{
+  border: 1px solid white !important;
+}
+@media (max-width: 800px) {
+  .numbers_{
+    display: none !important;
+  }  
+  .whatsapp_inquirey .btn_{
+    width: 100% !important;
+  }
+}
+@media (max-width: 350px) {
+  
+  .whatsapp_inquirey .btn_{
+    width: 90% !important;
+    height: auto !important;
+    font-size: 10px !important;
+    padding: 10px !important;
+  }
+  .whstapplogoInSmallScreen{
+    height: 20px;
+    width: 20px;
+  }
+}
+@media (min-width:750px) and (max-width:1200px) {
+  .numbers_{
+    display: flex !important;
+  } 
+}
+
+/* Line b/w hamburg and whatsapp icon  */
+.vertical-line {
+  width: 0.5px; 
+  height: 40px; 
+  background-color: #ffffff; 
+}
+
+
+
+/* -------------marquee moving headline------------------- */
+
+/* Container with a gradient background for a premium look */
+.slider-container {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  background: linear-gradient(90deg, #0c601a 0%, #063313 100%);
+  border: 2px solid rgba(255, 255, 255, 0.1); /* Subtle border */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5); /* Premium shadow for depth */
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  padding: 0.5rem 0; /* Additional padding for a refined look */
+  backdrop-filter: 50px(blur);
+}
+
+.slider-container:hover{
+  background: linear-gradient(109.6deg, rgb(5, 84, 94) 16%, rgb(89, 89, 89) 91.1%);
+}
+
+/* Visible state with smooth transition */
+.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Hidden state to slide the entire container off-screen */
+.hidden {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+/* Wrapper for the scrolling animation */
+.slider-wrapper {
+  display: inline-flex;
+  animation: scroll 20s linear infinite;
+  animation-play-state: running;
+  gap: 2rem; /* Add spacing between items for a more premium look */
+}
+
+/* Styling each message */
+.slider-message {
+  display: inline-block;
+  padding: 0.2rem; /* More padding for a bold, elegant feel */
+  background-color: rgba(255, 255, 255, 0); /* Subtle transparent background */
+ 
+  border-radius: 5px; /* More rounded corners */
+  font-size: 1.8rem; /* Slightly smaller font for balance */
+  font-family: 'Roboto', sans-serif; /* Premium modern font */
+  color: #ffffff; /* White text for contrast */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Text shadow for elegance */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effects */
+}
+
+/* Continuous scroll animation */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Hover effect to pause the scroll */
+.slider-container:hover .slider-wrapper {
+  animation-play-state: paused;
+}
+
+/* Add subtle hover scaling effect for individual messages */
+.slider-message:hover {
+  transform: scale(1.05); /* Slight enlargement on hover */
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3); /* Elevation on hover */
+  background-color: rgba(0, 0, 0, 0.112); /* Subtle transparent background */
+  backdrop-filter: 10px(blur);
+}
+
+/* Optional styling for smaller screens to maintain premium look */
+@media (max-width: 768px) {
+  .slider-message {
+    font-size: 1.4rem; /* Slightly smaller font size for smaller screens */
+    padding: 0.5rem 1rem; /* Adjust padding for mobile */
+  }
+}
+
+
+/* ---------------home page ----------------*/
+.hero-height{
+  height:70vh;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* -------tables styling-------------- */
+.table-data {
+  border-radius: 15px;
+  /* background-color: #0B2B11; */
+  background: linear-gradient(90deg, #0B2B11 20%, #0d5723 100%);
+
+  color:white;
+  margin-bottom: 50px;
+  margin-top: 50px;
+  }
+  .table-data .table>:not(caption)>*>*{
+    border-radius: 0px;
+  background-color: transparent !important;
+  /* background: linear-gradient(90deg, #0B2B11 20%, #0d5723 100%); */
+
+  color:white;
+  padding: 10px;
+  }
+
+
+/*---------------Footer styling------------------*/
+
+.footer-container .logo {
+  transition: transform 0.4s ease;
+}
+.footer-container{
+     /* background-color:var(--primary-color); */
+     background: linear-gradient(90deg, #0B2B11 20%, #0d5723 100%);
+
+} 
+
+
+
+.footer-container .logo:hover {
+  transform: scale(1.2);
+}
+
+.footer-container a {
+  transition: color 0.3s ease;
+}
+
+.footer-container .footer-list li {
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.footer-container .footer-list li:hover {
+  transform: translateX(5px);
+}
+
+.footer-container hr {
+  border-top: 1px solid #dee2e6;
+}
+.footer-link:hover{
+  color: gray !important;
+}
+
+.customColor {
+  color: #ffda44; /* Example color, adjust as needed */
+}
+
+.footer-container .footer-link {
+  text-decoration: none;
+}
+
+.footer-list .footer-link:hover {
+  color: gray !important;
+}
+
+
+.footer-container .social-icons a {
+  display: inline-block;
+  margin: 0 10px;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.footer-container .social-icons a:hover {
+  transform: scale(1.2);
+}
+
+/* Media Query for screens smaller than 425px */
+@media (max-width: 485px) {
+  .footer-container .logo {
+    max-width: 141px;
+    height: auto;
+  }
+
+  .footer-container .social-icons a {
+    width: 8vw;
+    max-width: 20px; 
+    min-width: 20px; 
+    margin: 0 5px;
+  }
+}
+.details-btn{
+  background:white;
+  color: var(--primary-color);
+padding: 2px 20px;
+border-radius: 50px;
+}
+.details-btn:hover{
+  background:var(--primary-color);
+  color: white;
+padding: 2px 20px;
+border-radius: 50px;
+border: 1px solid white;
+}
+/*-------------------Blog-------------------*/
+.card {
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.customArticle{
+  position: relative;
+  padding-left: 60px;
+  margin-top: 30px;
+}
+.link-underline:hover{
+  text-decoration: underline rgb(3, 67, 3) !important;
+  
+}
+/* ---------Tender By Orgnization ,Catagory ,Cities----------- */
+.tenderByRows p{
+  border-radius: 15px !important;
+}
+
+.tenderByRows p:hover{
+  transform: scale(1.1);
+  color:  green;
+}
+
+
+/*------------------privacy policy--------------*/
+.accordion-button:focus {
+  box-shadow: none; /* Removes the blue outline */
+}
+.customBgPrivacy{
+  background-color: #082b0e !important;
+}
+.customButtonPrivacy{
+  background-color: var(--primary-color);
+  color: white;
+}
+
+
+/* -------------Detail Page-------------- */
+.tenderAlerts{
+  color: red !important;
+}
+.blinkingEffectOfTenderAlert {
+  animation: slowBlink 2s infinite;
+  z-index: 0 !important;
+}
+
+@keyframes slowBlink {
+  0%, 50%, 100% {
+    opacity: 1;
+  }
+  25%, 75% {
+    opacity: 0;
+  }
+}
+.moreNewspapers img{
+  width: 10%;
+  height: auto;
+}
+
+/* ABout page css start */
+
+
+/* about page background image */
+.background-imageabout1{
+  background-image: url('./Components/railway-1555348_1280.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 85vh; 
+  width: 100%;
+  position :relative;
+
+}
+/* text on bg image of about page */
+
+.opacity-bg{
+  background: linear-gradient(rgba(248, 232, 0, 0.317),rgba(4, 63, 4, 0.628));
+}
+
+.fade-in-text  {
+  overflow: hidden;
+  font-weight: 700;
+  border-right: 0.15em solid white;
+  white-space: nowrap;
+  animation: typing 4s steps(40, end);
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+.fontabout{
+  font-size: 20px;
+}
+.background-imageabout{
+  background-image: url('./Components/elec1.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 85vh; 
+  width: 100%;
+  position :relative;
+
+}
+.bgcolor{
+  background-color: aliceblue;
+}
+
+/* ABout page css ends */
+
+
+
+/* 
+Categories page css starts */
+
+.Newspapers img{
+  width: 25%;
+  height: auto;
+}
+
+/* Categories page css ends */
+
+/* Subscription page css starts */
+ 
+.ContainerSub{
+  margin:10px;
+  padding:23px;
+  width:auto;
+  height: auto;
+  border-radius:20px;
+  background-color: aliceblue;
+}
+.conatinernum{
+  padding:5px;
+  width:30vw;
+  height: 10vh;
+
+  border-radius:20px;
+  
+}
+.backgroundSubscription{
+  background-color: aliceblue;
+}
+@media (max-width: 767.9px) {
+  .conatinernum {
+   
+    width: 50vw; 
+    height: auto;
+    border-radius: 15px; 
+  }
+  .conatinernum h3 {
+    font-size: 0.9rem;
+  line-height: 1; 
+  word-break: break-word;
+}
+
+}
+
+/* Subscription page css ends */
+
+/* pricing plan heading */
+.pricing_plan_heading{
+  color: #203125  !important;
+}

@@ -800,12 +800,12 @@ app.get('/organizations__/', (req, res) => {
         data: {
           current_page: page,
           data: dataResults,
-          first_page_url: `http://localhost:${PORT}/organizations?page=1&limit=${limit}`,
+          first_page_url: `http://localhost:${PORT}/organizations__?page=1&limit=${limit}`,
           from: offset + 1,
           last_page: totalPages,
-          last_page_url: `http://localhost:${PORT}/organizations?page=${totalPages}&limit=${limit}`,
-          next_page_url: page < totalPages ? `http://localhost:${PORT}/organizations?page=${page + 1}&limit=${limit}` : null,
-          path: `http://localhost:${PORT}/organizations`,
+          last_page_url: `http://localhost:${PORT}/organizations__?page=${totalPages}&limit=${limit}`,
+          next_page_url: page < totalPages ? `http://localhost:${PORT}/organizations__?page=${page + 1}&limit=${limit}` : null,
+          path: `http://localhost:${PORT}/organizations__`,
           per_page: limit,
           prev_page_url: page > 1 ? `http://localhost:${PORT}/organizations?page=${page - 1}&limit=${limit}` : null,
           to: offset + dataResults.length,
@@ -893,26 +893,6 @@ app.get('/FrontEndorganizations/', (req, res) => {
   }
 });
 
-
-
-const checkExistsOrganizations = (data) => {
-  return new Promise((resolve, reject) => {
-
-    const sql = 'SELECT * FROM organizations WHERE LOWER(name) = LOWER(?)';
-    const values = [data.name.toLowerCase()];
-
-    pool.query(sql, values, (err, results) => {
-      if (err) {
-        reject(err); // Reject the Promise in case of an error
-      } else if (results.length > 0) {
-        resolve(true); // Resolve with true if data exists
-      } else {
-        resolve(false); // Resolve with false if data does not exist
-      }
-    });
-  });
-};
-
 app.post('/organizations/', (req, res) => {
   const { name, effectedBy } = req.body;
 
@@ -953,6 +933,28 @@ app.post('/organizations/', (req, res) => {
   }
 
 });
+
+
+
+const checkExistsOrganizations = (data) => {
+  return new Promise((resolve, reject) => {
+
+    const sql = 'SELECT * FROM organizations WHERE LOWER(name) = LOWER(?)';
+    const values = [data.name.toLowerCase()];
+
+    pool.query(sql, values, (err, results) => {
+      if (err) {
+        reject(err); // Reject the Promise in case of an error
+      } else if (results.length > 0) {
+        resolve(true); // Resolve with true if data exists
+      } else {
+        resolve(false); // Resolve with false if data does not exist
+      }
+    });
+  });
+};
+
+
 
 app.post('/organizations/deleteOrganization', (req, res) => {
 
@@ -1167,7 +1169,9 @@ app.post('/newspapers/saveMultipleNewspapers', (req, res) => {
 
 app.get('/tender', (req, res) => {
   const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 10;
+  // const limit = parseInt(req.query.limit) || 10;
+  const limit = parseInt(req.query.limit) === 0 ? undefined : parseInt(req.query.limit) || 10;
+
   const offset = (page - 1) * limit;
   const sortField = req.query.sortField || 'publishDate'; // Default sort field
   const sortOrder = req.query.sortOrder === 'desc' ? 'DESC' : 'ASC'; // Ensuring proper order input
@@ -1230,8 +1234,19 @@ app.get('/tender', (req, res) => {
 
 
   const whereClause = filters.length ? `WHERE ${filters.join(' AND ')}` : '';
-
+  const limitClause = limit ? `LIMIT ? OFFSET ?` : '';
   // Main Query
+  // const query = `
+  //   SELECT tenders.*, users.name AS userName, cities.name AS cityName, organizations.name AS organizationName, newspapers.name AS newPaperName 
+  //   FROM tenders 
+  //   INNER JOIN users ON tenders.effectedBy = users.id 
+  //   INNER JOIN cities ON tenders.city = cities.id 
+  //   INNER JOIN organizations ON tenders.organization = organizations.id 
+  //   INNER JOIN newspapers ON tenders.newspaper = newspapers.id 
+  //   ${whereClause} 
+  //   ORDER BY ${sortField} ${sortOrder} 
+  //   LIMIT ? OFFSET ?
+  // `;
   const query = `
     SELECT tenders.*, users.name AS userName, cities.name AS cityName, organizations.name AS organizationName, newspapers.name AS newPaperName 
     FROM tenders 
@@ -1241,10 +1256,11 @@ app.get('/tender', (req, res) => {
     INNER JOIN newspapers ON tenders.newspaper = newspapers.id 
     ${whereClause} 
     ORDER BY ${sortField} ${sortOrder} 
-    LIMIT ? OFFSET ?
-  `;
+    ${limitClause}
+`;
+const queryValues = limit ? [...values, limit, offset] : values;
 
-  pool.query(query, [...values, limit, offset], (err, results) => {
+  pool.query(query, queryValues, (err, results) => {
     if (err) {
       console.error('Error fetching tenders:', err.message);
       return res.status(500).json({ status: false, message: 'Error fetching tenders.', error: err.message });
